@@ -102,6 +102,18 @@ const programsList = [
     name: 'Class 10',
     link: '/class-10',
   },
+  {
+    name: 'Class 11',
+    link: '/class-11',
+  },
+  {
+    name: 'Class 12',
+    link: '/class-12',
+  },
+  {
+    name: 'Admission Test',
+    link: '/admission-test',
+  }
 ]
 
 export default function RootLayout({ children }) {

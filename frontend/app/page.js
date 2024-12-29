@@ -10,6 +10,7 @@ import { Label } from '@radix-ui/react-label'
 import { motion } from 'framer-motion'
 import { Book } from 'lucide-react'
 import Image from 'next/image'
+import { useEffect, useRef } from 'react'
 
 const scaleUpVarient = {
   hidden: { scale: 0.5, opacity: 0 },
@@ -155,6 +156,23 @@ const heroWords = [
 ]
 
 export default function Home() {
+  const searchBoxRef = useRef(null)
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+        event.preventDefault()
+        searchBoxRef.current?.focus()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
+
   return (
     <div className="overflow-x-hidden">
       <div className="bg-[url('/Assets/Background.svg')] bg-cover flex flex-row gap-4 max-md:flex-wrap justify-between p-12 min-h-screen">
@@ -189,10 +207,11 @@ export default function Home() {
                 />
                 <Input
                   type="text"
+                  ref={searchBoxRef}
                   id="coaching_center"
                   name="coaching_center"
-                  placeholder="Search for courses"
-                  className="bg-transparent rounded-full pl-12 pr-4 py-2 w-full ring-0 border-0 focus-visible:ring-offset-0 focus-visible:ring-0"
+                  placeholder="⌘ + k to search for coaching centers"
+                  className="bg-transparent rounded-full pl-4 pr-4 py-2 w-full ring-0 border-0 focus-visible:ring-offset-0 focus-visible:ring-0"
                 />
               </motion.div>
             </div>
