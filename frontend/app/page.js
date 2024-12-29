@@ -1,6 +1,6 @@
 'use client'
 import CourseCard from '@/components/courseCard'
-import ProfileCard from '@/components/profileCard'
+import { AnimatedTestimonials } from '@/components/ui/animated-testimonials'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { InfiniteMovingCards } from '@/components/ui/infinite-moving-cards'
@@ -91,6 +91,13 @@ const parantsSay = [
 
 const teamInfo = [
   {
+    name: 'Syed Tamal',
+    title: 'CSE Student',
+    email: 'syetamal@gmail.com',
+    phone: '+880 1660039763',
+    image: '/Assets/tamal_dp.svg',
+  },
+  {
     name: 'Nahidur Zaman Tushar',
     title: 'CSE Student',
     email: 'nahidurzaman1903@gamil.com',
@@ -102,13 +109,6 @@ const teamInfo = [
     title: 'CSE Student',
     email: 'sakifshahrear@gmail.com',
     phone: '+880 1677343504',
-    image: '/Assets/Tushar_DP.svg',
-  },
-  {
-    name: 'Syed Tamal',
-    title: 'CSE Student',
-    email: 'syetamal@gmail.com',
-    phone: '+880 1660039763',
     image: '/Assets/Tushar_DP.svg',
   },
   {
@@ -496,19 +496,8 @@ export default function Home() {
             Meet Our Team
           </h1>
         </div>
-        <div className="flex flex-col gap-10">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 p-10 gap-10">
-            {teamInfo.map((team) => (
-              <ProfileCard
-                key={team.name}
-                name={team.name}
-                title={team.title}
-                email={team.email}
-                phone={team.phone}
-                image={team.image}
-              />
-            ))}
-          </div>
+        <div className="">
+          <AnimatedTestimonials testimonials={teamInfo} />
         </div>
       </div>
       <div className="bg-black text-white flex flex-col">
