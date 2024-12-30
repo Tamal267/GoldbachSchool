@@ -1,72 +1,82 @@
 'use client'
-import CourseCard from '@/components/courseCard'
+import CoachingCenterCard from '@/components/coachingCenterCard'
+import SearchCoachingCenter from '@/components/searchCoachingCenter'
 import { AnimatedTestimonials } from '@/components/ui/animated-testimonials'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { InfiniteMovingCards } from '@/components/ui/infinite-moving-cards'
 import { Input } from '@/components/ui/input'
 import { TypewriterEffect } from '@/components/ui/typewriter-effect'
+import {
+  bottomToTopParentVarient,
+  bottomToTopVarient,
+  leftToRightVarient,
+  rightToLeftVarient,
+  scaleUpVarient,
+  topToBottomVarient,
+} from '@/lib/animation'
 import { Label } from '@radix-ui/react-label'
 import { motion } from 'framer-motion'
 import { Book } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef } from 'react'
 
-const scaleUpVarient = {
-  hidden: { scale: 0.5, opacity: 0 },
-  show: {
-    scale: 1,
-    opacity: 1,
-    transition: { duration: 1, ease: 'easeInOut' },
+const coachingCenters = [
+  {
+    name: 'Retina Coaching Center',
+    image: '/Assets/class_room_course.svg',
+    location: 'Mirpur DOHS, MIST',
+    rating: 4.6,
+    students: 2000,
+    teachers: 50,
+    courses: 10,
   },
-}
-
-const leftToRightVarient = {
-  hidden: { x: -100, opacity: 0 },
-  show: { x: 0, opacity: 1, transition: { duration: 1, ease: 'easeOut' } },
-}
-
-const rightToLeftVarient = {
-  hidden: { x: 100, opacity: 0 },
-  show: { x: 0, opacity: 1, transition: { duration: 1, ease: 'easeOut' } },
-}
-
-const bottomToTopParentVarient = {
-  hidden: { y: 100, opacity: 0 },
-  show: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 1,
-      ease: 'easeInOut',
-      staggerChildren: 0.25,
-    },
+  {
+    name: 'Udvash Unmesh Coaching Center',
+    image: '/Assets/class_room_course.svg',
+    location: 'Mirpur DOHS, MIST',
+    rating: 4.2,
+    students: 4000,
+    teachers: 50,
+    courses: 10,
   },
-}
-
-const bottomToTopVarient = {
-  hidden: { y: 100, opacity: 0 },
-  show: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 1,
-      ease: 'easeInOut',
-    },
+  {
+    name: 'Mayer Dowa Coaching Center',
+    image: '/Assets/class_room_course.svg',
+    location: 'Mirpur DOHS, MIST',
+    rating: 4.5,
+    students: 200,
+    teachers: 5,
+    courses: 10,
   },
-}
-
-const topToBottomVarient = {
-  hidden: { y: -100, opacity: 0 },
-  show: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 1,
-      ease: 'easeInOut',
-    },
+  {
+    name: 'Newton Coaching Center',
+    image: '/Assets/class_room_course.svg',
+    location: 'Mirpur DOHS, MIST',
+    rating: 4.6,
+    students: 20,
+    teachers: 50,
+    courses: 10,
   },
-}
+  {
+    name: 'Elon Mask Coaching Center',
+    image: '/Assets/class_room_course.svg',
+    location: 'Mirpur DOHS, MIST',
+    rating: 4.9,
+    students: 20000,
+    teachers: 500,
+    courses: 1,
+  },
+  {
+    name: 'Goal Engineering Coaching Center',
+    image: '/Assets/class_room_course.svg',
+    location: 'Mirpur DOHS, MIST',
+    rating: 4.6,
+    students: 2000,
+    teachers: 50,
+    courses: 10,
+  },
+]
 
 const parantsSay = [
   {
@@ -162,7 +172,7 @@ export default function Home() {
     const handleKeyDown = (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
         event.preventDefault()
-        searchBoxRef.current?.focus()
+        searchBoxRef.current?.click()
       }
     }
 
@@ -188,31 +198,15 @@ export default function Home() {
                 htmlFor="coaching_center"
                 className="font-geist-sans text-lg font-medium text-darkb"
               >
-                Discover Courses That Match
+                Discover Coaching Centers That Match
                 <span className="text-red-700"> Your Goals </span>
               </Label>
               <motion.div
                 variants={bottomToTopVarient}
                 initial="hidden"
                 animate="show"
-                className="relative rounded-full max-w-md h-full w-full border border-darkb"
               >
-                {/* <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-blue-700" /> */}
-                <Image
-                  src="/Assets/search_icon.svg"
-                  alt="Search"
-                  width={40}
-                  height={40}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 h-full aspect-square"
-                />
-                <Input
-                  type="text"
-                  ref={searchBoxRef}
-                  id="coaching_center"
-                  name="coaching_center"
-                  placeholder="⌘ + k to search for coaching centers"
-                  className="bg-transparent rounded-full pl-4 pr-4 py-2 w-full ring-0 border-0 focus-visible:ring-offset-0 focus-visible:ring-0"
-                />
+                <SearchCoachingCenter coachingCenters={coachingCenters} />
               </motion.div>
             </div>
           </div>
@@ -398,12 +392,12 @@ export default function Home() {
         </div>
         <div className="flex flex-col gap-10">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 p-10 gap-10">
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
+            {coachingCenters.map((coachingCenter, index) => (
+              <CoachingCenterCard
+                key={index}
+                coachingCenterInfo={coachingCenter}
+              />
+            ))}
           </div>
           <div className="flex justify-center">
             <Button className="bg-darkb pr-0 rounded-full">

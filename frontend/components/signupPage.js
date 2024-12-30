@@ -118,11 +118,10 @@ export default function SignUpPage({ type, signUpAction }) {
               </Button>
             </form>
 
-
             <p>
               Already have an account?{' '}
               <Link
-                href="/"
+                href={`/login/${type.toLowerCase()}`}
                 className="text-darkb"
               >
                 Login

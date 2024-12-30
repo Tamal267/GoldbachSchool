@@ -1,11 +1,9 @@
 'use client'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { PasswordInput } from '@/components/ui/password_input'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useActionState } from 'react'
 
 const initialState = {
@@ -14,7 +12,10 @@ const initialState = {
 }
 
 export default function ResetPasswordPage({ type, ResetPassAction }) {
-  const [state, formAction, pending] = useActionState(ResetPassAction, initialState)
+  const [state, formAction, pending] = useActionState(
+    ResetPassAction,
+    initialState,
+  )
   return (
     <div className="bg-[#526b7f] pt-4">
       <div className="">
@@ -34,6 +35,15 @@ export default function ResetPasswordPage({ type, ResetPassAction }) {
                 />
               </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="confirm_password">Confirm Password</Label>
+                <PasswordInput
+                  disabled={false}
+                  name="confirm_password"
+                  className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0"
+                />
+              </div>
+
               {state?.message && (
                 <Alert variant={state?.success ? 'default' : 'destructive'}>
                   <AlertDescription>{state?.message}</AlertDescription>
@@ -48,7 +58,6 @@ export default function ResetPasswordPage({ type, ResetPassAction }) {
                 {pending ? 'Submitting...' : 'Reset Password'}
               </Button>
             </form>
-            
           </div>
           <div className="p-4">
             <Image

@@ -113,7 +113,7 @@ const programsList = [
   {
     name: 'Admission Test',
     link: '/admission-test',
-  }
+  },
 ]
 
 export default function RootLayout({ children }) {
@@ -123,17 +123,19 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${itim.variable} ${epilogue.variable} antialiased`}
       >
         <div className="w-full bg-darkb p-4 flex flex-row align-middle justify-between">
-          <div className="flex flex-row gap-2 items-center">
-            <Image
-              src="/Assets/goldback_logo.svg"
-              alt="Goldbach School"
-              width={50}
-              height={50}
-            />
-            <h1 className="text-white text-2xl font-bold font-itim">
-              Goldbach School
-            </h1>
-          </div>
+          <Link href="/">
+            <div className="flex flex-row gap-2 items-center">
+              <Image
+                src="/Assets/goldback_logo.svg"
+                alt="Goldbach School"
+                width={50}
+                height={50}
+              />
+              <h1 className="text-white text-2xl font-bold font-itim">
+                Goldbach School
+              </h1>
+            </div>
+          </Link>
           <div className="max-lg:hidden">
             <NavigationMenu>
               <NavigationMenuList>
@@ -203,16 +205,19 @@ export default function RootLayout({ children }) {
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <NavigationMenuLink
+                      href="/login/authority"
                       className={navigationMenuTriggerStyle()}
                     >
                       Authority
                     </NavigationMenuLink>
                     <NavigationMenuLink
+                      href="/login/teacher"
                       className={navigationMenuTriggerStyle()}
                     >
                       Teahcer
                     </NavigationMenuLink>
                     <NavigationMenuLink
+                      href="/login/student"
                       className={navigationMenuTriggerStyle()}
                     >
                       Student
@@ -220,15 +225,29 @@ export default function RootLayout({ children }) {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link
-                    href="/"
-                    legacyBehavior
-                    passHref
-                  >
-                    <NavigationMenuLink className="bg-transparent font-poppins text-blue-600 bg-white rounded-full p-2 hover:bg-blue-600 hover:text-white">
-                      Signup
+                  <NavigationMenuTrigger className="bg-transparent font-poppins text-blue-600 bg-white rounded-full p-4 hover:bg-blue-600 hover:text-white">
+                    Signup
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <NavigationMenuLink
+                      href="/signup/authority"
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      Authority
                     </NavigationMenuLink>
-                  </Link>
+                    <NavigationMenuLink
+                      href="/signup/teacher"
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      Teahcer
+                    </NavigationMenuLink>
+                    <NavigationMenuLink
+                      href="/signup/student"
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      Student
+                    </NavigationMenuLink>
+                  </NavigationMenuContent>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>

@@ -62,7 +62,7 @@ export default function LoginPage({ type, loginAction }) {
 
             <p>
               <Link
-                href="/"
+                href={`/forget_password/${type.toLowerCase()}`}
                 className="text-darkb"
               >
                 Forget Password?
@@ -72,7 +72,7 @@ export default function LoginPage({ type, loginAction }) {
             <p>
               Don{"'"}t have an account?{' '}
               <Link
-                href="/"
+                href={`/signup/${type.toLowerCase()}`}
                 className="text-darkb"
               >
                 Sign Up
