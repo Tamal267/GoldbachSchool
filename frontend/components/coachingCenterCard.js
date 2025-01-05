@@ -1,30 +1,17 @@
 import { FileBadge2, Speech, Users } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
+import RatingStar from './ratingStar'
 import { Button } from './ui/button'
 
-export default function CoachingCenterCard({
-  coachingCenterInfo
-}) {
+export default function CoachingCenterCard({ coachingCenterInfo }) {
   const name = coachingCenterInfo.name
+  const id = coachingCenterInfo.id
   const rating = coachingCenterInfo.rating
   const courses = coachingCenterInfo.courses
   const teachers = coachingCenterInfo.teachers
   const students = coachingCenterInfo.students
   const image = coachingCenterInfo.image
-  let ratingIcons = [
-    'empty_star',
-    'empty_star',
-    'empty_star',
-    'empty_star',
-    'empty_star',
-  ]
-  for (let i = 1; i <= 5; i++) {
-    if (rating >= i) {
-      ratingIcons[i - 1] = 'full_star'
-    } else if (rating > i - 1 && rating < i) {
-      ratingIcons[i - 1] = 'half_star'
-    }
-  }
 
   return (
     <div className="bg-white/70 rounded-lg flex flex-col gap-4 p-4 shadow-lg">
@@ -37,17 +24,7 @@ export default function CoachingCenterCard({
         />
       </div>
       <div className="flex flex-row justify-left pr-4">
-        <div className="flex flex-row">
-          {ratingIcons.map((icon, index) => (
-            <Image
-              key={index}
-              src={`/Assets/${icon}.svg`}
-              alt="Search"
-              width={20}
-              height={20}
-            />
-          ))}
-        </div>
+        <RatingStar rating={rating} />
         <span className="font-itim">({rating})</span>
       </div>
       <div>
@@ -67,9 +44,11 @@ export default function CoachingCenterCard({
           <span>{students}+ Students</span>
         </div>
       </div>
-      <div className="flex justify-center">
-        <Button className="bg-darkb p-4 rounded-full">Explore</Button>
-      </div>
+      <Link href={`/coaching_center/${id}`}>
+        <div className="flex justify-center">
+          <Button className="bg-darkb p-4 rounded-full">Explore</Button>
+        </div>
+      </Link>
     </div>
   )
 }
