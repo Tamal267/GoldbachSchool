@@ -15,68 +15,12 @@ import {
   scaleUpVarient,
   topToBottomVarient,
 } from '@/lib/animation'
+import { coachingCenters } from '@/lib/data'
 import { Label } from '@radix-ui/react-label'
 import { motion } from 'framer-motion'
 import { Book } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef } from 'react'
-
-const coachingCenters = [
-  {
-    name: 'Retina Coaching Center',
-    image: '/Assets/class_room_course.svg',
-    location: 'Mirpur DOHS, MIST',
-    rating: 4.6,
-    students: 2000,
-    teachers: 50,
-    courses: 10,
-  },
-  {
-    name: 'Udvash Unmesh Coaching Center',
-    image: '/Assets/class_room_course.svg',
-    location: 'Mirpur DOHS, MIST',
-    rating: 4.2,
-    students: 4000,
-    teachers: 50,
-    courses: 10,
-  },
-  {
-    name: 'Mayer Dowa Coaching Center',
-    image: '/Assets/class_room_course.svg',
-    location: 'Mirpur DOHS, MIST',
-    rating: 4.5,
-    students: 200,
-    teachers: 5,
-    courses: 10,
-  },
-  {
-    name: 'Newton Coaching Center',
-    image: '/Assets/class_room_course.svg',
-    location: 'Mirpur DOHS, MIST',
-    rating: 4.6,
-    students: 20,
-    teachers: 50,
-    courses: 10,
-  },
-  {
-    name: 'Elon Mask Coaching Center',
-    image: '/Assets/class_room_course.svg',
-    location: 'Mirpur DOHS, MIST',
-    rating: 4.9,
-    students: 20000,
-    teachers: 500,
-    courses: 1,
-  },
-  {
-    name: 'Goal Engineering Coaching Center',
-    image: '/Assets/class_room_course.svg',
-    location: 'Mirpur DOHS, MIST',
-    rating: 4.6,
-    students: 2000,
-    teachers: 50,
-    courses: 10,
-  },
-]
 
 const parantsSay = [
   {
