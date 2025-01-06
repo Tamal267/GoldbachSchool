@@ -64,6 +64,29 @@ const TeacherNavs = [
   },
 ]
 
+const studentNavs = [
+  {
+    name: 'Routine',
+    icon: NotepadText,
+    link: 'routine',
+  },
+  {
+    name: 'My Course',
+    icon: MonitorCheck,
+    link: 'my_course',
+  },
+  {
+    name: 'New Course',
+    icon: Soup,
+    link: 'buy_new_course',
+  },
+  {
+    name: 'Performance',
+    icon: Activity,
+    link: 'student_performance',
+  },
+]
+
 function GetNavs({ type, cs_id, activeLink, navItems, isCollapsed }) {
   return (
     <div className="flex flex-col mt-6">
@@ -126,6 +149,14 @@ export default function CoachingSidebar({ cs_id, children }) {
               navItems={TeacherNavs}
               activeLink={activeLink}
               type="Teacher"
+              isCollapsed={isCollapsed}
+            />
+
+            <GetNavs
+              cs_id={cs_id}
+              navItems={studentNavs}
+              activeLink={activeLink}
+              type="Student"
               isCollapsed={isCollapsed}
             />
           </div>
