@@ -227,3 +227,156 @@ export const studentMonitorDetails = [
     exam_performance: 95.4,
   },
 ]
+
+export const routine = [
+  {
+    class: 1,
+    date: '12 Jan 2024',
+    time: '14:45',
+    day: 'Monday',
+    class_link: '#',
+  },
+  {
+    class: 2,
+    date: '13 Jan 2024',
+    time: '14:45',
+    day: 'Tuesday',
+    class_link: '#',
+  },
+  {
+    class: 3,
+    date: '14 Jan 2024',
+    time: '14:45',
+    day: 'Wednesday',
+    class_link: '#',
+  },
+  {
+    class: 4,
+    date: '15 Jan 2024',
+    time: '14:45',
+    day: 'Thursday',
+    class_link: '#',
+  },
+  {
+    class: 5,
+    date: '16 Jan 2024',
+    time: '14:45',
+    day: 'Friday',
+    class_link: '#',
+  },
+  {
+    class: 6,
+    date: '17 Jan 2024',
+    time: '14:45',
+    day: 'Saturday',
+    class_link: '#',
+  },
+  {
+    class: 7,
+    date: '18 Jan 2024',
+    time: '14:45',
+    day: 'Sunday',
+    class_link: '#',
+  },
+]
+
+export const scriptEvaluation = [
+  {
+    sl_no: 1,
+    script_id: '1234',
+    student_name: 'Alice',
+    student_email: 'alice@gmail.com',
+    script: '/Assets/answerScript.svg',
+  },
+  {
+    sl_no: 2,
+    script_id: '1235',
+    student_name: 'Bob',
+    student_email: 'bob@gmail.com',
+    script: '/Assets/answerScript.svg',
+  },
+  {
+    sl_no: 3,
+    script_id: '1236',
+    student_name: 'Charlie',
+    student_email: 'charlie@gmail.com',
+    script: '/Assets/answerScript.svg',
+  },
+  {
+    sl_no: 4,
+    script_id: '1237',
+    student_name: 'David',
+    student_email: 'adf@gmail.com',
+    script: '/Assets/answerScript.svg',
+  },
+  {
+    sl_no: 5,
+    script_id: '1238',
+    student_name: 'Eve',
+    student_email: 'eve@gmail.com',
+    script: '/Assets/answerScript.svg',
+  },
+]
+
+export const classPerformance = [
+  {
+    class: 1,
+    reviews: 10,
+    rating: 4.5,
+    date: '12 Jan 2024',
+  },
+  {
+    class: 2,
+    reviews: 8,
+    rating: 4.2,
+    date: '13 Jan 2024',
+  },
+  {
+    class: 3,
+    reviews: 15,
+    rating: 4.8,
+    date: '14 Jan 2024',
+  },
+  {
+    class: 4,
+    reviews: 12,
+    rating: 4.3,
+    date: '15 Jan 2024',
+  },
+  {
+    class: 5,
+    reviews: 9,
+    rating: 4.6,
+    date: '16 Jan 2024',
+  },
+  {
+    class: 6,
+    reviews: 7,
+    rating: 4.1,
+    date: '17 Jan 2024',
+  },
+  {
+    class: 7,
+    reviews: 11,
+    rating: 4.7,
+    date: '18 Jan 2024',
+  },
+  {
+    class: 8,
+    reviews: 14,
+    rating: 4.4,
+    date: '19 Jan 2024',
+  },
+  {
+    class: 9,
+    reviews: 13,
+    rating: 4.9,
+    date: '20 Jan 2024',
+  },
+  {
+    class: 10,
+    reviews: 6,
+    rating: 4.0,
+    date: '21 Jan 2024',
+  },
+]

@@ -7,41 +7,39 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { teacherMonitorDetails } from '@/lib/data'
+import { classPerformance } from '@/lib/data'
 
-export default function TeacherMonitoring() {
+export default function ClassPerformance() {
   return (
     <div className="p-12">
       <div className="p-4 border rounded-lg flex flex-col gap-4">
         <div className="flex flex-row max-md:flex-col max-md:gap-2 items-baseline gap-4">
           <h1 className="text-2xl font-semibold font-poppins">
-            Teacher Monitoring
+            Class Performance
           </h1>
-          <span className="text-gray-400">345 Teachers</span>
+          <span className="text-gray-400">345 Reviews</span>
         </div>
         <Table className="overfow-x-auto">
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Total Class</TableHead>
-              <TableHead>Due Payment</TableHead>
+              <TableHead>Class</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Reviews</TableHead>
               <TableHead className="text-right">Ratings</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {teacherMonitorDetails.map((teacher, index) => (
+            {classPerformance.map((row, index) => (
               <TableRow key={index}>
-                <TableCell className="font-medium">
-                  {teacher.teacher_name}
-                </TableCell>
-                <TableCell>{teacher.total_class}</TableCell>
-                <TableCell>{teacher.due_payment}</TableCell>
+                <TableCell>{row.class}</TableCell>
+                <TableCell>{row.date}</TableCell>
+                <TableCell>{row.reviews}</TableCell>
                 <TableCell className="text-right flex justify-end gap-2">
                   <RatingStar
-                    rating={teacher.rating}
+                    rating={row.rating}
                     className="justify-end"
                   />
-                  <span className="font-itim">({teacher.rating})</span>
+                  <span className="font-itim">({row.rating})</span>
                 </TableCell>
               </TableRow>
             ))}
