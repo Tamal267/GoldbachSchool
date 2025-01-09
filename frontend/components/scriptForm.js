@@ -30,7 +30,6 @@ export default function ScriptForm({ row }) {
           alt="link"
           width={1000}
           height={1000}
-          placeholder="blur"
           className="w-full h-auto"
         />
         <div className="relative">
