@@ -193,6 +193,17 @@ export default function RootLayout({ children }) {
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Link
+                    href="/my_dashboard"
+                    legacyBehavior
+                    passHref
+                  >
+                    <NavigationMenuLink className="bg-transparent text-white font-poppins p-4">
+                      Dashboard
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>

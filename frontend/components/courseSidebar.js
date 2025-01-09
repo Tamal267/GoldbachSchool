@@ -5,56 +5,89 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { Activity, House, MonitorCheck } from 'lucide-react'
+import {
+  Activity,
+  Banknote,
+  DraftingCompass,
+  House,
+  MonitorCheck,
+  NotepadText,
+  Soup,
+} from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
 const AuthorityNavs = [
   {
-    name: 'All Coaching Centers',
+    name: 'Dashboard',
     icon: House,
-    link: 'all_coaching_centers',
+    link: '',
   },
   {
-    name: 'Notifications',
+    name: 'Teacher Monitoring',
     icon: MonitorCheck,
-    link: 'notification',
+    link: 'teacher_monitoring',
+  },
+  {
+    name: 'Student Monitoring',
+    icon: Activity,
+    link: 'student_monitoring',
+  },
+  {
+    name: 'New Course',
+    icon: Soup,
+    link: 'new_course',
   },
 ]
 
 const TeacherNavs = [
   {
-    name: 'All Coaching Centers',
-    icon: House,
-    link: 'all_coaching_centers',
+    name: 'Routine',
+    icon: NotepadText,
+    link: 'routine',
   },
   {
-    name: 'Notifications',
-    icon: MonitorCheck,
-    link: 'notification',
+    name: 'Script Evalution',
+    icon: DraftingCompass,
+    link: 'script_evaluation',
   },
   {
-    name: 'Overall Performance',
+    name: 'My Payment',
+    icon: Banknote,
+    link: 'my_payment',
+  },
+  {
+    name: 'Class Performance',
     icon: Activity,
-    link: 'overall_performance',
+    link: 'class_performance',
   },
 ]
 
 const studentNavs = [
   {
-    name: 'All Coaching Centers',
-    icon: House,
-    link: 'all_coaching_centers',
+    name: 'Routine',
+    icon: NotepadText,
+    link: 'routine',
   },
   {
-    name: 'Notifications',
+    name: 'My Course',
     icon: MonitorCheck,
-    link: 'notification',
+    link: 'my_course',
+  },
+  {
+    name: 'New Course',
+    icon: Soup,
+    link: 'buy_new_course',
+  },
+  {
+    name: 'Performance',
+    icon: Activity,
+    link: 'student_performance',
   },
 ]
 
-function GetNavs({ type, activeLink, navItems, isCollapsed }) {
+function GetNavs({ type, course_id, activeLink, navItems, isCollapsed }) {
   return (
     <div className="flex flex-col mt-6">
       {!isCollapsed && (
@@ -64,7 +97,7 @@ function GetNavs({ type, activeLink, navItems, isCollapsed }) {
       )}
       {navItems.map((nav, index) => (
         <Link
-          href={`/my_dashboard/${nav.link}`}
+          href={`/coaching_center/${course_id}/${nav.link}`}
           key={index}
           className={`flex items-center gap-2 hover:bg-gray-200 rounded-lg p-2 ${activeLink === nav.link ? 'text-darkb' : ''}`}
         >
@@ -76,10 +109,10 @@ function GetNavs({ type, activeLink, navItems, isCollapsed }) {
   )
 }
 
-export default function MyDashboardSidebar({ children }) {
+export default function CourseSidebar({ course_id, children }) {
   const pathname = usePathname()
   const segments = pathname.split('/')
-  const activeLink = segments[2]
+  const activeLink = segments[3]
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
@@ -99,11 +132,12 @@ export default function MyDashboardSidebar({ children }) {
           <div className="flex flex-col h-full p-6 overflow-y-auto">
             {!isCollapsed && (
               <h1 className="text-xl max-md:hidden font-semibold font-poppins">
-                My Dashboard
+                Physics
               </h1>
             )}
 
             <GetNavs
+              course_id={course_id}
               navItems={AuthorityNavs}
               activeLink={activeLink}
               type="Authority"
@@ -111,6 +145,7 @@ export default function MyDashboardSidebar({ children }) {
             />
 
             <GetNavs
+              course_id={course_id}
               navItems={TeacherNavs}
               activeLink={activeLink}
               type="Teacher"
@@ -118,6 +153,7 @@ export default function MyDashboardSidebar({ children }) {
             />
 
             <GetNavs
+              course_id={course_id}
               navItems={studentNavs}
               activeLink={activeLink}
               type="Student"
@@ -130,7 +166,7 @@ export default function MyDashboardSidebar({ children }) {
           <div className="overflow-y-auto h-full">
             {isCollapsed && (
               <h1 className="text-xl text-center font-semibold font-poppins p-4 bg-gray-100">
-                My Dashboard
+                Physics
               </h1>
             )}
             {children}

@@ -129,7 +129,7 @@ export default function CoachingSidebar({ cs_id, children }) {
             setIsCollapsed(size < 15)
           }}
         >
-          <div className="flex flex-col h-full p-6">
+          <div className="flex flex-col h-full p-6 overflow-y-auto">
             {!isCollapsed && (
               <h1 className="text-xl max-md:hidden font-semibold font-poppins">
                 ABC Coaching Center
