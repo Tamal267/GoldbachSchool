@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 export default function StudentPerformance() {
   return (
-    <div className="p-12">
+    <div className="p-12 bg-gray-50">
       <div className="flex flex-col gap-8">
         <div className="flex flex-col lg:flex-row gap-8 w-full justify-between">
           <div className="h-20 rounded-lg bg-[#A5C4DB] flex flex-row justify-between flex-grow max-w-3xl shadow-md">
@@ -53,7 +53,7 @@ export default function StudentPerformance() {
             courses.map((course, index) => (
               <div
                 key={index}
-                className="md:h-20 flex flex-col md:flex-row justify-between rounded-lg shadow-md bg-gray-50 items-end"
+                className="md:h-20 flex flex-col md:flex-row justify-between rounded-lg shadow-md bg-white items-end"
               >
                 <Image
                   src={course.image}

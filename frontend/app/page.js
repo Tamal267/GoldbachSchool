@@ -63,21 +63,21 @@ const teamInfo = [
     title: 'CSE Student',
     email: 'sakifshahrear@gmail.com',
     phone: '+880 1677343504',
-    image: '/Assets/Tushar_DP.svg',
+    image: '/Assets/sakif.jpeg',
   },
   {
     name: 'Khadiza Khanom Mithela',
     title: 'CSE Student',
     email: 'khadizakhanom8833@gamil.com',
     phone: '+880 1782640945',
-    image: '/Assets/Tushar_DP.svg',
+    image: '/Assets/dummyProfile.jpg',
   },
   {
     name: 'Shaikh Sabah Taj Shefa',
     title: 'CSE Student',
     email: 'shaikhsabah1990@gmail.com',
     phone: '+880 01769511899',
-    image: '/Assets/Tushar_DP.svg',
+    image: '/Assets/dummyProfile.jpg',
   },
 ]
 

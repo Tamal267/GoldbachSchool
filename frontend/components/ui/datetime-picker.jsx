@@ -305,7 +305,7 @@ function Calendar({
           month: "flex flex-col items-center space-y-4",
           month_caption: "flex justify-center pt-1 relative items-center",
           caption_label: "text-sm font-medium",
-          nav: "space-x-1 flex items-center ",
+          nav: "space-x-1 flex items-center justify-between",
           button_previous: cn(
             buttonVariants({
               variant: "outline",
