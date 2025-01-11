@@ -1,5 +1,6 @@
 import { FileBadge2, Speech } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import RatingStar from './ratingStar'
 import { Button } from './ui/button'
 
@@ -44,7 +45,9 @@ export default function MyCourseCard({ courseInfo }) {
         </div>
       </div>
       <div className="flex justify-center">
-        <Button className="bg-darkb p-4 rounded-full">Details</Button>
+        <Link href={`/course/${courseInfo.id}`}>
+          <Button className="bg-darkb p-4 rounded-full">Details</Button>
+        </Link>
       </div>
     </div>
   )

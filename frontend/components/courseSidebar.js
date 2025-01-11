@@ -6,98 +6,163 @@ import {
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
 import {
-  Activity,
-  Banknote,
-  DraftingCompass,
-  House,
-  MonitorCheck,
+  ListCollapse,
   NotepadText,
-  Soup,
+  NotepadTextDashed,
+  PackagePlus,
+  Plus,
+  Presentation,
+  Users,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-const AuthorityNavs = [
+const TeacherNavs = [
   {
-    name: 'Dashboard',
-    icon: House,
+    name: 'Add New Class',
+    icon: PackagePlus,
+    link: 'add_new_class',
+  },
+  {
+    name: 'Add New Exam',
+    icon: Plus,
+    link: 'add_new_exam',
+  },
+]
+
+const globalSectoins = [
+  {
+    name: 'Details',
+    icon: ListCollapse,
     link: '',
   },
   {
-    name: 'Teacher Monitoring',
-    icon: MonitorCheck,
-    link: 'teacher_monitoring',
+    name: 'Teachers',
+    link: 'teachers',
+    icon: Users,
   },
-  {
-    name: 'Student Monitoring',
-    icon: Activity,
-    link: 'student_monitoring',
-  },
-  {
-    name: 'New Course',
-    icon: Soup,
-    link: 'new_course',
-  },
-]
-
-const TeacherNavs = [
   {
     name: 'Routine',
     icon: NotepadText,
     link: 'routine',
   },
-  {
-    name: 'Script Evalution',
-    icon: DraftingCompass,
-    link: 'script_evaluation',
-  },
-  {
-    name: 'My Payment',
-    icon: Banknote,
-    link: 'my_payment',
-  },
-  {
-    name: 'Class Performance',
-    icon: Activity,
-    link: 'class_performance',
-  },
 ]
 
-const studentNavs = [
+const content = [
   {
-    name: 'Routine',
-    icon: NotepadText,
-    link: 'routine',
+    name: 'Introduction',
+    id: '21323df21',
+    type: 'class',
   },
   {
-    name: 'My Course',
-    icon: MonitorCheck,
-    link: 'my_course',
+    name: 'Chapter 1',
+    id: '21323df22',
+    type: 'class',
   },
   {
-    name: 'New Course',
-    icon: Soup,
-    link: 'buy_new_course',
+    name: 'Exam on Chapter 1',
+    id: '21323df23',
+    type: 'exam',
   },
   {
-    name: 'Performance',
-    icon: Activity,
-    link: 'student_performance',
+    name: 'Chapter 2',
+    id: '21323df24',
+    type: 'class',
+  },
+  {
+    name: 'Exam on Chapter 2',
+    id: '21323df25',
+    type: 'exam',
+  },
+  {
+    name: 'Chapter 3',
+    id: '21323df26',
+    type: 'class',
+  },
+  {
+    name: 'Exam on Chapter 3',
+    id: '21323df27',
+    type: 'exam',
+  },
+  {
+    name: 'Chapter 4',
+    id: '21323df28',
+    type: 'class',
+  },
+  {
+    name: 'Exam on Chapter 4',
+    id: '21323df29',
+    type: 'exam',
+  },
+  {
+    name: 'Chapter 5',
+    id: '21323df30',
+    type: 'class',
+  },
+  {
+    name: 'Exam on Chapter 5',
+    id: '21323df31',
+    type: 'exam',
+  },
+  {
+    name: 'Chapter 6',
+    id: '21323df32',
+    type: 'class',
+  },
+  {
+    name: 'Exam on Chapter 6',
+    id: '21323df33',
+    type: 'exam',
+  },
+  {
+    name: 'Chapter 7',
+    id: '21323df34',
+    type: 'class',
+  },
+  {
+    name: 'Exam on Chapter 7',
+    id: '21323df35',
+    type: 'exam',
+  },
+  {
+    name: 'Chapter 8',
+    id: '21323df36',
+    type: 'class',
+  },
+  {
+    name: 'Exam on Chapter 8',
+    id: '21323df37',
+    type: 'exam',
+  },
+  {
+    name: 'Chapter 9',
+    id: '21323df38',
+    type: 'class',
+  },
+  {
+    name: 'Exam on Chapter 9',
+    id: '21323df39',
+    type: 'exam',
+  },
+  {
+    name: 'Chapter 10',
+    id: '21323df40',
+    type: 'class',
+  },
+  {
+    name: 'Exam on Chapter 10',
+    id: '21323df41',
+    type: 'exam',
   },
 ]
 
 function GetNavs({ type, course_id, activeLink, navItems, isCollapsed }) {
   return (
-    <div className="flex flex-col mt-6">
-      {!isCollapsed && (
-        <p className="max-md:hidden text-gray-500 text-sm border-b mb-2">
-          {type}
-        </p>
-      )}
+    <div className="flex flex-col my-4">
       {navItems.map((nav, index) => (
         <Link
-          href={`/coaching_center/${course_id}/${nav.link}`}
+          href={`/course/${course_id}/${nav.link}`}
           key={index}
           className={`flex items-center gap-2 hover:bg-gray-200 rounded-lg p-2 ${activeLink === nav.link ? 'text-darkb' : ''}`}
         >
@@ -109,10 +174,48 @@ function GetNavs({ type, course_id, activeLink, navItems, isCollapsed }) {
   )
 }
 
+function GetContentNavs({
+  type,
+  course_id,
+  activeLink,
+  navItems,
+  isCollapsed,
+}) {
+  return (
+    <div className="flex flex-col mt-6">
+      {!isCollapsed && (
+        <p className="max-md:hidden text-gray-500 text-sm border-b mb-2">
+          {type}
+        </p>
+      )}
+      {navItems.map((nav, index) => (
+        <Link
+          href={`/course/${course_id}/${nav.type}/${nav.id}`}
+          key={index}
+          className={`flex items-center gap-2 hover:bg-gray-200 rounded-lg p-2 ${activeLink === nav.id ? 'text-darkb' : ''}`}
+        >
+          {nav.type == 'exam' && (
+            <NotepadTextDashed
+              size={20}
+              className="text-red-500"
+            />
+          )}
+          {nav.type == 'class' && (
+            <Presentation
+              size={20}
+              className="text-blue-500"
+            />
+          )}
+          {!isCollapsed && <span className="max-md:hidden">{nav.name}</span>}
+        </Link>
+      ))}
+    </div>
+  )
+}
+
 export default function CourseSidebar({ course_id, children }) {
   const pathname = usePathname()
   const segments = pathname.split('/')
-  const activeLink = segments[3]
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
@@ -138,25 +241,27 @@ export default function CourseSidebar({ course_id, children }) {
 
             <GetNavs
               course_id={course_id}
-              navItems={AuthorityNavs}
-              activeLink={activeLink}
-              type="Authority"
+              navItems={globalSectoins}
+              activeLink={segments[3]}
+              type="Global"
               isCollapsed={isCollapsed}
             />
+
+            <div className="border-b"></div>
 
             <GetNavs
               course_id={course_id}
               navItems={TeacherNavs}
-              activeLink={activeLink}
+              activeLink={segments[3]}
               type="Teacher"
               isCollapsed={isCollapsed}
             />
 
-            <GetNavs
+            <GetContentNavs
               course_id={course_id}
-              navItems={studentNavs}
-              activeLink={activeLink}
-              type="Student"
+              navItems={content}
+              activeLink={segments[4]}
+              type="Contents"
               isCollapsed={isCollapsed}
             />
           </div>

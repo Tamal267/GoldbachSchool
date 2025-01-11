@@ -1,9 +1,11 @@
 import { FileBadge2, Speech, Users } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import RatingStar from './ratingStar'
 import { Button } from './ui/button'
 
 export default function CourseCard({ courseInfo }) {
+  const id = courseInfo.id
   const name = courseInfo.name
   const rating = courseInfo.rating
   const program = courseInfo.program
@@ -49,7 +51,9 @@ export default function CourseCard({ courseInfo }) {
       </div>
       <div className="grid grid-cols-3 gap-4 items-center">
         <span className="font-bold ">{price} ৳</span>
-        <Button className="bg-darkb p-4 rounded-full">Details</Button>
+        <Link href={`/course/${id}`}>
+          <Button className="bg-darkb p-4 rounded-full">Details</Button>
+        </Link>
       </div>
     </div>
   )

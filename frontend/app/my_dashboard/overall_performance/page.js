@@ -115,7 +115,7 @@ const chartConfig = {
   },
   reviews: {
     label: 'Students Reviews',
-    color: 'hsl(var(--chart-1))',
+    color: 'blue',
   },
   mobile: {
     label: 'Mobile',

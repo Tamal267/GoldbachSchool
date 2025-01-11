@@ -16,9 +16,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { bottomToTopVarient } from '@/lib/animation'
-import { motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 
 export default function SearchCoachingCenter({ coachingCenters }) {
@@ -41,10 +40,7 @@ export default function SearchCoachingCenter({ coachingCenters }) {
 
   return (
     <Dialog>
-      <div
-        
-        className="relative rounded-full max-w-md h-full w-full border border-darkb"
-      >
+      <div className="relative rounded-full max-w-md h-full w-full border border-darkb">
         <DialogTrigger className="w-full outline-none">
           {/* <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-blue-700" /> */}
           <Image
@@ -74,7 +70,14 @@ export default function SearchCoachingCenter({ coachingCenters }) {
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup heading="Suggestions">
                   {coachingCenters.map((coachingCenter, index) => (
-                    <CommandItem key={index}>{coachingCenter.name}</CommandItem>
+                    <Link
+                      href={`/coaching_center/${coachingCenter.id}`}
+                      key={index}
+                    >
+                      <CommandItem key={index}>
+                        {coachingCenter.name}
+                      </CommandItem>
+                    </Link>
                   ))}
                 </CommandGroup>
               </CommandList>

@@ -141,7 +141,7 @@ export default function RootLayout({ children }) {
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <Link
-                    href="/"
+                    href="/coaching_centers"
                     legacyBehavior
                     passHref
                   >
@@ -184,7 +184,7 @@ export default function RootLayout({ children }) {
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                   <Link
-                    href="/"
+                    href="/courses"
                     legacyBehavior
                     passHref
                   >
