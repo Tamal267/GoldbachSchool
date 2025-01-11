@@ -23,7 +23,7 @@ export default function Teachers() {
               />
               <div>
                 <CardTitle>{teacher.name}</CardTitle>
-                <CardDescription>MIST</CardDescription>
+                <CardDescription>{teacher.about}</CardDescription>
                 <div className="flex flex-col text-sm text-gray-500">
                   <div className="flex items-center flex-row gap-2">
                     <Mail
