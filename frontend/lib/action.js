@@ -187,3 +187,26 @@ export async function logout(prevState, formData) {
   await cookies().delete('token')
   redirect('/')
 }
+
+
+export async function forgetPassword(prevState, formData) {
+
+  const raw = Object.fromEntries(formData) 
+  console.log("raw: ", raw);
+  const response = await post('user/forget_pass', {
+    email: raw.email
+  })
+
+  console.log("response:" ,response);
+  redirect(`/otp?email=${raw.email}`)
+
+
+}
+
+export async function otpCheck(prevState, formData) {
+  const raw = Object.fromEntries(formData) 
+  console.log("raw: ", raw);
+  const response = await post('user/otp_check', {
+    email: raw.email
+  })
+}

@@ -3,6 +3,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { forgetPassword } from '@/lib/action'
 import Image from 'next/image'
 import { useActionState } from 'react'
 
@@ -11,9 +12,9 @@ const initialState = {
   success: false,
 }
 
-export default function ForgetPasswordPage({ type, forgetPassAction }) {
+export default function ForgetPasswordPage({ type}) {
   const [state, formAction, pending] = useActionState(
-    forgetPassAction,
+    forgetPassword,
     initialState,
   )
   return (
