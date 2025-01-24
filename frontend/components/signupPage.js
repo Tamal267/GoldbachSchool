@@ -18,9 +18,11 @@ import { Alert, AlertDescription } from './ui/alert'
 const initialState = {
   message: '',
   success: false,
+  type: '',
 }
 
 export default function SignUpPage({ type, signUpAction }) {
+  initialState.type = type
   const [state, formAction, pending] = useActionState(
     signUpAction,
     initialState,
@@ -39,14 +41,17 @@ export default function SignUpPage({ type, signUpAction }) {
           </div>
           <div className="p-8 bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 shadow-lg text-white flex flex-col gap-6 max-w-md flex-grow">
             <h1 className="text-bold text-2xl">{type} Sign Up</h1>
-            <form className="space-y-4">
+            <form
+              className="space-y-4"
+              action={formAction}
+            >
               <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="full_name">Full Name</Label>
                 <div>
                   <Input
                     type="text"
-                    id="name"
-                    name="name"
+                    id="full_name"
+                    name="full_name"
                     className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0"
                   />
                 </div>
@@ -91,7 +96,7 @@ export default function SignUpPage({ type, signUpAction }) {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="gender">Gender</Label>
-                <Select>
+                <Select name="gender">
                   <SelectTrigger className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0">
                     <SelectValue placeholder="Select Gender" />
                   </SelectTrigger>

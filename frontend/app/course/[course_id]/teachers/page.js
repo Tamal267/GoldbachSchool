@@ -30,14 +30,14 @@ export default function Teachers() {
                       size={12}
                       className="text-darkb"
                     />
-                    sagor@gmail.com
+                    {teacher.email}
                   </div>
                   <div className="flex items-center flex-row gap-2">
                     <PhoneCall
                       size={12}
                       className="text-darkb"
                     />
-                    01700000000
+                    {teacher.phone}
                   </div>
                 </div>
               </div>

@@ -10,12 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { signUp } from '@/lib/action'
 import Image from 'next/image'
 import Link from 'next/link'
 
 
 export default function AuthoritySignUp() {
   return (
-    <SignUpPage type="Authority" signUpAction="authoritySignUp" />
+    <SignUpPage type="Authority" signUpAction={signUp} />
   )
 }

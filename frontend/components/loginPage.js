@@ -14,6 +14,7 @@ const initialState = {
 }
 
 export default function LoginPage({ type, loginAction }) {
+  initialState.type = type
   const [state, formAction, pending] = useActionState(loginAction, initialState)
   return (
     <div className="bg-[#526b7f] pt-4">
