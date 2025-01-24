@@ -141,27 +141,31 @@ async function uploadImage(folder, uId, file, bucket) {
 export async function signUp(prevState, formData) {
   let raw = Object.fromEntries(formData)
   raw.type = prevState.type
-  console.log('raw', raw)
-  console.log('prevState', prevState)
 
   if (raw.password !== raw.confirm_password) {
-    prevState.success = false
-    prevState.message = 'Passwords do not match'
-    return prevState
+    return {
+      success: false,
+      message: 'Passwords do not match',
+      type: prevState.type,
+    }
   }
 
   if (mailChecker.isValid(raw.email)) {
     const response = await post('user/signup', raw)
+    console.log(response)
     if (response.error) {
-      prevState.success = false
-      prevState.message = response.error
-      return prevState
-    }
-    redirect(`/login/${prevState.type.toLowerCase()}`)
+      return {
+        success: false,
+        message: response.error,
+        type: prevState.type,
+      }
+    } else redirect(`/login/${prevState.type.toLowerCase()}`)
   } else {
-    prevState.success = false
-    prevState.message = 'Invalid email'
-    return prevState
+    return {
+      success: false,
+      message: 'Invalid email',
+      type: prevState.type
+    }
   }
 }
 
