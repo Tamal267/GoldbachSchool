@@ -12,7 +12,7 @@ const initialState = {
   success: false,
 }
 
-export default function ForgetPasswordPage({ type}) {
+export default function ForgetPasswordPage() {
   const [state, formAction, pending] = useActionState(
     forgetPassword,
     initialState,
@@ -22,7 +22,7 @@ export default function ForgetPasswordPage({ type}) {
       <div className="">
         <div className="bg-[url(/Assets/potato.svg)] bg-cover bg-top flex md:flex-row flex-col justify-around items-center p-12 min-h-screen">
           <div className="h-fit p-8 bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 text-white flex flex-col gap-6 max-w-md flex-grow shadow-lg">
-            <h1 className="text-bold text-2xl">{type} Forget Password</h1>
+            <h1 className="text-bold text-2xl">Forget Password</h1>
             <form
               className="space-y-4"
               action={formAction}

@@ -152,7 +152,6 @@ export async function signUp(prevState, formData) {
 
   if (mailChecker.isValid(raw.email)) {
     const response = await post('user/signup', raw)
-    console.log(response)
     if (response.error) {
       return {
         success: false,
@@ -164,7 +163,7 @@ export async function signUp(prevState, formData) {
     return {
       success: false,
       message: 'Invalid email',
-      type: prevState.type
+      type: prevState.type,
     }
   }
 }
@@ -172,7 +171,6 @@ export async function signUp(prevState, formData) {
 export async function login(prevState, formData) {
   const raw = Object.fromEntries(formData)
   raw.type = prevState.type
-  console.log('raw', raw)
   const response = await post('user/login', raw)
   if (response.error)
     return {
@@ -188,25 +186,65 @@ export async function logout(prevState, formData) {
   redirect('/')
 }
 
-
 export async function forgetPassword(prevState, formData) {
-
-  const raw = Object.fromEntries(formData) 
-  console.log("raw: ", raw);
+  const raw = Object.fromEntries(formData)
   const response = await post('user/forget_pass', {
-    email: raw.email
+    email: raw.email,
   })
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+    }
+  }
 
-  console.log("response:" ,response);
   redirect(`/otp?email=${raw.email}`)
-
-
 }
 
 export async function otpCheck(prevState, formData) {
-  const raw = Object.fromEntries(formData) 
-  console.log("raw: ", raw);
+  const raw = Object.fromEntries(formData)
+  raw.email = prevState.email
   const response = await post('user/otp_check', {
-    email: raw.email
+    email: raw.email,
+    otp: raw.otp,
   })
+
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+      email: raw.email,
+    }
+  }
+
+  redirect(`/reset_password?email=${raw.email}`)
 }
+
+export async function resetPass(prevState, formData) {
+  const raw = Object.fromEntries(formData)
+  raw.email = prevState.email
+
+  if (raw.password !== raw.confirm_password) {
+    return {
+      success: false,
+      message: 'Passwords do not match',
+      email: raw.email,
+    }
+  }
+
+  const response = await post('user/reset_pass', {
+    email: raw.email,
+    password: raw.password,
+  })
+
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+      email: raw.email,
+    }
+  }
+
+  redirect(`/login/${response.type.toLowerCase()}`)
+}
+

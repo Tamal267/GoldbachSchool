@@ -1,8 +1,7 @@
 import OTPPage from '@/components/otpPage'
-import React from 'react'
 
-export default function OTP() {
-  return (
-    <OTPPage />
-  )
+export default async function OTP({ searchParams }) {
+  const sp = await searchParams
+  const email = sp.email ? sp.email : ''
+  return <OTPPage email={email} />
 }

@@ -9,7 +9,6 @@ import {
 import { Label } from '@/components/ui/label'
 import { otpCheck } from '@/lib/action'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { useActionState } from 'react'
 
 const initialState = {
@@ -17,11 +16,9 @@ const initialState = {
   success: false,
 }
 
-export default function OTPPage() {
+export default function OTPPage({ email }) {
+  initialState.email = email
   const [state, formAction, pending] = useActionState(otpCheck, initialState)
-  const router = useRouter();
-  const {email} = router.query;
-  console.log("email: ", email);
   return (
     <div className="bg-[#526b7f] pt-4">
       <div className="">
