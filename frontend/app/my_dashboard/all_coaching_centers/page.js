@@ -1,8 +1,10 @@
 import CoachingCenterCard from '@/components/coachingCenterCard'
 import SearchCoachingCenter from '@/components/searchCoachingCenter'
+import { viewCoachingCenters } from '@/lib/action'
 import { coachingCenters } from '@/lib/data'
 
-export default function AllCoachingCenters() {
+export default async function AllCoachingCenters() {
+  const coachingCenters = await viewCoachingCenters()
   return (
     <div className="bg-gray-50">
       <div className="flex flex-col items-center justify-center gap-10 p-8">

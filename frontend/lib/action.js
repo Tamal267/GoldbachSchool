@@ -1,6 +1,7 @@
 'use server'
 
 import mailChecker from 'mailchecker'
+import { revalidatePath } from 'next/cache'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { cache } from 'react'
@@ -10,7 +11,6 @@ const server_url = process.env.SERVER_URL + '/'
 
 export const post = cache(async (url, data) => {
   url = server_url + url
-  console.log('url: ', url)
 
   const response = await fetch(
     url,
@@ -62,7 +62,8 @@ export const get = cache(async (url) => {
 })
 
 export const get_with_token = cache(async (url) => {
-  const token = cookies().get('token')
+  const co = await cookies()
+  const token = co.get('token')
   if (token === undefined)
     return {
       error: 'Unauthorized',
@@ -93,7 +94,8 @@ export const get_with_token = cache(async (url) => {
 })
 
 export const post_with_token = cache(async (url, data) => {
-  const token = cookies().get('token')
+  const co = await cookies()
+  const token = co.get('token')
   if (token === undefined)
     return {
       error: 'Unauthorized',
@@ -177,7 +179,8 @@ export async function login(prevState, formData) {
       success: false,
       message: response.error,
     }
-  await cookies().set('token', response.token)
+  const co = await cookies()
+  co.set('token', response.token)
   redirect('/')
 }
 
@@ -248,3 +251,57 @@ export async function resetPass(prevState, formData) {
   redirect(`/login/${response.type.toLowerCase()}`)
 }
 
+export async function createCoachingCenter(prevState, formData) {
+  const raw = Object.fromEntries(formData)
+
+  let authorities_emails = []
+  const entries = Object.entries(raw)
+
+  entries.forEach(async ([key, value]) => {
+    if (key.startsWith('authority-') && value !== '') {
+      authorities_emails.push(value)
+    }
+  })
+  authorities_emails = [...new Set(authorities_emails)]
+
+  const { url, error } = await uploadImage(
+    'coaching_centers',
+    raw.name,
+    raw.image,
+    'store_room',
+  )
+
+  if (error) {
+    console.log('error image: ', error)
+    return {
+      success: false,
+      message: 'Error uploading image',
+    }
+  }
+
+  console.log(raw.name, url, authorities_emails)
+
+  const response = await post_with_token('coaching_center/create', {
+    name: raw.name,
+    image: url,
+    authorities_emails,
+  })
+
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+    }
+  }
+  revalidatePath('my_dashboard/create_new_coaching_center')
+  return {
+    success: true,
+    message: `Coaching Center ${raw.name} created successfully`,
+  }
+}
+
+export async function viewCoachingCenters() {
+  const response = await get_with_token('coaching_center/view')
+  if (response.error) return response.error
+  return response.result
+}

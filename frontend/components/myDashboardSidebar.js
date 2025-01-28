@@ -5,7 +5,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { Activity, House, MonitorCheck } from 'lucide-react'
+import { Activity, House, MonitorCheck, School } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -20,6 +20,11 @@ const AuthorityNavs = [
     name: 'Notifications',
     icon: MonitorCheck,
     link: 'notification',
+  },
+  {
+    name: 'Create Coaching Center',
+    icon: School,
+    link: 'create_new_coaching_center',
   },
 ]
 

@@ -4,7 +4,7 @@ import sql from '../db'
 import { sendEmail } from '../sendEmail'
 
 function generateRandomWord() {
-  return randomBytes(3).toString('hex') 
+  return randomBytes(3).toString('hex')
 }
 
 export const signUp = async (c: any) => {
@@ -39,10 +39,7 @@ export const login = async (c: any) => {
       console.log('JWT secret is not defined')
       return c.json({ error: 'Internal server error' }, 500)
     }
-    const token = await JwtSign(
-      { email, id: result[0].id, type: result[0].type },
-      secret,
-    )
+    const token = await JwtSign({ email, type: result[0].type }, secret)
     return c.json({ result, token })
   } catch (error) {
     console.log(error)

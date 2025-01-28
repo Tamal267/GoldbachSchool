@@ -63,7 +63,7 @@ export default function LoginPage({ type, loginAction }) {
 
             <p>
               <Link
-                href={`/forget_password/${type.toLowerCase()}`}
+                href={`/forget_password`}
                 className="text-darkb"
               >
                 Forget Password?
