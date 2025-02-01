@@ -109,7 +109,7 @@ function GetNavs({ type, cs_id, activeLink, navItems, isCollapsed }) {
   )
 }
 
-export default function CoachingSidebar({ cs_id, children }) {
+export default function CoachingSidebar({ cs_id, children, coaching_center }) {
   const pathname = usePathname()
   const segments = pathname.split('/')
   const activeLink = segments[3]
@@ -132,7 +132,7 @@ export default function CoachingSidebar({ cs_id, children }) {
           <div className="flex flex-col h-full p-6 overflow-y-auto">
             {!isCollapsed && (
               <h1 className="text-xl max-md:hidden font-semibold font-poppins">
-                ABC Coaching Center
+                {coaching_center.name}
               </h1>
             )}
 

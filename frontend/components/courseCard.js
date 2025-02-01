@@ -7,12 +7,12 @@ import { Button } from './ui/button'
 export default function CourseCard({ courseInfo }) {
   const id = courseInfo.id
   const name = courseInfo.name
-  const rating = courseInfo.rating
+  const rating = courseInfo.rating ? courseInfo.rating : 0
   const program = courseInfo.program
-  const classes = courseInfo.classes
-  const total_time = courseInfo.total_time
-  const students = courseInfo.students
-  const price = courseInfo.price
+  const classes = courseInfo.classes ? courseInfo.classes : 0
+  const total_time = courseInfo.total_time ? courseInfo.total_time : 0
+  const students = courseInfo.students ? courseInfo.students : 0
+  const price = courseInfo.course_fee
   const image = courseInfo.image
 
   return (

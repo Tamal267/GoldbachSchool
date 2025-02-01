@@ -213,7 +213,7 @@ function GetContentNavs({
   )
 }
 
-export default function CourseSidebar({ course_id, children }) {
+export default function CourseSidebar({ course_id, children, course }) {
   const pathname = usePathname()
   const segments = pathname.split('/')
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -235,7 +235,7 @@ export default function CourseSidebar({ course_id, children }) {
           <div className="flex flex-col h-full p-6 overflow-y-auto">
             {!isCollapsed && (
               <h1 className="text-xl max-md:hidden font-semibold font-poppins">
-                Physics
+                {course.name}
               </h1>
             )}
 
@@ -271,7 +271,7 @@ export default function CourseSidebar({ course_id, children }) {
           <div className="overflow-y-auto h-full">
             {isCollapsed && (
               <h1 className="text-xl text-center font-semibold font-poppins p-4 bg-gray-100">
-                Physics
+                {course.name}
               </h1>
             )}
             {children}

@@ -279,8 +279,6 @@ export async function createCoachingCenter(prevState, formData) {
     }
   }
 
-  console.log(raw.name, url, authorities_emails)
-
   const response = await post_with_token('coaching_center/create', {
     name: raw.name,
     image: url,
@@ -302,6 +300,90 @@ export async function createCoachingCenter(prevState, formData) {
 
 export async function viewCoachingCenters() {
   const response = await get_with_token('coaching_center/view')
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function getCoachingCenter(cs_id) {
+  const response = await post_with_token('coaching_center/get_coaching_center', {
+    coaching_center_id: cs_id,
+  })
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function createCourse(prevState, formData) {
+  let raw = Object.fromEntries(formData)
+  raw.coaching_center_id = prevState.coaching_center_id
+
+  let ins_emails = []
+  const entries = Object.entries(raw)
+
+   entries.forEach(async ([key, value]) => {
+    if (key.startsWith('instructor-') && value !== '') {
+      ins_emails.push(value)
+    }
+  })
+  ins_emails = [...new Set(ins_emails)]
+
+  raw.ins_emails = ins_emails
+
+
+  const { url, error } = await uploadImage(
+    raw.coaching_center_id,
+    raw.name,
+    raw.image,
+    'store_room',
+  )
+
+  if (error) {
+    console.log('error image: ', error)
+    return {
+      success: false,
+      message: 'Error uploading image',
+      coaching_center_id: raw.coaching_center_id,
+    }
+  }
+
+  raw.image = url
+
+  const response = await post_with_token('course/create', raw)
+
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+      coaching_center_id: raw.coaching_center_id,
+    }
+  }
+  revalidatePath(`coaching_center/${raw.coaching_center_id}/new_course`)
+  return {
+    success: true,
+    message: `New course ${raw.name} created successfully`,
+    coaching_center_id: raw.coaching_center_id,
+  }
+}
+
+export async function viewCourses(cs_id) {
+  const response = await post_with_token('course/view', {
+    coaching_center_id: cs_id,
+  })
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function getCourse(course_id) {
+  const response = await post_with_token('course/get_course', {
+    course_id,
+  })
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function getTeachers(course_id) {
+  const response = await post_with_token('course/get_teachers', {
+    course_id,
+  })
   if (response.error) return response.error
   return response.result
 }

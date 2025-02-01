@@ -1,25 +1,28 @@
 import { Button } from '@/components/ui/button'
+import { getCourse } from '@/lib/action'
 import { BookOpenCheck, FileSpreadsheet, Timer, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function Course({ params }) {
-  const { course_id } = params
+export default async function Course({ params }) {
+  const { course_id } = await params
+  const courseArr = await getCourse(course_id)
+  const course = courseArr[0]
   return (
     <div className="p-12">
       <div className="flex flex-col gap-8 lg:flex-row">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 flex-grow">
           <div>
             <Image
-              src="/Assets/teacherInClass.jpg"
-              alt="Physics"
+              src={course.image}
+              alt={course.name}
               width={1400}
               height={1000}
               className="w-full h-auto"
             />
           </div>
           <div>
-            <h1 className="text-3xl font-poppins">Physics</h1>
+            <h1 className="text-3xl font-poppins">{course.name}</h1>
           </div>
           <div className="flex flex-row gap-8">
             <div className="flex flex-row gap-2 items-center">
@@ -56,43 +59,7 @@ export default function Course({ params }) {
             <h1 className="text-xl font-epilogue font-semibold text-darkb">
               Description
             </h1>
-            <p className="text-gray-700">
-              Welcome to Grade 10 Mathematics - Algebra Essentials. This class
-              is designed to help students excel in algebra with engaging
-              lessons, hands-on practice, and personalized guidance. In this
-              course, you will explore fundamental topics like linear equations,
-              quadratic functions, and graphing techniques. With interactive
-              lessons, quizzes, and assignments, you{"'"}ll be well-prepared for
-              your upcoming exams.
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <h1 className="text-xl font-epilogue font-semibold text-darkb">
-              Topics Covered
-            </h1>
-            <ul className="list-none list-inside text-gray-700 px-2 space-y-2">
-              <li className="flex items-center">
-                <span className="mr-2 text-darkb">&rarr;</span>
-                Basics of Algebraic Expressions
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2 text-darkb">&rarr;</span>
-                Linear Equations and Inequalities
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2 text-darkb">&rarr;</span>
-                Quadratic Equations
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2 text-darkb">&rarr;</span>
-                Functions and Graphs{' '}
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2 text-darkb">&rarr;</span>
-                Real-life Problem Solving{' '}
-              </li>
-            </ul>
+            <p className="text-gray-700">{course.description}</p>
           </div>
         </div>
         <div className="h-fit bg-white/70 rounded-lg flex flex-col gap-4 p-4 shadow-lg ">

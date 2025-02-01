@@ -4,11 +4,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { teachers } from '@/lib/data'
+import { getTeachers } from '@/lib/action'
 import { Mail, PhoneCall } from 'lucide-react'
 import Image from 'next/image'
 
-export default function Teachers() {
+export default async function Teachers({ params }) {
+  const { course_id } = await params
+  const teachers = await getTeachers(course_id)
   return (
     <div className="p-12 flex flex-col gap-4">
       {teachers.map((teacher, index) => (
@@ -16,7 +18,7 @@ export default function Teachers() {
           <CardHeader>
             <div className="flex flex-row gap-4">
               <Image
-                src={teacher.image}
+                src={teacher.image ? teacher.image : '/Assets/dummyProfile.jpg'}
                 alt={teacher.name}
                 width={100}
                 height={100}

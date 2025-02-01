@@ -69,16 +69,17 @@ export default function SearchCoachingCenter({ coachingCenters }) {
               <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup heading="Suggestions">
-                  {coachingCenters.map((coachingCenter, index) => (
-                    <Link
-                      href={`/coaching_center/${coachingCenter.id}`}
-                      key={index}
-                    >
-                      <CommandItem key={index}>
-                        {coachingCenter.name}
-                      </CommandItem>
-                    </Link>
-                  ))}
+                  {coachingCenters.length > 0 &&
+                    coachingCenters.map((coachingCenter, index) => (
+                      <Link
+                        href={`/coaching_center/${coachingCenter.id}`}
+                        key={index}
+                      >
+                        <CommandItem key={index}>
+                          {coachingCenter.name}
+                        </CommandItem>
+                      </Link>
+                    ))}
                 </CommandGroup>
               </CommandList>
             </Command>

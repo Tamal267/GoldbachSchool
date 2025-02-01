@@ -1,7 +1,6 @@
 import CoachingCenterCard from '@/components/coachingCenterCard'
 import SearchCoachingCenter from '@/components/searchCoachingCenter'
 import { viewCoachingCenters } from '@/lib/action'
-import { coachingCenters } from '@/lib/data'
 
 export default async function AllCoachingCenters() {
   const coachingCenters = await viewCoachingCenters()
@@ -11,7 +10,7 @@ export default async function AllCoachingCenters() {
         <h1 className="text-2xl font-bold text-darkb">Coaching Centers</h1>
         <SearchCoachingCenter coachingCenters={coachingCenters} />
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
-          {coachingCenters.map((coachingCenter, index) => (
+          {coachingCenters.length > 0 && coachingCenters.map((coachingCenter, index) => (
             <CoachingCenterCard
               key={index}
               coachingCenterInfo={coachingCenter}

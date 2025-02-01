@@ -21,6 +21,7 @@ export default function CoachingCenterCard({ coachingCenterInfo }) {
           alt="Search"
           width={500}
           height={500}
+          className="w-full h-auto aspect-auto"
         />
       </div>
       <div className="flex flex-row justify-left pr-4">

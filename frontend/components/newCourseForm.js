@@ -3,7 +3,6 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import MultipleSelector from '@/components/ui/multiple-selector'
 import {
   Select,
   SelectContent,
@@ -11,9 +10,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useActionState, useState } from 'react'
+import { createCourse } from '@/lib/action'
+import { useActionState, useCallback, useState } from 'react'
 import { AutosizeTextarea } from './ui/autosize-textarea'
-import { DateTimePicker } from './ui/datetime-picker'
+import { DateTimePicker } from './ui/date-time-picker-demo'
 
 const initialState = {
   message: '',
@@ -36,10 +36,29 @@ const OPTIONS = [
   { label: 'Admissoin', value: 'admission' },
 ]
 
-export default function NewCourseForm({ type, loginAction }) {
-  const [state, formAction, pending] = useActionState(loginAction, initialState)
-  const { date24, setDate24 } = useState(new Date())
+export default function NewCourseForm({ coaching_center_id }) {
+  initialState.coaching_center_id = coaching_center_id
+  const [state, formAction, pending] = useActionState(
+    createCourse,
+    initialState,
+  )
+  const [date24, setDate24] = useState(new Date())
   const [insEmails, setInsEmails] = useState([''])
+
+  const onSetDate = (date) => {
+    setDate24(date)
+  }
+
+  const handleSubmit = useCallback(
+    (formData) => {
+      const d = new Date(date24)
+      console.log('date24: ', date24)
+      formData.append('start_time', d.toISOString())
+      formAction(formData)
+    },
+    [date24, formAction],
+  )
+
   return (
     <div className="pt-4">
       <div className="">
@@ -48,23 +67,26 @@ export default function NewCourseForm({ type, loginAction }) {
             <h1 className="text-bold text-2xl">New Course</h1>
             <form
               className="space-y-4"
-              action={formAction}
+              action={handleSubmit}
             >
               <div className="space-y-2">
                 <Label htmlFor="program">Program</Label>
                 <div>
-                  <MultipleSelector
-                    maxSelected={1}
-                    creatable
-                    defaultOptions={OPTIONS}
-                    placeholder="Select program..."
-                    className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0"
-                    emptyIndicator={
-                      <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                        no results found.
-                      </p>
-                    }
-                  />
+                  <Select name="program">
+                    <SelectTrigger className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0">
+                      <SelectValue placeholder="Select a program" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {OPTIONS.map((option) => (
+                        <SelectItem
+                          key={option.value}
+                          value={option.value}
+                        >
+                          {option.value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
@@ -86,6 +108,7 @@ export default function NewCourseForm({ type, loginAction }) {
                 <div>
                   <AutosizeTextarea
                     placeholder="Write description"
+                    name="description"
                     className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0 "
                     maxHeight={500}
                   />
@@ -107,7 +130,7 @@ export default function NewCourseForm({ type, loginAction }) {
               <div className="space-y-2">
                 <Label htmlFor="version">Version</Label>
                 <div>
-                  <Select>
+                  <Select name="version">
                     <SelectTrigger className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0">
                       <SelectValue placeholder="Version" />
                     </SelectTrigger>
@@ -120,24 +143,10 @@ export default function NewCourseForm({ type, loginAction }) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="routine">Routing</Label>
-                <div>
-                  <Input
-                    type="file"
-                    id="routine"
-                    name="routine"
-                    className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
                 <Label htmlFor="start_time">Start Time</Label>
                 <div>
                   <DateTimePicker
-                    hourCycle={24}
-                    value={date24}
-                    onChange={setDate24}
+                    onSetDate={onSetDate}
                     className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0 "
                   />
                 </div>
@@ -180,7 +189,7 @@ export default function NewCourseForm({ type, loginAction }) {
                 <Label htmlFor="per_class_tk">Per Class TK</Label>
                 <div>
                   <Input
-                    type="text"
+                    type="number"
                     id="per_class_tk"
                     name="per_class_tk"
                     className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0"
@@ -189,12 +198,12 @@ export default function NewCourseForm({ type, loginAction }) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="per_evalution_tk">Per Evalution TK</Label>
+                <Label htmlFor="per_evaluation_tk">Per Evalution TK</Label>
                 <div>
                   <Input
-                    type="text"
-                    id="per_evalution_tk"
-                    name="per_evalution_tk"
+                    type="number"
+                    id="per_evaluation_tk"
+                    name="per_evaluation_tk"
                     className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0"
                   />
                 </div>
@@ -204,7 +213,7 @@ export default function NewCourseForm({ type, loginAction }) {
                 <Label htmlFor="course_fee">Course Fee</Label>
                 <div>
                   <Input
-                    type="text"
+                    type="number"
                     id="course_fee"
                     name="course_fee"
                     className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0"

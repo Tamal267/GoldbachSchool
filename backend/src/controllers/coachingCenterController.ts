@@ -37,7 +37,7 @@ export const insertCoachingCenter = async (c: any) => {
     return c.json({ result })
   } catch (error) {
     console.log(error)
-    return c.json({ erro: 'error' }, 400)
+    return c.json({ error: 'error' }, 400)
   }
 }
 
@@ -52,13 +52,38 @@ export const viewCoachingCenters = async (c: any) => {
   }
 
   const type = user[0].type
+  const user_id = user[0].id
 
   try {
     let result = {}
-      if (type === 'Authority') result = await sql`select * from coaching_centers where id in (select coaching_center_id from authorities where user_id = '8c867749-5fc5-444d-a5e6-d14b9fd96e3b')`
+    if (type === 'Authority')
+      result =
+        await sql`select * from coaching_centers where id in (select coaching_center_id from authorities where user_id = ${user_id})`
     return c.json({ result })
   } catch (error) {
     console.log(error)
-    return c.json({ erro: 'error' }, 400)
+    return c.json({ error: 'error' }, 400)
+  }
+}
+
+
+export const getCoachingCenter = async (c: any) => {
+  const { email } = c.get('jwtPayload')
+  if (!email) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+  const user = await sql`select * from users where email = ${email}`
+  if (user.length === 0) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+
+  try {
+    const { coaching_center_id } = await c.req.json()
+    const result =
+        await sql`select * from coaching_centers where id = ${coaching_center_id}`
+    return c.json({ result })
+  } catch (error) {
+    console.log(error)
+    return c.json({ error: 'error' }, 400)
   }
 }
