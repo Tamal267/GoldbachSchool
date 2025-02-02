@@ -2,7 +2,6 @@
 
 import { add, format } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
-import * as React from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -14,9 +13,7 @@ import {
 import { cn } from '@/lib/utils'
 import { TimePickerDemo } from './time-picker-demo'
 
-export function DateTimePicker({ onSetDate, className }) {
-  const [date, setDate] = React.useState()
-
+export function DateTimePicker({ date, onSetDate, className }) {
   /**
    * carry over the current time when a user clicks a new day
    * instead of resetting to 00:00
@@ -24,14 +21,12 @@ export function DateTimePicker({ onSetDate, className }) {
   const handleSelect = (newDay) => {
     if (!newDay) return
     if (!date) {
-      setDate(newDay)
       onSetDate(newDay)
       return
     }
     const diff = newDay.getTime() - date.getTime()
     const diffInDays = diff / (1000 * 60 * 60 * 24)
     const newDateFull = add(date, { days: Math.ceil(diffInDays) })
-    setDate(newDateFull)
     onSetDate(newDateFull)
   }
 
@@ -42,7 +37,8 @@ export function DateTimePicker({ onSetDate, className }) {
           variant={'outline'}
           className={cn(
             'w-[280px] justify-start text-left font-normal',
-            !date && 'text-muted-foreground', className
+            !date && 'text-muted-foreground',
+            className,
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
@@ -58,7 +54,7 @@ export function DateTimePicker({ onSetDate, className }) {
         />
         <div className="p-3 border-t border-border">
           <TimePickerDemo
-            setDate={setDate}
+            setDate={onSetDate}
             date={date}
           />
         </div>

@@ -6,20 +6,39 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { routine } from '@/lib/data'
+import { viewContents } from '@/lib/action'
+import { format, isAfter } from 'date-fns'
 import { AlarmClock } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function Routine() {
+const capitalizeFirstLetter = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+}
+
+export default async function Routine({ params }) {
+  const { course_id } = await params
+  const contents = await viewContents(course_id)
+  let firstRow = contents[0]
+  for (let i = 0; i < contents.length; i++) {
+    if (isAfter(contents[i].start_time, new Date())) {
+      firstRow = contents[i]
+      break
+    }
+  }
   return (
     <div className="flex flex-col gap-8 p-12">
       <div className="flex justify-between rounded-full h-12 bg-[#A5C4DB] shadow-lg">
         <div className="flex-grow p-4 flex items-center justify-between gap-4">
           <div className="flex flex-row gap-2 justify-between">
-            <AlarmClock /> Next Class
+            <AlarmClock /> Next {capitalizeFirstLetter(firstRow.type)}
           </div>
-          <div className="font-epilogue">20 DEC 2024, 12:30, FRIDAY</div>
+          <div className="font-epilogue">
+            {format(
+              firstRow.start_time,
+              'dd MMM yyyy, HH:mm, EEEE',
+            ).toUpperCase()}
+          </div>
         </div>
         <Image
           src="/Assets/notificationNav.svg"
@@ -38,7 +57,8 @@ export default function Routine() {
         <Table className="overfow-x-auto">
           <TableHeader>
             <TableRow>
-              <TableHead>Class</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Title</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Time</TableHead>
               <TableHead>Day</TableHead>
@@ -46,14 +66,17 @@ export default function Routine() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {routine.map((row, index) => (
+            {contents.map((row, index) => (
               <TableRow key={index}>
-                <TableCell className="font-medium">{row.class}</TableCell>
-                <TableCell>{row.date}</TableCell>
-                <TableCell>{row.time}</TableCell>
-                <TableCell>{row.day}</TableCell>
+                <TableCell className="font-medium">
+                  {capitalizeFirstLetter(row.type)}
+                </TableCell>
+                <TableCell className="font-medium">{row.title}</TableCell>
+                <TableCell>{format(row.start_time, 'dd MMM yyyy')}</TableCell>
+                <TableCell>{format(row.start_time, 'HH:mm')}</TableCell>
+                <TableCell>{format(row.start_time, 'EEEE')}</TableCell>
                 <TableCell>
-                  <Link href={row.class_link}>
+                  <Link href={`/course/${course_id}/${row.type}/${row.id}`}>
                     <Image
                       src="/Assets/GoToLink.svg"
                       alt="link"

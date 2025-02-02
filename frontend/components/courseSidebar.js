@@ -206,14 +206,14 @@ function GetContentNavs({
               className="text-blue-500"
             />
           )}
-          {!isCollapsed && <span className="max-md:hidden">{nav.name}</span>}
+          {!isCollapsed && <span className="max-md:hidden">{nav.title}</span>}
         </Link>
       ))}
     </div>
   )
 }
 
-export default function CourseSidebar({ course_id, children, course }) {
+export default function CourseSidebar({ course_id, children, course, contents }) {
   const pathname = usePathname()
   const segments = pathname.split('/')
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -259,7 +259,7 @@ export default function CourseSidebar({ course_id, children, course }) {
 
             <GetContentNavs
               course_id={course_id}
-              navItems={content}
+              navItems={contents}
               activeLink={segments[4]}
               type="Contents"
               isCollapsed={isCollapsed}

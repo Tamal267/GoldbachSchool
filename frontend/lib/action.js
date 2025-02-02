@@ -305,9 +305,12 @@ export async function viewCoachingCenters() {
 }
 
 export async function getCoachingCenter(cs_id) {
-  const response = await post_with_token('coaching_center/get_coaching_center', {
-    coaching_center_id: cs_id,
-  })
+  const response = await post_with_token(
+    'coaching_center/get_coaching_center',
+    {
+      coaching_center_id: cs_id,
+    },
+  )
   if (response.error) return response.error
   return response.result
 }
@@ -319,7 +322,7 @@ export async function createCourse(prevState, formData) {
   let ins_emails = []
   const entries = Object.entries(raw)
 
-   entries.forEach(async ([key, value]) => {
+  entries.forEach(async ([key, value]) => {
     if (key.startsWith('instructor-') && value !== '') {
       ins_emails.push(value)
     }
@@ -327,7 +330,6 @@ export async function createCourse(prevState, formData) {
   ins_emails = [...new Set(ins_emails)]
 
   raw.ins_emails = ins_emails
-
 
   const { url, error } = await uploadImage(
     raw.coaching_center_id,
@@ -383,6 +385,125 @@ export async function getCourse(course_id) {
 export async function getTeachers(course_id) {
   const response = await post_with_token('course/get_teachers', {
     course_id,
+  })
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function addClass(prevState, formData) {
+  let raw = Object.fromEntries(formData)
+  raw.course_id = prevState.course_id
+
+  let items = []
+
+  const entries = Object.entries(raw)
+
+  entries.forEach(async ([key, value]) => {
+    if (key.startsWith('topic-') && value !== '') {
+      items.push(value)
+    }
+  })
+
+  raw.topics = [...new Set(items)]
+
+  const regex = /[?&]v=([^&]+)/
+
+  const match = raw.link.match(regex)
+
+  if (match) {
+    raw.link = `https://www.youtube.com/embed/${match[1]}`
+  } else {
+    return {
+      success: false,
+      message: 'Invalid video link',
+      course_id: raw.course_id,
+    }
+  }
+
+  const response = await post_with_token('course/add_class', raw)
+
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+      course_id: raw.course_id,
+    }
+  }
+  revalidatePath(`course/${raw.course_id}/add_new_class`)
+  return {
+    success: true,
+    message: `New class '${raw.title}' added successfully`,
+    course_id: raw.course_id,
+  }
+}
+
+export async function addExam(prevState, formData) {
+  let raw = Object.fromEntries(formData)
+  raw.course_id = prevState.course_id
+
+  const regex = /^[0-9]{1,2}:[0-9]{1,2}$/
+  if (!regex.test(raw.duration)) {
+    return {
+      success: false,
+      message: 'Invalid duration format',
+      course_id: raw.course_id,
+    }
+  }
+
+  const { url, error } = await uploadImage(
+    raw.course_id,
+    raw.title,
+    raw.question_paper,
+    'store_room',
+  )
+
+  if (error) {
+    console.log('error image: ', error)
+    return {
+      success: false,
+      message: 'Error uploading file',
+      course_id: raw.course_id,
+    }
+  }
+
+  raw.question_paper = url
+
+  const response = await post_with_token('course/add_exam', raw)
+
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+      course_id: raw.course_id,
+    }
+  }
+  revalidatePath(`course/${raw.course_id}/add_new_exam`)
+  return {
+    success: true,
+    message: `New exam '${raw.title}' added successfully`,
+    course_id: raw.course_id,
+  }
+}
+
+export async function viewContents(course_id) {
+  const response = await post_with_token('course/view_contents', {
+    course_id,
+  })
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function getClass(class_id) {
+  const response = await post_with_token('course/get_class', {
+    class_id,
+  })
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function getExam(exam_id) {
+  const response = await post_with_token('course/get_exam', {
+    exam_id,
   })
   if (response.error) return response.error
   return response.result

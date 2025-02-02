@@ -55,17 +55,22 @@ export const viewCoachingCenters = async (c: any) => {
   const user_id = user[0].id
 
   try {
-    let result = {}
+    let result: any[] = []
     if (type === 'Authority')
       result =
         await sql`select * from coaching_centers where id in (select coaching_center_id from authorities where user_id = ${user_id})`
+    if (type === 'Teacher')
+      result = await sql`select * from coaching_centers 
+where id in (
+  select c.coaching_center_id from courses c join teachers t on c.id = t.course_id
+  where t.user_id = ${user_id}
+)`
     return c.json({ result })
   } catch (error) {
     console.log(error)
     return c.json({ error: 'error' }, 400)
   }
 }
-
 
 export const getCoachingCenter = async (c: any) => {
   const { email } = c.get('jwtPayload')
@@ -80,7 +85,7 @@ export const getCoachingCenter = async (c: any) => {
   try {
     const { coaching_center_id } = await c.req.json()
     const result =
-        await sql`select * from coaching_centers where id = ${coaching_center_id}`
+      await sql`select * from coaching_centers where id = ${coaching_center_id}`
     return c.json({ result })
   } catch (error) {
     console.log(error)

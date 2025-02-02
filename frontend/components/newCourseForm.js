@@ -42,7 +42,7 @@ export default function NewCourseForm({ coaching_center_id }) {
     createCourse,
     initialState,
   )
-  const [date24, setDate24] = useState(new Date())
+  const [date24, setDate24] = useState()
   const [insEmails, setInsEmails] = useState([''])
 
   const onSetDate = (date) => {
@@ -52,7 +52,6 @@ export default function NewCourseForm({ coaching_center_id }) {
   const handleSubmit = useCallback(
     (formData) => {
       const d = new Date(date24)
-      console.log('date24: ', date24)
       formData.append('start_time', d.toISOString())
       formAction(formData)
     },
@@ -146,6 +145,7 @@ export default function NewCourseForm({ coaching_center_id }) {
                 <Label htmlFor="start_time">Start Time</Label>
                 <div>
                   <DateTimePicker
+                    date={st_date24}
                     onSetDate={onSetDate}
                     className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0 "
                   />

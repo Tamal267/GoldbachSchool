@@ -2,9 +2,17 @@
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { useActionState, useState } from 'react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { addClass } from '@/lib/action'
+import { useActionState, useCallback, useState } from 'react'
 import { AutosizeTextarea } from './ui/autosize-textarea'
-import { DateTimePicker } from './ui/datetime-picker'
+import { DateTimePicker } from './ui/date-time-picker-demo'
 import { Input } from './ui/input'
 
 const initialState = {
@@ -12,13 +20,19 @@ const initialState = {
   success: false,
 }
 
-export default function AddNewClassForm({ type, ResetPassAction }) {
-  const [st_date24, setStDate24] = useState(new Date())
-  const [end_date24, setEndDate24] = useState(new Date())
+export default function AddNewClassForm({ course_id, teachers }) {
+  initialState.course_id = course_id
+  const [st_date24, setStDate24] = useState()
   const [topics, setTopics] = useState([''])
-  const [state, formAction, pending] = useActionState(
-    ResetPassAction,
-    initialState,
+  const [state, formAction, pending] = useActionState(addClass, initialState)
+
+  const handleSubmit = useCallback(
+    (formData) => {
+      const d = new Date(st_date24)
+      formData.append('start_time', d.toISOString())
+      formAction(formData)
+    },
+    [st_date24, formAction],
   )
 
   return (
@@ -27,16 +41,15 @@ export default function AddNewClassForm({ type, ResetPassAction }) {
         <h1 className="text-bold text-2xl">Add New Class</h1>
         <form
           className="space-y-4"
-          action={formAction}
+          action={handleSubmit}
         >
           <div className="space-y-2">
             <Label htmlFor="start_time">Start Time</Label>
             <div>
               <DateTimePicker
-                hourCycle={24}
-                value={st_date24}
-                onChange={setStDate24}
-                className="bg-transparent rounded-lg w-full ring-0 border border-gray-500 focus-visible:ring-offset-0 focus-visible:ring-0"
+                date={st_date24}
+                onSetDate={(date) => setStDate24(date)}
+                className="bg-transparent rounded-lg w-full ring-0 border border-gray-500 focus-visible:ring-offset-0 focus-visible:ring-0 "
               />
             </div>
           </div>
@@ -48,7 +61,7 @@ export default function AddNewClassForm({ type, ResetPassAction }) {
                 type="text"
                 id="duration"
                 name="duration"
-                placeholder="Class Duration"
+                placeholder="hh:mm"
                 className="bg-transparent rounded-lg w-full ring-0 border border-gray-500 focus-visible:ring-offset-0 focus-visible:ring-0"
               />
             </div>
@@ -64,6 +77,27 @@ export default function AddNewClassForm({ type, ResetPassAction }) {
                 placeholder="Class Title"
                 className="bg-transparent rounded-lg w-full ring-0 border border-gray-500 focus-visible:ring-offset-0 focus-visible:ring-0"
               />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="teacher_id">Teacher</Label>
+            <div>
+              <Select name="teacher_id">
+                <SelectTrigger className="bg-transparent rounded-lg w-full ring-0 border border-gray-500 focus-visible:ring-offset-0 focus-visible:ring-0">
+                  <SelectValue placeholder="Select a teacher" />
+                </SelectTrigger>
+                <SelectContent>
+                  {teachers.map((option) => (
+                    <SelectItem
+                      key={option.id}
+                      value={option.id}
+                    >
+                      {option.name}, {option.email}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -85,6 +119,7 @@ export default function AddNewClassForm({ type, ResetPassAction }) {
             <div>
               <AutosizeTextarea
                 placeholder="Write opinion"
+                name="description"
                 className="bg-transparent rounded-lg w-full ring-0 border border-gray-500 focus-visible:ring-offset-0 focus-visible:ring-0 "
                 maxHeight={500}
               />
@@ -96,11 +131,11 @@ export default function AddNewClassForm({ type, ResetPassAction }) {
               key={index}
               className="space-y-2"
             >
-              <Label htmlFor={`instructor-${index}`}>Topic {index + 1}</Label>
+              <Label htmlFor={`topic-${index}`}>Topic {index + 1}</Label>
               <Input
                 type="topic"
-                id={`instructor-${index}`}
-                name={`instructor-${index}`}
+                id={`topic-${index}`}
+                name={`topic-${index}`}
                 value={topic}
                 onChange={(e) => {
                   const newEmails = [...topics]
