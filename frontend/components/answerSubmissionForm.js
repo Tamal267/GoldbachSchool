@@ -4,22 +4,25 @@ import { Button } from '@/components/ui/button'
 import { useActionState } from 'react'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
+import { submitAnswer } from '@/lib/action'
 
 const initialState = {
   message: '',
   success: false,
 }
 
-export default function AnswerSubmissionForm({ type, AnswerSubmissionAction }) {
+export default function AnswerSubmissionForm({ exam_id, course_id }) {
+  initialState.exam_id = exam_id
+  initialState.course_id = course_id
   const [state, formAction, pending] = useActionState(
-    AnswerSubmissionAction,
+    submitAnswer,
     initialState,
   )
 
   return (
     <div className="w-full flex justify-center my-12">
       <div className="h-fit p-8 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 text-darkb flex flex-col gap-6 flex-grow shadow-lg bg-blue-900">
-        <h1 className="text-bold text-2xl">Submit {type}</h1>
+        <h1 className="text-bold text-2xl">Submit Answer</h1>
         <form
           className="space-y-4"
           action={formAction}

@@ -1,11 +1,14 @@
 import FeedbackForm from '@/components/feedbackForm'
-import { getClass } from '@/lib/action'
+import { getClass, isRegistered } from '@/lib/action'
 import { formatRelative } from 'date-fns'
 import { CalendarRange, CircleUser, Timer } from 'lucide-react'
 
 export default async function Class({ params }) {
   const { course_id, class_id } = await params
-  const classArr = await getClass(class_id)
+  const [classArr, isReg] = await Promise.all([
+    getClass(class_id),
+    isRegistered(course_id),
+  ])
   const cls = classArr[0]
   const regex = /^([0-9]{1,2}):([0-9]{1,2})$/
   const str = cls.duration
@@ -53,9 +56,7 @@ export default async function Class({ params }) {
               size={20}
               className="text-blue-700"
             />
-            <span>
-              {cls.teacher_name}
-            </span>
+            <span>{cls.teacher_name}</span>
           </div>
         </div>
         <hr className="w-full" />
@@ -63,9 +64,7 @@ export default async function Class({ params }) {
           <h1 className="text-xl font-epilogue font-semibold text-darkb">
             Description
           </h1>
-          <p className="text-gray-700">
-            {cls.description}
-          </p>
+          <p className="text-gray-700">{cls.description}</p>
         </div>
 
         <div className="space-y-2">
@@ -74,7 +73,10 @@ export default async function Class({ params }) {
           </h1>
           <ul className="list-none list-inside text-gray-700 px-2 space-y-2">
             {cls.topics.map((topic, index) => (
-              <li key={index} className="flex items-center">
+              <li
+                key={index}
+                className="flex items-center"
+              >
                 <span className="mr-2 text-darkb">&rarr;</span>
                 {topic}
               </li>
@@ -82,7 +84,12 @@ export default async function Class({ params }) {
           </ul>
         </div>
 
-        <FeedbackForm />
+        {isReg.registered > 0 && isReg.type === 'Student' && (
+          <FeedbackForm
+            course_id={course_id}
+            class_id={class_id}
+          />
+        )}
       </div>
     </div>
   )

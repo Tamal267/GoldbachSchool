@@ -65,6 +65,12 @@ where id in (
   select c.coaching_center_id from courses c join teachers t on c.id = t.course_id
   where t.user_id = ${user_id}
 )`
+    if (type === 'Student')
+      result = await sql`select * from coaching_centers 
+where id in (
+select c.coaching_center_id from courses c join students s on c.id = s.course_id
+where s.user_id = ${user_id}
+)`
     return c.json({ result })
   } catch (error) {
     console.log(error)

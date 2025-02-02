@@ -2,7 +2,8 @@
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { useActionState, useState } from 'react'
+import { addStudent } from '@/lib/action'
+import { useActionState } from 'react'
 import { Input } from './ui/input'
 
 const initialState = {
@@ -10,14 +11,9 @@ const initialState = {
   success: false,
 }
 
-export default function BuyCourseForm({ type, ResetPassAction }) {
-  const [st_date24, setStDate24] = useState(new Date())
-  const [end_date24, setEndDate24] = useState(new Date())
-  const [topics, setTopics] = useState([''])
-  const [state, formAction, pending] = useActionState(
-    ResetPassAction,
-    initialState,
-  )
+export default function BuyCourseForm({ course }) {
+  initialState.course_id = course.id
+  const [state, formAction, pending] = useActionState(addStudent, initialState)
 
   return (
     <div className="w-full flex justify-center ">
@@ -25,7 +21,7 @@ export default function BuyCourseForm({ type, ResetPassAction }) {
         <h1 className="text-bold text-2xl">Buy Course</h1>
         <div className="flex flex-col text-sm text-gray-500">
           <span>Bkash Marchent No: 01660039763</span>
-          <span>Couse Fee: 2000 tk</span>
+          <span>Couse Fee: {course.course_fee} tk</span>
         </div>
         <form
           className="space-y-4"

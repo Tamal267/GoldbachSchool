@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { viewContents } from '@/lib/action'
+import { isRegistered, viewContents } from '@/lib/action'
 import { format, isAfter } from 'date-fns'
 import { AlarmClock } from 'lucide-react'
 import Image from 'next/image'
@@ -18,7 +18,10 @@ const capitalizeFirstLetter = (str) => {
 
 export default async function Routine({ params }) {
   const { course_id } = await params
-  const contents = await viewContents(course_id)
+  const [contents, isReg] = await Promise.all([
+    viewContents(course_id),
+    isRegistered(course_id),
+  ])
   let firstRow = contents[0]
   for (let i = 0; i < contents.length; i++) {
     if (isAfter(contents[i].start_time, new Date())) {
@@ -62,7 +65,7 @@ export default async function Routine({ params }) {
               <TableHead>Date</TableHead>
               <TableHead>Time</TableHead>
               <TableHead>Day</TableHead>
-              <TableHead>Class Link</TableHead>
+              {isReg.registered > 0 && <TableHead>Class Link</TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -75,16 +78,18 @@ export default async function Routine({ params }) {
                 <TableCell>{format(row.start_time, 'dd MMM yyyy')}</TableCell>
                 <TableCell>{format(row.start_time, 'HH:mm')}</TableCell>
                 <TableCell>{format(row.start_time, 'EEEE')}</TableCell>
-                <TableCell>
-                  <Link href={`/course/${course_id}/${row.type}/${row.id}`}>
-                    <Image
-                      src="/Assets/GoToLink.svg"
-                      alt="link"
-                      width={80}
-                      height={100}
-                    />
-                  </Link>
-                </TableCell>
+                {isReg.registered > 0 && (
+                  <TableCell>
+                    <Link href={`/course/${course_id}/${row.type}/${row.id}`}>
+                      <Image
+                        src="/Assets/GoToLink.svg"
+                        alt="link"
+                        width={80}
+                        height={100}
+                      />
+                    </Link>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

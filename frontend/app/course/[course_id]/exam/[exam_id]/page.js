@@ -1,11 +1,14 @@
 import AnswerSubmissionForm from '@/components/answerSubmissionForm'
-import { getExam } from '@/lib/action'
+import { getExam, isRegistered } from '@/lib/action'
 import { format, isAfter } from 'date-fns'
 import { AlarmCheck } from 'lucide-react'
 
 export default async function Class({ params }) {
-  const { exam_id } = await params
-  const examArr = await getExam(exam_id)
+  const { exam_id, course_id } = await params
+  const [examArr, isReg] = await Promise.all([
+    getExam(exam_id),
+    isRegistered(course_id),
+  ])
   const exam = examArr[0]
   const regex = /^([0-9]{1,2}):([0-9]{1,2})$/
   const str = exam.duration
@@ -39,7 +42,13 @@ export default async function Class({ params }) {
           src={exam.question_paper}
           className="w-full h-screen"
         />
-        <AnswerSubmissionForm type="Question" />
+        {isReg.registered > 0 && isReg.type === 'Student' && (
+          <AnswerSubmissionForm
+            type="Question"
+            exam_id={exam_id}
+            course_id={course_id}
+          />
+        )}
       </div>
     </div>
   )

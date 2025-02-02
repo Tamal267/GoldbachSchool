@@ -5,15 +5,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import {
-  Activity,
-  Banknote,
-  DraftingCompass,
-  House,
-  MonitorCheck,
-  NotepadText,
-  Soup,
-} from 'lucide-react'
+import { Activity, Banknote, House, MonitorCheck, Soup } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -43,16 +35,6 @@ const AuthorityNavs = [
 
 const TeacherNavs = [
   {
-    name: 'Routine',
-    icon: NotepadText,
-    link: 'routine',
-  },
-  {
-    name: 'Script Evalution',
-    icon: DraftingCompass,
-    link: 'script_evaluation',
-  },
-  {
     name: 'My Payment',
     icon: Banknote,
     link: 'my_payment',
@@ -65,11 +47,6 @@ const TeacherNavs = [
 ]
 
 const studentNavs = [
-  {
-    name: 'Routine',
-    icon: NotepadText,
-    link: 'routine',
-  },
   {
     name: 'My Course',
     icon: MonitorCheck,

@@ -6,6 +6,7 @@ import {
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
 import {
+  DraftingCompass,
   ListCollapse,
   NotepadText,
   NotepadTextDashed,
@@ -28,6 +29,11 @@ const TeacherNavs = [
     name: 'Add New Exam',
     icon: Plus,
     link: 'add_new_exam',
+  },
+  {
+    name: 'Script Evalution',
+    icon: DraftingCompass,
+    link: 'script_evaluation',
   },
 ]
 
@@ -213,7 +219,13 @@ function GetContentNavs({
   )
 }
 
-export default function CourseSidebar({ course_id, children, course, contents }) {
+export default function CourseSidebar({
+  course_id,
+  children,
+  course,
+  contents,
+  isReg,
+}) {
   const pathname = usePathname()
   const segments = pathname.split('/')
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -247,15 +259,19 @@ export default function CourseSidebar({ course_id, children, course, contents })
               isCollapsed={isCollapsed}
             />
 
-            <div className="border-b"></div>
+            {((isReg.registered > 0 && isReg.type === 'Authority') ||
+              isReg.type === 'Teacher') && <div className="border-b"></div>}
 
-            <GetNavs
-              course_id={course_id}
-              navItems={TeacherNavs}
-              activeLink={segments[3]}
-              type="Teacher"
-              isCollapsed={isCollapsed}
-            />
+            {((isReg.registered > 0 && isReg.type === 'Authority') ||
+              isReg.type === 'Teacher') && (
+              <GetNavs
+                course_id={course_id}
+                navItems={TeacherNavs}
+                activeLink={segments[3]}
+                type="Teacher"
+                isCollapsed={isCollapsed}
+              />
+            )}
 
             <GetContentNavs
               course_id={course_id}

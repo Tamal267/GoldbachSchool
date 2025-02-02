@@ -2,7 +2,8 @@
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { useActionState, useState } from 'react'
+import { submitClassReview } from '@/lib/action'
+import { useActionState, useCallback, useState } from 'react'
 import { AutosizeTextarea } from './ui/autosize-textarea'
 import RatingInput from './ui/ratingInput'
 
@@ -11,9 +12,11 @@ const initialState = {
   success: false,
 }
 
-export default function FeedbackForm({ type, ResetPassAction }) {
+export default function FeedbackForm({ course_id, class_id }) {
+  initialState.course_id = course_id
+  initialState.class_id = class_id
   const [state, formAction, pending] = useActionState(
-    ResetPassAction,
+    submitClassReview,
     initialState,
   )
   const [rating, setRating] = useState(0)
@@ -22,19 +25,28 @@ export default function FeedbackForm({ type, ResetPassAction }) {
     setRating(newRating)
   }
 
+  const handleSubmit = useCallback(
+    (formData) => {
+      formData.append('rating', rating)
+      formAction(formData)
+    },
+    [rating, formAction],
+  )
+
   return (
     <div className="w-full flex justify-center my-12 ">
       <div className="h-fit p-8 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 text-darkb flex flex-col gap-6 flex-grow shadow-lg bg-blue-900">
         <h1 className="text-bold text-2xl">Class Review</h1>
         <form
           className="space-y-4"
-          action={formAction}
+          action={handleSubmit}
         >
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
             <div>
               <AutosizeTextarea
                 placeholder="Write opinion"
+                name="description"
                 className="bg-transparent rounded-lg w-full ring-0 border border-gray-500 focus-visible:ring-offset-0 focus-visible:ring-0 "
                 maxHeight={500}
               />

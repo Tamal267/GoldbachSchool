@@ -1,6 +1,6 @@
 'use client'
-import Image from 'next/image'
-import { useActionState } from 'react'
+import { updateMark } from '@/lib/action'
+import { useActionState, useCallback, useState } from 'react'
 import { Alert, AlertDescription } from './ui/alert'
 import { Button } from './ui/button'
 import { FloatingInput, FloatingLabel } from './ui/floatingInput'
@@ -10,32 +10,38 @@ const initialState = {
   success: false,
 }
 
-function loginAction() {
-  return {
-    url: '/api/login',
-    method: 'POST',
-  }
-}
-
 export default function ScriptForm({ row }) {
-  const [state, formAction, pending] = useActionState(loginAction, initialState)
+  const [state, formAction, pending] = useActionState(updateMark, initialState)
+  const [mark, setMark] = useState(row.mark)
+  const [feedback, setFeedback] = useState(row.feedback)
+
+  const handleSubmit = useCallback(
+    (formData) => {
+      formData.append('student_id', row.student_id)
+      formData.append('exam_id', row.exam_id)
+      formData.append('course_id', row.course_id)
+      formAction(formData)
+    },
+    [row, formAction],
+  )
+
   return (
     <div>
       <form
-        action={formAction}
+        action={handleSubmit}
         className="flex flex-col gap-4"
       >
-        <Image
-          src={row.script}
-          alt="link"
-          width={1000}
-          height={1000}
-          className="w-full h-auto"
+        <iframe
+          src={row.answer_paper}
+          className="w-full h-screen"
         />
         <div className="relative">
           <FloatingInput
             id="mark"
             name="mark"
+            type="number"
+            value={mark}
+            onChange={(e) => setMark(e.target.value)}
           />
           <FloatingLabel htmlFor="mark">Mark</FloatingLabel>
         </div>
@@ -43,6 +49,9 @@ export default function ScriptForm({ row }) {
           <FloatingInput
             id="feedback"
             name="feedback"
+            type="text"
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
           />
           <FloatingLabel htmlFor="feedback">Feedback</FloatingLabel>
         </div>

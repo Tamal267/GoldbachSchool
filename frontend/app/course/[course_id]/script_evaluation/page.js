@@ -22,10 +22,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { scriptEvaluation } from '@/lib/data'
+import { getNewScripts, getPrevScripts } from '@/lib/action'
 import Image from 'next/image'
 
-export default function ScriptEvaluation() {
+export default async function ScriptEvaluation({ params }) {
+  const { course_id } = await params
+  const [newScripts, prevScripts] = await Promise.all([
+    getNewScripts(course_id),
+    getPrevScripts(course_id),
+  ])
+  console.log(newScripts)
   return (
     <div className="flex flex-col gap-8 p-12">
       <div className="p-4 border rounded-lg flex flex-col gap-4">
@@ -42,31 +48,32 @@ export default function ScriptEvaluation() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {scriptEvaluation.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell>{row.sl_no}</TableCell>
-                <TableCell>{row.student_name}</TableCell>
-                <TableCell>{row.student_email}</TableCell>
-                <TableCell>
-                  <Dialog>
-                    <DialogTrigger>
-                      <Image
-                        src="/Assets/openScript.svg"
-                        alt="link"
-                        width={80}
-                        height={100}
-                      />
-                    </DialogTrigger>
-                    <DialogContent className="max-h-screen m-4 overflow-y-auto">
-                      <DialogHeader>
-                        <DialogTitle>View Script</DialogTitle>
-                        <ScriptForm row={row} />
-                      </DialogHeader>
-                    </DialogContent>
-                  </Dialog>
-                </TableCell>
-              </TableRow>
-            ))}
+            {newScripts &&
+              newScripts.map((row, index) => (
+                <TableRow key={index}>
+                  <TableCell>{row.sl_no}</TableCell>
+                  <TableCell>{row.full_name}</TableCell>
+                  <TableCell>{row.email}</TableCell>
+                  <TableCell>
+                    <Dialog>
+                      <DialogTrigger>
+                        <Image
+                          src="/Assets/openScript.svg"
+                          alt="link"
+                          width={80}
+                          height={100}
+                        />
+                      </DialogTrigger>
+                      <DialogContent className="max-h-screen m-4 overflow-y-auto">
+                        <DialogHeader>
+                          <DialogTitle>View Answer Script</DialogTitle>
+                          <ScriptForm row={row} />
+                        </DialogHeader>
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
         <Pagination>
@@ -100,31 +107,32 @@ export default function ScriptEvaluation() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {scriptEvaluation.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell>{row.sl_no}</TableCell>
-                <TableCell>{row.student_name}</TableCell>
-                <TableCell>{row.student_email}</TableCell>
-                <TableCell>
-                  <Dialog>
-                    <DialogTrigger>
-                      <Image
-                        src="/Assets/openScript.svg"
-                        alt="link"
-                        width={80}
-                        height={100}
-                      />
-                    </DialogTrigger>
-                    <DialogContent className="max-h-screen m-4 overflow-y-auto">
-                      <DialogHeader>
-                        <DialogTitle>View Script</DialogTitle>
-                        <ScriptForm row={row} />
-                      </DialogHeader>
-                    </DialogContent>
-                  </Dialog>
-                </TableCell>
-              </TableRow>
-            ))}
+            {prevScripts &&
+              prevScripts.map((row, index) => (
+                <TableRow key={index}>
+                  <TableCell>{row.sl_no}</TableCell>
+                  <TableCell>{row.full_name}</TableCell>
+                  <TableCell>{row.email}</TableCell>
+                  <TableCell>
+                    <Dialog>
+                      <DialogTrigger>
+                        <Image
+                          src="/Assets/openScript.svg"
+                          alt="link"
+                          width={80}
+                          height={100}
+                        />
+                      </DialogTrigger>
+                      <DialogContent className="max-h-screen m-4 overflow-y-auto">
+                        <DialogHeader>
+                          <DialogTitle>View Answer Script</DialogTitle>
+                          <ScriptForm row={row} />
+                        </DialogHeader>
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
         <Pagination>

@@ -508,3 +508,159 @@ export async function getExam(exam_id) {
   if (response.error) return response.error
   return response.result
 }
+
+export async function getAllCourses() {
+  const response = await get_with_token('course/get_all_courses')
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function addStudent(prevState, formData) {
+  let raw = Object.fromEntries(formData)
+  raw.course_id = prevState.course_id
+
+  const response = await post_with_token('course/add_student', raw)
+
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+      course_id: raw.course_id,
+    }
+  }
+
+  redirect(`/course/${raw.course_id}`)
+}
+
+export async function isRegistered(course_id) {
+  const response = await post_with_token('course/is_registered', {
+    course_id,
+  })
+  if (response.error) return response.error
+  return response.result[0]
+}
+
+export async function submitAnswer(prevState, formData) {
+  let raw = Object.fromEntries(formData)
+  raw.exam_id = prevState.exam_id
+  raw.course_id = prevState.course_id
+
+  // console.log('raw: ', raw)
+
+  // return {
+  //   success: true,
+  //   message: 'Answer submitted successfully',
+  //   course_id: raw.course_id,
+  // }
+
+  const { url, error } = await uploadImage(
+    raw.course_id,
+    raw.title,
+    raw.answer_paper,
+    'store_room',
+  )
+
+  if (error) {
+    console.log('error image: ', error)
+    return {
+      success: false,
+      message: 'Error uploading file',
+      course_id: raw.course_id,
+      exam_id: raw.exam_id,
+    }
+  }
+
+  raw.answer_paper = url
+
+  const response = await post_with_token('course/submit_answer', raw)
+
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+      course_id: raw.course_id,
+      exam_id: raw.exam_id,
+    }
+  }
+  // revalidatePath(`course/${raw.course_id}/exam/${raw.exam_id}`)
+  return {
+    success: true,
+    message: `Your answer submitted successfully`,
+    course_id: raw.course_id,
+    exam_id: raw.exam_id,
+  }
+}
+
+export async function submitClassReview(prevState, formData) {
+  let raw = Object.fromEntries(formData)
+  raw.class_id = prevState.class_id
+  raw.course_id = prevState.course_id
+
+  // console.log('raw: ', raw)
+
+  // return {
+  //   success: true,
+  //   message: 'Review submitted successfully',
+  //   course_id: raw.course_id,
+  //   class_id: raw.class_id,
+  // }
+
+  const response = await post_with_token('course/submit_class_review', raw)
+
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+      course_id: raw.course_id,
+      class_id: raw.class_id,
+    }
+  }
+  // revalidatePath(`course/${raw.course_id}/class/${raw.class_id}`)
+  return {
+    success: true,
+    message: `Your review submitted successfully`,
+    course_id: raw.course_id,
+    class_id: raw.class_id,
+  }
+}
+
+export async function getNewScripts(course_id) {
+  const response = await post_with_token('course/get_new_scripts', {
+    course_id,
+  })
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function getPrevScripts(course_id) {
+  const response = await post_with_token('course/get_prev_scripts', {
+    course_id,
+  })
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function updateMark(prevState, formData) {
+  let raw = Object.fromEntries(formData)
+
+  // console.log('raw: ', raw)
+
+  // return {
+  //   success: true,
+  //   message: 'Answer submitted successfully',
+  // }
+
+  const response = await post_with_token('course/update_mark', raw)
+
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+    }
+  }
+  revalidatePath(`course/${raw.course_id}/script_evaluation`)
+  return {
+    success: true,
+    message: `Your answer submitted successfully`,
+  }
+}

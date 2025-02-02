@@ -145,7 +145,7 @@ export default function NewCourseForm({ coaching_center_id }) {
                 <Label htmlFor="start_time">Start Time</Label>
                 <div>
                   <DateTimePicker
-                    date={st_date24}
+                    date={date24}
                     onSetDate={onSetDate}
                     className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0 "
                   />
