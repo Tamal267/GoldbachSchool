@@ -90,6 +90,19 @@ export default function QuestionSubmissionForm({ course_id }) {
             </div>
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="total_mark">Total mark</Label>
+            <div>
+              <Input
+                type="number"
+                id="total_mark"
+                name="total_mark"
+                placeholder="100"
+                className="bg-transparent rounded-lg w-full ring-0 border border-gray-500 focus-visible:ring-offset-0 focus-visible:ring-0"
+              />
+            </div>
+          </div>
+
           {state?.message && (
             <Alert variant={state?.success ? 'default' : 'destructive'}>
               <AlertDescription>{state?.message}</AlertDescription>

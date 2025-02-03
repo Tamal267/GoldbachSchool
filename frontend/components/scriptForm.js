@@ -12,8 +12,8 @@ const initialState = {
 
 export default function ScriptForm({ row }) {
   const [state, formAction, pending] = useActionState(updateMark, initialState)
-  const [mark, setMark] = useState(row.mark)
-  const [feedback, setFeedback] = useState(row.feedback)
+  const [mark, setMark] = useState(row.mark || 0)
+  const [feedback, setFeedback] = useState(row.feedback || '')
 
   const handleSubmit = useCallback(
     (formData) => {

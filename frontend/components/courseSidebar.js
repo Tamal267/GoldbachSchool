@@ -6,8 +6,10 @@ import {
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
 import {
+  Activity,
   DraftingCompass,
   ListCollapse,
+  MonitorCheck,
   NotepadText,
   NotepadTextDashed,
   PackagePlus,
@@ -52,6 +54,16 @@ const globalSectoins = [
     name: 'Routine',
     icon: NotepadText,
     link: 'routine',
+  },
+  {
+    name: 'Students Rating',
+    icon: Activity,
+    link: 'students_rating',
+  },
+  {
+    name: 'Teacher Performance',
+    icon: MonitorCheck,
+    link: 'teacher_monitoring',
   },
 ]
 

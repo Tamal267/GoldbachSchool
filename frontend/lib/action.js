@@ -664,3 +664,19 @@ export async function updateMark(prevState, formData) {
     message: `Your answer submitted successfully`,
   }
 }
+
+export async function viewStudentsRating(course_id) {
+  const response = await post_with_token('course/view_students_rating', {
+    course_id,
+  })
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function viewTeacherMonitoring(course_id) {
+  const response = await post_with_token('course/view_teacher_monitoring', {
+    course_id,
+  })
+  if (response.error) return response.error
+  return response.result
+}

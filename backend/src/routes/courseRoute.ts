@@ -18,6 +18,8 @@ import {
   updateMark,
   viewContents,
   viewCourses,
+  viewStudentsRating,
+  viewTeacherMonitoring,
 } from '../controllers/courseController'
 
 const route = new Hono()
@@ -45,5 +47,7 @@ route.post('/submit_class_review', submitClassReview)
 route.post('/get_new_scripts', getNewScripts)
 route.post('/update_mark', updateMark)
 route.post('/get_prev_scripts', getPreviousScripts)
+route.post('/view_students_rating', viewStudentsRating)
+route.post('/view_teacher_monitoring', viewTeacherMonitoring)
 
 export default route

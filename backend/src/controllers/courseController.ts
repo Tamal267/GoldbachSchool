@@ -207,11 +207,17 @@ export const addExam = async (c: any) => {
   }
 
   try {
-    const { title, start_time, duration, course_id, question_paper } =
-      await c.req.json()
+    const {
+      title,
+      start_time,
+      duration,
+      course_id,
+      question_paper,
+      total_mark,
+    } = await c.req.json()
 
     const result =
-      await sql`INSERT INTO exams (title, start_time, duration, course_id, question_paper) values (${title}, ${start_time}, ${duration}, ${course_id}, ${question_paper}) RETURNING *`
+      await sql`INSERT INTO exams (title, start_time, duration, course_id, question_paper, total_mark) values (${title}, ${start_time}, ${duration}, ${course_id}, ${question_paper}, ${total_mark}) RETURNING *`
 
     return c.json({ result })
   } catch (error) {
@@ -281,7 +287,7 @@ export const getExam = async (c: any) => {
   try {
     const { exam_id } = await c.req.json()
     const result =
-      await sql`select id, created_at, title, start_time, course_id, title, question_paper, duration from exams 
+      await sql`select id, created_at, title, start_time, course_id, title, question_paper, duration, total_mark from exams 
 where id = ${exam_id}`
     return c.json({ result })
   } catch (error) {
@@ -549,6 +555,67 @@ export const updateMark = async (c: any) => {
 
     const result =
       await sql`UPDATE answers SET mark = ${mark}, feedback = ${feedback} WHERE student_id = ${student_id} and exam_id = ${exam_id} RETURNING *`
+
+    return c.json({ result })
+  } catch (error) {
+    console.log(error)
+    return c.json({ error: 'error' }, 400)
+  }
+}
+
+export const viewStudentsRating = async (c: any) => {
+  const { email } = c.get('jwtPayload')
+  if (!email) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+  const user = await sql`select * from users where email = ${email}`
+  if (user.length === 0) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+
+  try {
+    const { course_id } = await c.req.json()
+
+    const result = await sql`with totalMark as (
+  select sum(total_mark) tm from exams
+  where course_id = ${course_id}
+)
+select row_number() over(order by sum(mark) desc) sl_no, count(mark) total_exams, round(sum(mark) / tm * 100, 2) exam_performance, full_name, email
+from totalMark, answers 
+join users on users.id = answers.student_id
+join exams on exams.id = answers.exam_id
+join courses on courses.id = exams.course_id
+where courses.id = ${course_id}
+group by full_name, email, tm`
+
+    return c.json({ result })
+  } catch (error) {
+    console.log(error)
+    return c.json({ error: 'error' }, 400)
+  }
+}
+
+export const viewTeacherMonitoring = async (c: any) => {
+  const { email } = c.get('jwtPayload')
+  if (!email) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+  const user = await sql`select * from users where email = ${email}`
+  if (user.length === 0) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+
+  try {
+    const { course_id } = await c.req.json()
+
+    const result =
+      await sql`select row_number() over(order by round(sum(r.rating) / (count(*) * 5) * 5, 1) desc) sl_no, count(*) total_classes, sum(payment) paid, count(*) * courses.per_class_tk - sum(payment) due_payment, full_name, email, round(sum(r.rating) / (count(*) * 5) * 5, 1) rating, classes.teacher_id, classes.course_id
+from classes 
+join users on users.id = classes.teacher_id
+join courses on courses.id = classes.course_id
+join class_reviews r on classes.id = r.class_id
+where courses.id = ${course_id}
+group by full_name, email, courses.per_class_tk, classes.teacher_id, classes.course_id`
 
     return c.json({ result })
   } catch (error) {

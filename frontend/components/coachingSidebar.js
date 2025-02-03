@@ -16,16 +16,7 @@ const AuthorityNavs = [
     icon: House,
     link: '',
   },
-  {
-    name: 'Teacher Monitoring',
-    icon: MonitorCheck,
-    link: 'teacher_monitoring',
-  },
-  {
-    name: 'Student Monitoring',
-    icon: Activity,
-    link: 'student_monitoring',
-  },
+
   {
     name: 'New Course',
     icon: Soup,

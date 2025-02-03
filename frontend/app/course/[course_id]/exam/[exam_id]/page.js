@@ -1,7 +1,7 @@
 import AnswerSubmissionForm from '@/components/answerSubmissionForm'
 import { getExam, isRegistered } from '@/lib/action'
 import { format, isAfter } from 'date-fns'
-import { AlarmCheck } from 'lucide-react'
+import { AlarmCheck, Star } from 'lucide-react'
 
 export default async function Class({ params }) {
   const { exam_id, course_id } = await params
@@ -36,6 +36,10 @@ export default async function Class({ params }) {
             <span className="font-epilogue">
               {hours} HOURS {minutes} MINUTES
             </span>
+          </div>
+          <div className="flex flex-row gap-2 p-4 text-gray-900 text-sm">
+            <Star size={20} />
+            <span className="font-epilogue">{exam.total_mark} MARKS</span>
           </div>
         </div>
         <iframe
