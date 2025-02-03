@@ -97,3 +97,24 @@ export const resetPass = async (c: any) => {
     return c.json({ error: 'Something went wrong' }, 400)
   }
 }
+
+export const getUserInfo = async (c: any) => {
+  const { email } = c.get('jwtPayload')
+  if (!email) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+  try {
+    const user = await sql`select full_name, email, type from users
+where email = ${email}`
+    if (user.length === 0) {
+      return c.json({ error: 'Unauthorized' }, 401)
+    }
+
+    console.log(user)
+
+    return c.json({ user })
+  } catch (error) {
+    console.log(error)
+    return c.json({ error: 'error' }, 400)
+  }
+}

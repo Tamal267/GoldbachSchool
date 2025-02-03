@@ -1,4 +1,12 @@
 import RatingStar from '@/components/ratingStar'
+import TeacherPaymentForm from '@/components/teacherPaymentForm'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import {
   Table,
   TableBody,
@@ -8,6 +16,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { isRegistered, viewTeacherMonitoring } from '@/lib/action'
+import { Airplay } from 'lucide-react'
 
 export default async function TeacherMonitoring({ params }) {
   const { course_id } = await params
@@ -55,6 +64,7 @@ export default async function TeacherMonitoring({ params }) {
                   </TableCell>
                   <TableCell>{teacher.email}</TableCell>
                   <TableCell>{teacher.total_classes}</TableCell>
+
                   {isReg.registered > 0 &&
                     (isReg.type === 'Authority' ||
                       isReg.type === 'Teacher') && (
@@ -64,7 +74,23 @@ export default async function TeacherMonitoring({ params }) {
                   {isReg.registered > 0 &&
                     (isReg.type === 'Authority' ||
                       isReg.type === 'Teacher') && (
-                      <TableCell>{teacher.due_payment}</TableCell>
+                      <TableCell>
+                        {teacher.due_payment}
+
+                        {isReg.type === 'Authority' && (
+                          <Dialog>
+                            <DialogTrigger className="ml-2 text-darkb">
+                              <Airplay size={12} />
+                            </DialogTrigger>
+                            <DialogContent className="max-h-screen m-4 overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>Teacher Payment</DialogTitle>
+                                <TeacherPaymentForm row={teacher} />
+                              </DialogHeader>
+                            </DialogContent>
+                          </Dialog>
+                        )}
+                      </TableCell>
                     )}
 
                   <TableCell className="text-right flex justify-end gap-2  min-w-[200px]">

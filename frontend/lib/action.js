@@ -189,6 +189,12 @@ export async function logout(prevState, formData) {
   redirect('/')
 }
 
+export async function getUserInfo() {
+  const response = await get_with_token('user/info/get_user')
+  if (response.error) return response.error
+  return response.user[0]
+}
+
 export async function forgetPassword(prevState, formData) {
   const raw = Object.fromEntries(formData)
   const response = await post('user/forget_pass', {
@@ -679,4 +685,23 @@ export async function viewTeacherMonitoring(course_id) {
   })
   if (response.error) return response.error
   return response.result
+}
+
+export async function teacherPayment(prevState, formData) {
+  let raw = Object.fromEntries(formData)
+
+  const response = await post_with_token('course/teacher_payment', raw)
+
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+    }
+  }
+
+  revalidatePath(`course/${raw.course_id}/teacher_monitoring`)
+  return {
+    success: true,
+    message: `Payment updated successfully`,
+  }
 }

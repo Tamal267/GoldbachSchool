@@ -1,10 +1,10 @@
 import CourseCard from '@/components/courseCard'
 import { viewCourses } from '@/lib/action'
-import { courses } from '@/lib/data'
 
 export default async function CoachingCenter({ params }) {
   const { cs_id } = await params
   const courses = await viewCourses(cs_id)
+  console.log(courses)
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="flex flex-col items-center justify-center gap-10 p-8">

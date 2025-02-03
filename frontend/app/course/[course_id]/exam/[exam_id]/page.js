@@ -34,7 +34,7 @@ export default async function Class({ params }) {
           <div className="flex flex-row gap-2 p-4 text-gray-900 text-sm">
             <AlarmCheck size={20} />
             <span className="font-epilogue">
-              {hours} HOURS {minutes} MINUTES
+              {hours} hours {minutes} minutes
             </span>
           </div>
           <div className="flex flex-row gap-2 p-4 text-gray-900 text-sm">

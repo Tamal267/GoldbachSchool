@@ -1,17 +1,21 @@
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
+import { getUserInfo } from '@/lib/action'
 import { courses } from '@/lib/data'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function StudentPerformance() {
+export default async function StudentPerformance() {
+  const userInfo = await getUserInfo()
   return (
     <div className="p-12 bg-gray-50">
       <div className="flex flex-col gap-8">
         <div className="flex flex-col lg:flex-row gap-8 w-full justify-between">
           <div className="h-20 rounded-lg bg-[#A5C4DB] flex flex-row justify-between flex-grow max-w-3xl shadow-md">
             <div className="p-4 flex flex-col">
-              <h1 className="font-bold text-3xl">Hello Frank!</h1>
+              <h1 className="font-bold text-3xl">
+                Hello {userInfo.full_name}!
+              </h1>
               <span>It{"'"}s good to see you again.</span>
             </div>
             <div className="w-fit">

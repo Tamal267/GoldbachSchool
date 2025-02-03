@@ -48,7 +48,7 @@ export default async function Class({ params }) {
               className="text-blue-700"
             />
             <span>
-              {hours} HOURS {minutes} MINUTES
+              {hours} hours {minutes} minutes
             </span>
           </div>
           <div className="flex flex-row gap-2 items-center">

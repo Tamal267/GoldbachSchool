@@ -7,11 +7,11 @@ import { Button } from './ui/button'
 export default function CourseCard({ courseInfo }) {
   const id = courseInfo.id
   const name = courseInfo.name
-  const rating = courseInfo.rating ? courseInfo.rating : 0
+  const rating = courseInfo.total_rating ? courseInfo.total_rating : 0
   const program = courseInfo.program
-  const classes = courseInfo.classes ? courseInfo.classes : 0
-  const total_time = courseInfo.total_time ? courseInfo.total_time : 0
-  const students = courseInfo.students ? courseInfo.students : 0
+  const classes = courseInfo.total_classes ? courseInfo.total_classes : 0
+  const teachers = courseInfo.total_teachers ? courseInfo.total_teachers : 0
+  const students = courseInfo.total_students ? courseInfo.total_students : 0
   const price = courseInfo.course_fee
   const image = courseInfo.image
 
@@ -42,7 +42,7 @@ export default function CourseCard({ courseInfo }) {
         </div>
         <div className="flex flex-row gap-2 items-center">
           <Speech size={14} />
-          <span>{total_time}</span>
+          <span>{teachers}</span>
         </div>
         <div className="flex flex-row gap-2 items-center">
           <Users size={14} />

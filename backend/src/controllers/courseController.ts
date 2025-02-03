@@ -70,13 +70,54 @@ export const viewCourses = async (c: any) => {
     const { coaching_center_id } = await c.req.json()
     let result: any[] = []
     if (type === 'Authority')
-      result = await sql`with cte as (
-select coaching_center_id from authorities 
-where user_id = ${user_id} and
-coaching_center_id = ${coaching_center_id}
+      result = await sql`with classCnt as (
+  select count(*) as total_classes, course_id from classes
+  group by course_id
+),
+examCnt as (
+  select count(*) as total_exams, course_id from exams
+  group by course_id
+),
+teacherCnt as (
+  select count(*) as total_teachers, course_id from teachers
+  group by course_id
+),
+studentCnt as (
+  select count(*) as total_students, course_id from students
+  group by course_id
+),
+courseDetails as (
+  select c.*, classCnt.total_classes, examCnt.total_exams, teacherCnt.total_teachers, studentCnt.total_students from courses c 
+  join classCnt on classCnt.course_id = c.id
+  join examCnt on examCnt.course_id = c.id 
+  join teacherCnt on teacherCnt.course_id = c.id
+  join studentCnt on studentCnt.course_id = c.id
+),
+cte as (
+  select coaching_center_id from authorities 
+  where user_id = ${user_id} and
+  coaching_center_id = ${coaching_center_id}
+),
+teacherRating as (
+  select c.teacher_id, c.course_id, round(coalesce(sum(cr.rating), 0) / (count(c.teacher_id) * 5) * 5, 1) rating from classes c
+  left join class_reviews cr on c.id = cr.class_id
+  group by c.teacher_id, c.course_id
+),
+teacherPer as (
+  select row_number() over(order by tr.rating desc) sl_no, t.user_id teacher_id, u.full_name, u.email, count(t.user_id) total_classes, t.payment paid, count(t.user_id) * c.per_class_tk - t.payment due_payment, tr.rating, cls.course_id  from teachers t
+  join teacherRating tr on tr.teacher_id = t.user_id and tr.course_id = t.course_id
+  join courses c on t.course_id = c.id
+  join classes cls on cls.course_id = c.id and cls.teacher_id = t.user_id
+  join users u on u.id = t.user_id
+  group by t.user_id, u.full_name, u.email, c.per_class_tk, tr.rating, cls.course_id, t.payment 
+),
+coursePer as (
+  select round(sum(rating) / (5 * count(*)) * 5, 2) total_rating, course_id from teacherPer tp
+  group by course_id
 )
-select c.* from courses c, cte
-where c.coaching_center_id = cte.coaching_center_id`
+select c.*, cp.total_rating from courseDetails c, cte, coursePer cp
+where c.coaching_center_id = cte.coaching_center_id 
+and cp.course_id = c.id`
 
     if (type === 'Teacher')
       result =
@@ -608,14 +649,51 @@ export const viewTeacherMonitoring = async (c: any) => {
   try {
     const { course_id } = await c.req.json()
 
+    const result = await sql`with teacherRating as (
+  select c.teacher_id, c.course_id, round(coalesce(sum(cr.rating), 0) / (count(c.teacher_id) * 5) * 5, 1) rating from classes c
+  left join class_reviews cr on c.id = cr.class_id
+  group by c.teacher_id, c.course_id
+)
+select row_number() over(order by tr.rating desc) sl_no, t.user_id teacher_id, u.full_name, u.email, count(t.user_id) total_classes, t.payment paid, count(t.user_id) * c.per_class_tk - t.payment due_payment, tr.rating, cls.course_id  from teachers t
+join teacherRating tr on tr.teacher_id = t.user_id and tr.course_id = t.course_id
+join courses c on t.course_id = c.id
+join classes cls on cls.course_id = c.id and cls.teacher_id = t.user_id
+join users u on u.id = t.user_id
+where c.id = ${course_id}
+group by t.user_id, u.full_name, u.email, c.per_class_tk, tr.rating, cls.course_id, t.payment `
+
+    return c.json({ result })
+  } catch (error) {
+    console.log(error)
+    return c.json({ error: 'error' }, 400)
+  }
+}
+
+export const teacherPayment = async (c: any) => {
+  const { email } = c.get('jwtPayload')
+  if (!email) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+  const user =
+    await sql`select * from users where email = ${email} and type = 'Authority'`
+  if (user.length === 0) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+
+  const authority_id = user[0].id
+
+  try {
+    const { payment, teacher_id, course_id } = await c.req.json()
+
+    const isValidAuthor =
+      await sql`select count(*) from courses c join authorities a on c.coaching_center_id = a.coaching_center_id 
+      where a.user_id = ${authority_id} and c.id = ${course_id}`
+    if (isValidAuthor.length === 0) {
+      return c.json({ error: 'Invalid teacher' }, 400)
+    }
+
     const result =
-      await sql`select row_number() over(order by round(sum(r.rating) / (count(*) * 5) * 5, 1) desc) sl_no, count(*) total_classes, sum(payment) paid, count(*) * courses.per_class_tk - sum(payment) due_payment, full_name, email, round(sum(r.rating) / (count(*) * 5) * 5, 1) rating, classes.teacher_id, classes.course_id
-from classes 
-join users on users.id = classes.teacher_id
-join courses on courses.id = classes.course_id
-join class_reviews r on classes.id = r.class_id
-where courses.id = ${course_id}
-group by full_name, email, courses.per_class_tk, classes.teacher_id, classes.course_id`
+      await sql`UPDATE teachers SET payment = payment + ${payment} WHERE user_id = ${teacher_id} and course_id = ${course_id} RETURNING *`
 
     return c.json({ result })
   } catch (error) {

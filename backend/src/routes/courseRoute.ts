@@ -15,6 +15,7 @@ import {
   isRegisterd,
   submitAnswer,
   submitClassReview,
+  teacherPayment,
   updateMark,
   viewContents,
   viewCourses,
@@ -49,5 +50,6 @@ route.post('/update_mark', updateMark)
 route.post('/get_prev_scripts', getPreviousScripts)
 route.post('/view_students_rating', viewStudentsRating)
 route.post('/view_teacher_monitoring', viewTeacherMonitoring)
+route.post('/teacher_payment', teacherPayment)
 
 export default route

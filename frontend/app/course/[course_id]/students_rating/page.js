@@ -27,7 +27,9 @@ export default async function StudentMonitoring({ params }) {
           <h1 className="text-2xl font-semibold font-poppins">
             Student Monitoring
           </h1>
-          <span className="text-gray-400">345 Students</span>
+          <span className="text-gray-400">
+            {studentRatings.length} Students
+          </span>
         </div>
         <Table className="overfow-x-auto">
           <TableHeader>
