@@ -1,3 +1,4 @@
+import MarkdownRender from '@/components/markdownRenderer'
 import { Button } from '@/components/ui/button'
 import { getCourse, isRegistered } from '@/lib/action'
 import { BookOpenCheck, FileSpreadsheet, User } from 'lucide-react'
@@ -9,6 +10,7 @@ export default async function Course({ params }) {
   const courseArr = await getCourse(course_id)
   const course = courseArr[0]
   const isReg = await isRegistered(course_id)
+
   return (
     <div className="p-12">
       <div className="flex flex-col gap-8 lg:flex-row">
@@ -53,7 +55,8 @@ export default async function Course({ params }) {
             <h1 className="text-xl font-epilogue font-semibold text-darkb">
               Description
             </h1>
-            <p className="text-gray-700">{course.description}</p>
+            {/* <p className="text-gray-700">{course.description}</p> */}
+            <MarkdownRender content={course.description} />
           </div>
         </div>
         {!(
