@@ -163,7 +163,8 @@ export default async function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
       </div>
-      <div className="flex flex-row gap-4 items-baseline">
+
+      <div className="max-lg:hidden flex flex-row gap-4 items-baseline">
         {loggedIn && (
           <div className="flex flex-row gap-2 items-center text-white">
             <span>
@@ -172,68 +173,67 @@ export default async function Navbar() {
             </span>
           </div>
         )}
-        <div className="max-lg:hidden">
-          <NavigationMenu>
-            <NavigationMenuList>
-              {!loggedIn && (
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent text-white font-poppins border-2 border-blue-400 rounded-full p-4 mr-4">
-                    Login
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <NavigationMenuLink
-                      href="/login/authority"
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      Authority
-                    </NavigationMenuLink>
-                    <NavigationMenuLink
-                      href="/login/teacher"
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      Teahcer
-                    </NavigationMenuLink>
-                    <NavigationMenuLink
-                      href="/login/student"
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      Student
-                    </NavigationMenuLink>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              )}
-              {!loggedIn && (
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent font-poppins text-blue-600 bg-white rounded-full p-4 hover:bg-blue-600 hover:text-white">
-                    Signup
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <NavigationMenuLink
-                      href="/signup/authority"
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      Authority
-                    </NavigationMenuLink>
-                    <NavigationMenuLink
-                      href="/signup/teacher"
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      Teahcer
-                    </NavigationMenuLink>
-                    <NavigationMenuLink
-                      href="/signup/student"
-                      className={navigationMenuTriggerStyle()}
-                    >
-                      Student
-                    </NavigationMenuLink>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              )}
-              {loggedIn && <Logout />}
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
+        <NavigationMenu>
+          <NavigationMenuList>
+            {!loggedIn && (
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-transparent text-white font-poppins border-2 border-blue-400 rounded-full p-4 mr-4">
+                  Login
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <NavigationMenuLink
+                    href="/login/authority"
+                    className={navigationMenuTriggerStyle()}
+                  >
+                    Authority
+                  </NavigationMenuLink>
+                  <NavigationMenuLink
+                    href="/login/teacher"
+                    className={navigationMenuTriggerStyle()}
+                  >
+                    Teahcer
+                  </NavigationMenuLink>
+                  <NavigationMenuLink
+                    href="/login/student"
+                    className={navigationMenuTriggerStyle()}
+                  >
+                    Student
+                  </NavigationMenuLink>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            )}
+            {!loggedIn && (
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="bg-transparent font-poppins text-blue-600 bg-white rounded-full p-4 hover:bg-blue-600 hover:text-white">
+                  Signup
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <NavigationMenuLink
+                    href="/signup/authority"
+                    className={navigationMenuTriggerStyle()}
+                  >
+                    Authority
+                  </NavigationMenuLink>
+                  <NavigationMenuLink
+                    href="/signup/teacher"
+                    className={navigationMenuTriggerStyle()}
+                  >
+                    Teahcer
+                  </NavigationMenuLink>
+                  <NavigationMenuLink
+                    href="/signup/student"
+                    className={navigationMenuTriggerStyle()}
+                  >
+                    Student
+                  </NavigationMenuLink>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            )}
+            {loggedIn && <Logout />}
+          </NavigationMenuList>
+        </NavigationMenu>
       </div>
+
       <div className="lg:hidden">
         <Sheet>
           <SheetTrigger className="text-white">

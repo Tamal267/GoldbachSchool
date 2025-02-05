@@ -110,8 +110,6 @@ where email = ${email}`
       return c.json({ error: 'Unauthorized' }, 401)
     }
 
-    console.log(user)
-
     return c.json({ user })
   } catch (error) {
     console.log(error)

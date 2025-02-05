@@ -114,6 +114,7 @@ group by t.course_id
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
 where c.coaching_center_id = cte.coaching_center_id 
 and c.id = co.course_id
+order by co.total_rating desc
 `
 
     if (type === 'Teacher')
@@ -159,7 +160,8 @@ group by t.course_id
 )
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
 where c.coaching_center_id = cte.coaching_center_id 
-and c.id = co.course_id`
+and c.id = co.course_id
+order by co.total_rating desc`
 
     if (type === 'Student')
       result = await sql`with classCnt as (
@@ -204,7 +206,8 @@ group by t.course_id
 )
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
 where c.coaching_center_id = cte.coaching_center_id 
-and c.id = co.course_id`
+and c.id = co.course_id
+order by co.total_rating desc`
 
     return c.json({ result })
   } catch (error) {

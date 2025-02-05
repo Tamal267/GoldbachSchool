@@ -7,10 +7,18 @@ import { Button } from './ui/button'
 export default function CoachingCenterCard({ coachingCenterInfo }) {
   const name = coachingCenterInfo.name
   const id = coachingCenterInfo.id
-  const rating = coachingCenterInfo.rating ? coachingCenterInfo.rating : 0
-  const courses = coachingCenterInfo.courses ? coachingCenterInfo.courses : 0
-  const teachers = coachingCenterInfo.teachers ? coachingCenterInfo.teachers : 0
-  const students = coachingCenterInfo.students ? coachingCenterInfo.students : 0
+  const rating = coachingCenterInfo.total_rating
+    ? coachingCenterInfo.total_rating
+    : 0
+  const courses = coachingCenterInfo.total_courses
+    ? coachingCenterInfo.total_courses
+    : 0
+  const teachers = coachingCenterInfo.total_teachers
+    ? coachingCenterInfo.total_teachers
+    : 0
+  const students = coachingCenterInfo.total_students
+    ? coachingCenterInfo.total_students
+    : 0
   const image = coachingCenterInfo.image
 
   return (
