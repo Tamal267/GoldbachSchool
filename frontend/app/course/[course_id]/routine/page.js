@@ -22,6 +22,15 @@ export default async function Routine({ params }) {
     viewContents(course_id),
     isRegistered(course_id),
   ])
+  if (contents.length === 0) {
+    return (
+      <div className="p-12 flex flex-col gap-4">
+        <h1 className="text-2xl font-semibold font-poppins">
+          No Routine Available
+        </h1>
+      </div>
+    )
+  }
   let firstRow = contents[0]
   for (let i = 0; i < contents.length; i++) {
     if (isAfter(contents[i].start_time, new Date())) {

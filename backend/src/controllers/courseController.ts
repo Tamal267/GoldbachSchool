@@ -27,7 +27,7 @@ export const createCourse = async (c: any) => {
     } = await c.req.json()
 
     let au_id_arr = []
-    au_id_arr.push(user[0].id)
+
     for (const email of ins_emails) {
       const uid =
         await sql`select id from users where email = ${email} and type = 'Teacher'`
@@ -87,47 +87,124 @@ studentCnt as (
   group by course_id
 ),
 courseDetails as (
-  select c.*, classCnt.total_classes, examCnt.total_exams, teacherCnt.total_teachers, studentCnt.total_students from courses c 
-  join classCnt on classCnt.course_id = c.id
-  join examCnt on examCnt.course_id = c.id 
-  join teacherCnt on teacherCnt.course_id = c.id
-  join studentCnt on studentCnt.course_id = c.id
+  select c.*, coalesce(classCnt.total_classes, 0) total_classes, coalesce(examCnt.total_exams, 0) total_exams, coalesce(teacherCnt.total_teachers, 0) total_teachers, coalesce(studentCnt.total_students, 0) total_students from courses c 
+  left join classCnt on classCnt.course_id = c.id
+  left join examCnt on examCnt.course_id = c.id 
+  left join teacherCnt on teacherCnt.course_id = c.id
+  left join studentCnt on studentCnt.course_id = c.id
 ),
 cte as (
   select coaching_center_id from authorities 
   where user_id = ${user_id} and
-  coaching_center_id = ${coaching_center_id}
+  coaching_center_id = ${coaching_center_id} 
+),
+teacherPerCo as (
+select c.course_id, c.teacher_id, round(sum(rating) / (5 * count(*)) * 5, 1) rating, count(*) total_classes from classes c
+join class_reviews cr on c.id = cr.class_id
+group by c.course_id, c.teacher_id
 ),
 teacherRating as (
-  select c.teacher_id, c.course_id, round(coalesce(sum(cr.rating), 0) / (count(c.teacher_id) * 5) * 5, 1) rating from classes c
-  left join class_reviews cr on c.id = cr.class_id
-  group by c.teacher_id, c.course_id
-),
-teacherPer as (
-  select row_number() over(order by tr.rating desc) sl_no, t.user_id teacher_id, u.full_name, u.email, count(t.user_id) total_classes, t.payment paid, count(t.user_id) * c.per_class_tk - t.payment due_payment, tr.rating, cls.course_id  from teachers t
-  join teacherRating tr on tr.teacher_id = t.user_id and tr.course_id = t.course_id
-  join courses c on t.course_id = c.id
-  join classes cls on cls.course_id = c.id and cls.teacher_id = t.user_id
-  join users u on u.id = t.user_id
-  group by t.user_id, u.full_name, u.email, c.per_class_tk, tr.rating, cls.course_id, t.payment 
+select t.*, coalesce(tpc.rating, 0) rating, coalesce(total_classes, 0) total_classes from teachers t
+left join teacherPerCo tpc on tpc.course_id = t.course_id and tpc.teacher_id = t.user_id
 ),
 coursePer as (
-  select round(sum(rating) / (5 * count(*)) * 5, 2) total_rating, course_id from teacherPer tp
-  group by course_id
+select t.course_id, round(sum(t.rating) / (5 * count(*)) * 5, 1) total_rating from teacherRating t
+group by t.course_id
 )
-select c.*, cp.total_rating from courseDetails c, cte, coursePer cp
+select c.*, co.total_rating from courseDetails c, cte, coursePer co
 where c.coaching_center_id = cte.coaching_center_id 
-and cp.course_id = c.id`
+and c.id = co.course_id
+`
 
     if (type === 'Teacher')
-      result =
-        await sql`select c.* from courses c join teachers t on c.id = t.course_id
-where t.user_id = ${user_id}`
+      result = await sql`with classCnt as (
+  select count(*) as total_classes, course_id from classes
+  group by course_id
+),
+examCnt as (
+  select count(*) as total_exams, course_id from exams
+  group by course_id
+),
+teacherCnt as (
+  select count(*) as total_teachers, course_id from teachers
+  group by course_id
+),
+studentCnt as (
+  select count(*) as total_students, course_id from students
+  group by course_id
+),
+courseDetails as (
+  select c.*, coalesce(classCnt.total_classes, 0) total_classes, coalesce(examCnt.total_exams, 0) total_exams, coalesce(teacherCnt.total_teachers, 0) total_teachers, coalesce(studentCnt.total_students, 0) total_students from courses c 
+  left join classCnt on classCnt.course_id = c.id
+  left join examCnt on examCnt.course_id = c.id 
+  left join teacherCnt on teacherCnt.course_id = c.id
+  left join studentCnt on studentCnt.course_id = c.id
+),
+cte as (
+  select distinct c.coaching_center_id from courses c join teachers s on c.id = s.course_id
+where s.user_id = ${user_id} and c.coaching_center_id = ${coaching_center_id}
+),
+teacherPerCo as (
+select c.course_id, c.teacher_id, round(sum(rating) / (5 * count(*)) * 5, 1) rating, count(*) total_classes from classes c
+join class_reviews cr on c.id = cr.class_id
+group by c.course_id, c.teacher_id
+),
+teacherRating as (
+select t.*, coalesce(tpc.rating, 0) rating, coalesce(total_classes, 0) total_classes from teachers t
+left join teacherPerCo tpc on tpc.course_id = t.course_id and tpc.teacher_id = t.user_id
+),
+coursePer as (
+select t.course_id, round(sum(t.rating) / (5 * count(*)) * 5, 1) total_rating from teacherRating t
+group by t.course_id
+)
+select c.*, co.total_rating from courseDetails c, cte, coursePer co
+where c.coaching_center_id = cte.coaching_center_id 
+and c.id = co.course_id`
 
     if (type === 'Student')
-      result =
-        await sql`select c.* from courses c join students s on c.id = s.course_id
-where s.user_id = ${user_id}`
+      result = await sql`with classCnt as (
+  select count(*) as total_classes, course_id from classes
+  group by course_id
+),
+examCnt as (
+  select count(*) as total_exams, course_id from exams
+  group by course_id
+),
+teacherCnt as (
+  select count(*) as total_teachers, course_id from teachers
+  group by course_id
+),
+studentCnt as (
+  select count(*) as total_students, course_id from students
+  group by course_id
+),
+courseDetails as (
+  select c.*, coalesce(classCnt.total_classes, 0) total_classes, coalesce(examCnt.total_exams, 0) total_exams, coalesce(teacherCnt.total_teachers, 0) total_teachers, coalesce(studentCnt.total_students, 0) total_students from courses c 
+  left join classCnt on classCnt.course_id = c.id
+  left join examCnt on examCnt.course_id = c.id 
+  left join teacherCnt on teacherCnt.course_id = c.id
+  left join studentCnt on studentCnt.course_id = c.id
+),
+cte as (
+  select distinct c.coaching_center_id from courses c join students s on c.id = s.course_id
+where s.user_id = ${user_id} and c.coaching_center_id = ${coaching_center_id}
+),
+teacherPerCo as (
+select c.course_id, c.teacher_id, round(sum(rating) / (5 * count(*)) * 5, 1) rating, count(*) total_classes from classes c
+join class_reviews cr on c.id = cr.class_id
+group by c.course_id, c.teacher_id
+),
+teacherRating as (
+select t.*, coalesce(tpc.rating, 0) rating, coalesce(total_classes, 0) total_classes from teachers t
+left join teacherPerCo tpc on tpc.course_id = t.course_id and tpc.teacher_id = t.user_id
+),
+coursePer as (
+select t.course_id, round(sum(t.rating) / (5 * count(*)) * 5, 1) total_rating from teacherRating t
+group by t.course_id
+)
+select c.*, co.total_rating from courseDetails c, cte, coursePer co
+where c.coaching_center_id = cte.coaching_center_id 
+and c.id = co.course_id`
 
     return c.json({ result })
   } catch (error) {
@@ -348,7 +425,50 @@ export const getAllCourses = async (c: any) => {
   }
 
   try {
-    const result = await sql`select * from courses`
+    const result = await sql`with classCnt as (
+  select count(*) as total_classes, course_id from classes
+  group by course_id
+),
+examCnt as (
+  select count(*) as total_exams, course_id from exams
+  group by course_id
+),
+teacherCnt as (
+  select count(*) as total_teachers, course_id from teachers
+  group by course_id
+),
+studentCnt as (
+  select count(*) as total_students, course_id from students
+  group by course_id
+),
+courseDetails as (
+  select c.*, coalesce(classCnt.total_classes, 0) total_classes, coalesce(examCnt.total_exams, 0) total_exams, coalesce(teacherCnt.total_teachers, 0) total_teachers, coalesce(studentCnt.total_students, 0) total_students from courses c 
+  left join classCnt on classCnt.course_id = c.id
+  left join examCnt on examCnt.course_id = c.id 
+  left join teacherCnt on teacherCnt.course_id = c.id
+  left join studentCnt on studentCnt.course_id = c.id
+),
+cte as (
+  select id coaching_center_id from coaching_centers 
+),
+teacherPerCo as (
+select c.course_id, c.teacher_id, round(sum(rating) / (5 * count(*)) * 5, 1) rating, count(*) total_classes from classes c
+join class_reviews cr on c.id = cr.class_id
+group by c.course_id, c.teacher_id
+),
+teacherRating as (
+select t.*, coalesce(tpc.rating, 0) rating, coalesce(total_classes, 0) total_classes from teachers t
+left join teacherPerCo tpc on tpc.course_id = t.course_id and tpc.teacher_id = t.user_id
+),
+coursePer as (
+select t.course_id, round(sum(t.rating) / (5 * count(*)) * 5, 1) total_rating from teacherRating t
+group by t.course_id
+)
+select c.*, co.total_rating from courseDetails c, cte, coursePer co
+where c.coaching_center_id = cte.coaching_center_id 
+and c.id = co.course_id
+order by co.total_rating desc
+`
     return c.json({ result })
   } catch (error) {
     console.log(error)
@@ -649,18 +769,19 @@ export const viewTeacherMonitoring = async (c: any) => {
   try {
     const { course_id } = await c.req.json()
 
-    const result = await sql`with teacherRating as (
-  select c.teacher_id, c.course_id, round(coalesce(sum(cr.rating), 0) / (count(c.teacher_id) * 5) * 5, 1) rating from classes c
-  left join class_reviews cr on c.id = cr.class_id
-  group by c.teacher_id, c.course_id
+    const result = await sql`with teacherPerCo as (
+select c.course_id, c.teacher_id, round(sum(rating) / (5 * count(*)) * 5, 1) rating, count(*) total_classes from classes c
+join class_reviews cr on c.id = cr.class_id
+group by c.course_id, c.teacher_id
+),
+teacherRating as (
+select t.*, coalesce(tpc.rating, 0) rating, coalesce(total_classes, 0) total_classes from teachers t
+left join teacherPerCo tpc on tpc.course_id = t.course_id and tpc.teacher_id = t.user_id
 )
-select row_number() over(order by tr.rating desc) sl_no, t.user_id teacher_id, u.full_name, u.email, count(t.user_id) total_classes, t.payment paid, count(t.user_id) * c.per_class_tk - t.payment due_payment, tr.rating, cls.course_id  from teachers t
-join teacherRating tr on tr.teacher_id = t.user_id and tr.course_id = t.course_id
+select row_number() over(order by t.rating desc) sl_no, t.user_id teacher_id, t.course_id, u.full_name, u.email, t.total_classes, t.payment paid, t.total_classes * c.per_class_tk - t.payment due_payment, t.rating from teacherRating t
 join courses c on t.course_id = c.id
-join classes cls on cls.course_id = c.id and cls.teacher_id = t.user_id
 join users u on u.id = t.user_id
-where c.id = ${course_id}
-group by t.user_id, u.full_name, u.email, c.per_class_tk, tr.rating, cls.course_id, t.payment `
+where t.course_id = ${course_id}`
 
     return c.json({ result })
   } catch (error) {

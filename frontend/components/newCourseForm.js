@@ -29,7 +29,7 @@ const OPTIONS = [
   { label: 'Class 6', value: 'class_6' },
   { label: 'Class 7', value: 'class_7' },
   { label: 'Class 8', value: 'class_8' },
-  { label: 'Class 8', value: 'class_9' },
+  { label: 'Class 9', value: 'class_9' },
   { label: 'Class 10', value: 'class_10' },
   { label: 'Class 11', value: 'class_11' },
   { label: 'Class 12', value: 'class_12' },
@@ -75,13 +75,13 @@ export default function NewCourseForm({ coaching_center_id }) {
                     <SelectTrigger className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0">
                       <SelectValue placeholder="Select a program" />
                     </SelectTrigger>
-                    <SelectContent>
-                      {OPTIONS.map((option) => (
+                    <SelectContent key="program">
+                      {OPTIONS.map((option, index) => (
                         <SelectItem
-                          key={option.value}
-                          value={option.value}
+                          key={index}
+                          value={option.label}
                         >
-                          {option.value}
+                          {option.label}
                         </SelectItem>
                       ))}
                     </SelectContent>

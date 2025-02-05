@@ -4,19 +4,19 @@ import Link from 'next/link'
 import RatingStar from './ratingStar'
 import { Button } from './ui/button'
 
-export default function CourseCard({ courseInfo }) {
-  const id = courseInfo.id
-  const name = courseInfo.name
-  const rating = courseInfo.total_rating ? courseInfo.total_rating : 0
-  const program = courseInfo.program
-  const classes = courseInfo.total_classes ? courseInfo.total_classes : 0
-  const teachers = courseInfo.total_teachers ? courseInfo.total_teachers : 0
-  const students = courseInfo.total_students ? courseInfo.total_students : 0
-  const price = courseInfo.course_fee
-  const image = courseInfo.image
+export default function CourseCard({ course }) {
+  const id = course.id
+  const name = course.name
+  const rating = course.total_rating ? course.total_rating : 0
+  const program = course.program
+  const classes = course.total_classes ? course.total_classes : 0
+  const teachers = course.total_teachers ? course.total_teachers : 0
+  const students = course.total_students ? course.total_students : 0
+  const price = course.course_fee
+  const image = course.image
 
   return (
-    <div className="bg-white/70 rounded-lg flex flex-col gap-4 p-4 shadow-lg relative">
+    <div className="bg-white/70 rounded-lg flex flex-col gap-4 p-4 shadow-lg relative h-fit">
       <div className="absolute top-0 right-0 p-2 bg-darkb text-white rounded-tl-lg">
         {program}
       </div>
@@ -42,7 +42,7 @@ export default function CourseCard({ courseInfo }) {
         </div>
         <div className="flex flex-row gap-2 items-center">
           <Speech size={14} />
-          <span>{teachers}</span>
+          <span>{teachers} Teachers</span>
         </div>
         <div className="flex flex-row gap-2 items-center">
           <Users size={14} />

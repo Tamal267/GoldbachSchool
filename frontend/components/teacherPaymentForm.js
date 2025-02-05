@@ -41,7 +41,7 @@ export default function TeacherPaymentForm({ row }) {
             value={payment}
             onChange={(e) => setPayment(e.target.value)}
           />
-          <FloatingLabel htmlFor="mark">Mark</FloatingLabel>
+          <FloatingLabel htmlFor="payment">Payment</FloatingLabel>
         </div>
 
         {state?.message && (
