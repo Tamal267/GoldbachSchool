@@ -20,6 +20,10 @@ export default async function AllCoachingCenters() {
     )
   }
 
+  const firstColumn = coachingCenters.filter((_, index) => index % 3 === 0)
+  const secondColumn = coachingCenters.filter((_, index) => index % 3 === 1)
+  const thirdColumn = coachingCenters.filter((_, index) => index % 3 === 2)
+
   return (
     <div className="bg-gray-50">
       <div className="flex flex-col items-center justify-center gap-10 p-8">

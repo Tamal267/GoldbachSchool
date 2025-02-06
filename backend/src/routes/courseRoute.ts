@@ -9,6 +9,7 @@ import {
   getClass,
   getCourse,
   getExam,
+  getNewCourses,
   getNewScripts,
   getPreviousScripts,
   getTeachers,
@@ -51,5 +52,6 @@ route.post('/get_prev_scripts', getPreviousScripts)
 route.post('/view_students_rating', viewStudentsRating)
 route.post('/view_teacher_monitoring', viewTeacherMonitoring)
 route.post('/teacher_payment', teacherPayment)
+route.get('/get_new_courses', getNewCourses)
 
 export default route

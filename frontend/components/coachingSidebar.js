@@ -36,7 +36,7 @@ const studentNavs = [
   {
     name: 'My Course',
     icon: MonitorCheck,
-    link: 'my_course',
+    link: '/',
   },
   {
     name: 'New Course',
@@ -44,7 +44,7 @@ const studentNavs = [
     link: 'buy_new_course',
   },
   {
-    name: 'Performance',
+    name: 'Progress',
     icon: Activity,
     link: 'student_performance',
   },
@@ -72,7 +72,12 @@ function GetNavs({ type, cs_id, activeLink, navItems, isCollapsed }) {
   )
 }
 
-export default function CoachingSidebar({ cs_id, children, coaching_center }) {
+export default function CoachingSidebar({
+  cs_id,
+  children,
+  coaching_center,
+  user,
+}) {
   const pathname = usePathname()
   const segments = pathname.split('/')
   const activeLink = segments[3]
@@ -99,29 +104,35 @@ export default function CoachingSidebar({ cs_id, children, coaching_center }) {
               </h1>
             )}
 
-            <GetNavs
-              cs_id={cs_id}
-              navItems={AuthorityNavs}
-              activeLink={activeLink}
-              type="Authority"
-              isCollapsed={isCollapsed}
-            />
+            {user.type === 'Authority' && (
+              <GetNavs
+                cs_id={cs_id}
+                navItems={AuthorityNavs}
+                activeLink={activeLink}
+                type="Authority"
+                isCollapsed={isCollapsed}
+              />
+            )}
 
-            <GetNavs
-              cs_id={cs_id}
-              navItems={TeacherNavs}
-              activeLink={activeLink}
-              type="Teacher"
-              isCollapsed={isCollapsed}
-            />
+            {user.type === 'Teacher' && (
+              <GetNavs
+                cs_id={cs_id}
+                navItems={TeacherNavs}
+                activeLink={activeLink}
+                type="Teacher"
+                isCollapsed={isCollapsed}
+              />
+            )}
 
-            <GetNavs
-              cs_id={cs_id}
-              navItems={studentNavs}
-              activeLink={activeLink}
-              type="Student"
-              isCollapsed={isCollapsed}
-            />
+            {user.type === 'Student' && (
+              <GetNavs
+                cs_id={cs_id}
+                navItems={studentNavs}
+                activeLink={activeLink}
+                type="Student"
+                isCollapsed={isCollapsed}
+              />
+            )}
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />
@@ -129,7 +140,7 @@ export default function CoachingSidebar({ cs_id, children, coaching_center }) {
           <div className="overflow-y-auto h-full">
             {isCollapsed && (
               <h1 className="text-xl text-center font-semibold font-poppins p-4 bg-gray-100">
-                ABC Coaching Center
+                {coaching_center.name}
               </h1>
             )}
             {children}

@@ -1,14 +1,23 @@
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
-import { getUserInfo } from '@/lib/action'
-import { courses } from '@/lib/data'
+import { getUserInfo, studentDashboard } from '@/lib/action'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default async function StudentPerformance() {
-  const userInfo = await getUserInfo()
+export default async function StudentPerformance({ params }) {
+  const { cs_id } = await params
+  const [userInfo, studentDash] = await Promise.all([
+    getUserInfo(),
+    studentDashboard(cs_id),
+  ])
+  let completed = 0
+  for (let i = 0; i < studentDash.length; i++) {
+    if (studentDash[i].progress >= 100) {
+      completed++
+    }
+  }
   return (
-    <div className="p-12 bg-gray-50">
+    <div className="p-12 bg-gray-50 min-h-screen">
       <div className="flex flex-col gap-8">
         <div className="flex flex-col lg:flex-row gap-8 w-full justify-between">
           <div className="h-20 rounded-lg bg-[#A5C4DB] flex flex-row justify-between flex-grow max-w-3xl shadow-md">
@@ -31,7 +40,9 @@ export default async function StudentPerformance() {
 
           <div className="flex flex-row gap-4 w-fit">
             <div className="h-20 p-4 rounded-lg bg-[#A5C4DB] flex flex-row justify-between gap-2 shadow-md">
-              <h1 className="text-4xl font-semibold font-poppins">11</h1>
+              <h1 className="text-4xl font-semibold font-poppins">
+                {completed}
+              </h1>
               <div className="flex flex-col">
                 <span className="text-sm">Course</span>
                 <span className="text-sm">Completed</span>
@@ -39,7 +50,9 @@ export default async function StudentPerformance() {
             </div>
 
             <div className="h-20 p-4 rounded-lg bg-[#A5C4DB] flex flex-row justify-between gap-2 shadow-md">
-              <h1 className="text-4xl font-semibold font-poppins">5</h1>
+              <h1 className="text-4xl font-semibold font-poppins">
+                {studentDash.length - completed}
+              </h1>
               <div className="flex flex-col">
                 <span className="text-sm">Course</span>
                 <span className="text-sm">In Progress</span>
@@ -53,8 +66,8 @@ export default async function StudentPerformance() {
             Courses
           </h1>
 
-          {courses &&
-            courses.map((course, index) => (
+          {studentDash &&
+            studentDash.map((course, index) => (
               <div
                 key={index}
                 className="md:h-20 flex flex-col md:flex-row justify-between rounded-lg shadow-md bg-white items-end"
@@ -70,13 +83,13 @@ export default async function StudentPerformance() {
                 <div className="flex flex-col flex-grow justify-between p-4 gap-2 max-md:w-full">
                   <h1 className="text-xl font-poppins">{course.name}</h1>
                   <Progress
-                    value={80}
+                    value={course.progress}
                     className="bg-[#A5C4DB]"
                   />
                 </div>
 
                 <Link
-                  href={`/course/${course.id}`}
+                  href={`/course/${course.course_id}`}
                   className="p-4 max-md:w-full"
                 >
                   <Button className="bg-[#A5C4DB] text-black w-full hover:bg-white">

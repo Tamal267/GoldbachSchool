@@ -81,7 +81,7 @@ function GetNavs({ type, activeLink, navItems, isCollapsed }) {
   )
 }
 
-export default function MyDashboardSidebar({ children }) {
+export default function MyDashboardSidebar({ children, user }) {
   const pathname = usePathname()
   const segments = pathname.split('/')
   const activeLink = segments[2]
@@ -108,26 +108,32 @@ export default function MyDashboardSidebar({ children }) {
               </h1>
             )}
 
-            <GetNavs
-              navItems={AuthorityNavs}
-              activeLink={activeLink}
-              type="Authority"
-              isCollapsed={isCollapsed}
-            />
+            {user.type === 'Authority' && (
+              <GetNavs
+                navItems={AuthorityNavs}
+                activeLink={activeLink}
+                type="Authority"
+                isCollapsed={isCollapsed}
+              />
+            )}
 
-            <GetNavs
-              navItems={TeacherNavs}
-              activeLink={activeLink}
-              type="Teacher"
-              isCollapsed={isCollapsed}
-            />
+            {user.type === 'Teacher' && (
+              <GetNavs
+                navItems={TeacherNavs}
+                activeLink={activeLink}
+                type="Teacher"
+                isCollapsed={isCollapsed}
+              />
+            )}
 
-            <GetNavs
-              navItems={studentNavs}
-              activeLink={activeLink}
-              type="Student"
-              isCollapsed={isCollapsed}
-            />
+            {user.type === 'Student' && (
+              <GetNavs
+                navItems={studentNavs}
+                activeLink={activeLink}
+                type="Student"
+                isCollapsed={isCollapsed}
+              />
+            )}
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />

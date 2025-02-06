@@ -744,13 +744,14 @@ export const viewStudentsRating = async (c: any) => {
   select sum(total_mark) tm from exams
   where course_id = ${course_id}
 )
-select row_number() over(order by sum(mark) desc) sl_no, count(mark) total_exams, round(sum(mark) / tm * 100, 2) exam_performance, full_name, email
+select row_number() over(order by coalesce(round(sum(mark) / tm * 100, 2), 0) desc) sl_no, count(mark) total_exams, coalesce(round(sum(mark) / tm * 100, 2), 0) exam_performance, full_name, email
 from totalMark, answers 
 join users on users.id = answers.student_id
 join exams on exams.id = answers.exam_id
 join courses on courses.id = exams.course_id
 where courses.id = ${course_id}
-group by full_name, email, tm`
+group by full_name, email, tm
+order by exam_performance desc`
 
     return c.json({ result })
   } catch (error) {
@@ -818,6 +819,69 @@ export const teacherPayment = async (c: any) => {
 
     const result =
       await sql`UPDATE teachers SET payment = payment + ${payment} WHERE user_id = ${teacher_id} and course_id = ${course_id} RETURNING *`
+
+    return c.json({ result })
+  } catch (error) {
+    console.log(error)
+    return c.json({ error: 'error' }, 400)
+  }
+}
+
+export const getNewCourses = async (c: any) => {
+  const { email } = c.get('jwtPayload')
+  if (!email) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+  const user = await sql`select * from users where email = ${email} 
+  and type = 'Student'`
+  if (user.length === 0) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+
+  const user_id = user[0].id
+
+  try {
+    const result = await sql`with classCnt as (
+  select count(*) as total_classes, course_id from classes
+  group by course_id
+),
+examCnt as (
+  select count(*) as total_exams, course_id from exams
+  group by course_id
+),
+teacherCnt as (
+  select count(*) as total_teachers, course_id from teachers
+  group by course_id
+),
+studentCnt as (
+  select count(*) as total_students, course_id from students
+  group by course_id
+),
+courseDetails as (
+  select c.*, coalesce(classCnt.total_classes, 0) total_classes, coalesce(examCnt.total_exams, 0) total_exams, coalesce(teacherCnt.total_teachers, 0) total_teachers, coalesce(studentCnt.total_students, 0) total_students from courses c 
+  left join classCnt on classCnt.course_id = c.id
+  left join examCnt on examCnt.course_id = c.id 
+  left join teacherCnt on teacherCnt.course_id = c.id
+  left join studentCnt on studentCnt.course_id = c.id
+),
+teacherPerCo as (
+select c.course_id, c.teacher_id, round(sum(rating) / (5 * count(*)) * 5, 1) rating, count(*) total_classes from classes c
+join class_reviews cr on c.id = cr.class_id
+group by c.course_id, c.teacher_id
+),
+teacherRating as (
+select t.*, coalesce(tpc.rating, 0) rating, coalesce(total_classes, 0) total_classes from teachers t
+left join teacherPerCo tpc on tpc.course_id = t.course_id and tpc.teacher_id = t.user_id
+),
+coursePer as (
+select t.course_id, round(sum(t.rating) / (5 * count(*)) * 5, 1) total_rating from teacherRating t
+group by t.course_id
+)
+select c.*, co.total_rating from courseDetails c, coursePer co
+where c.id not in (select s.course_id from students s
+  where user_id = ${user_id})
+and c.id = co.course_id
+order by total_rating desc`
 
     return c.json({ result })
   } catch (error) {

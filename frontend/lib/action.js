@@ -705,3 +705,23 @@ export async function teacherPayment(prevState, formData) {
     message: `Payment updated successfully`,
   }
 }
+
+export async function getNewCourses() {
+  const response = await get_with_token('course/get_new_courses')
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function studentDashboard(cs_id) {
+  const response = await post_with_token('coaching_center/student_dashboard', {
+    coaching_center_id: cs_id,
+  })
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function getAllCoachingCenters() {
+  const response = await get_with_token('coaching_center/view_all')
+  if (response.error) return response.error
+  return response.result
+}
