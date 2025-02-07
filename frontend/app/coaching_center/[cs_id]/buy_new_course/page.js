@@ -1,22 +1,12 @@
 import CourseCard from '@/components/courseCard'
+import EmptyPage from '@/components/emptyPage'
 import { getNewCourses } from '@/lib/action'
 
 export default async function BuyNewCourse() {
   const courses = await getNewCourses()
 
-  if (!Array.isArray(courses)) {
-    return (
-      <div className="p-12">
-        <h1>No Course Available</h1>
-      </div>
-    )
-  }
-  if (courses.length === 0) {
-    return (
-      <div className="p-12">
-        <h1>No Course Available</h1>
-      </div>
-    )
+  if (!Array.isArray(courses) || courses.length === 0) {
+    return <EmptyPage />
   }
 
   const firstColumn = courses.filter((_, index) => index % 3 === 0)

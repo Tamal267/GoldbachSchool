@@ -1,23 +1,13 @@
 import CourseCard from '@/components/courseCard'
+import EmptyPage from '@/components/emptyPage'
 import { viewCourses } from '@/lib/action'
 
 export default async function CoachingCenter({ params }) {
   const { cs_id } = await params
   const allCourses = await viewCourses(cs_id)
 
-  if (!Array.isArray(allCourses)) {
-    return (
-      <div className="p-12">
-        <h1>No Course Available</h1>
-      </div>
-    )
-  }
-  if (allCourses.length === 0) {
-    return (
-      <div className="p-12">
-        <h1>No Course Available</h1>
-      </div>
-    )
+  if (!Array.isArray(allCourses) || allCourses.length === 0) {
+    return <EmptyPage />
   }
 
   const firstColumn = allCourses.filter((_, index) => index % 3 === 0)

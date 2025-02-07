@@ -234,13 +234,14 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <Button className="bg-darkb pr-0 rounded-full">
-              Learn More
+            <Button className="bg-darkb p-0 rounded-full">
+              <span className="my-2 mx-4">Learn More</span>
               <Image
                 src="/Assets/right_arrow.svg"
                 alt="Search"
                 width={40}
                 height={40}
+                className="h-full w-auto"
               />
             </Button>
           </motion.div>
@@ -344,13 +345,14 @@ export default function Home() {
             ))}
           </div>
           <div className="flex justify-center">
-            <Button className="bg-darkb pr-0 rounded-full">
-              Explore Coaching Centers
+            <Button className="bg-darkb p-0 rounded-full">
+              <span className="my-2 mx-4">Explore Coaching Centers</span>
               <Image
                 src="/Assets/right_arrow.svg"
                 alt="Search"
                 width={40}
                 height={40}
+                className="h-full w-auto"
               />
             </Button>
           </div>

@@ -24,7 +24,6 @@ export default async function TeacherMonitoring({ params }) {
     viewTeacherMonitoring(course_id),
     isRegistered(course_id),
   ])
-  console.log(teacherMonitorDetails)
   return (
     <div className="p-12">
       <div className="p-4 border rounded-lg flex flex-col gap-4 overflow-x-auto">

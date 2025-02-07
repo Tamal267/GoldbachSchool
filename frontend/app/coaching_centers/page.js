@@ -1,22 +1,12 @@
 import CoachingCenterCard from '@/components/coachingCenterCard'
+import EmptyPage from '@/components/emptyPage'
 import SearchCoachingCenter from '@/components/searchCoachingCenter'
 import { getAllCoachingCenters } from '@/lib/action'
 
 export default async function CoachingCenters() {
   const coachingCenters = await getAllCoachingCenters()
-  if (!Array.isArray(coachingCenters)) {
-    return (
-      <div className="p-12">
-        <h1>No Course Available</h1>
-      </div>
-    )
-  }
-  if (coachingCenters.length === 0) {
-    return (
-      <div className="p-12">
-        <h1>No Course Available</h1>
-      </div>
-    )
+  if (!Array.isArray(coachingCenters) || coachingCenters.length === 0) {
+    return <EmptyPage />
   }
 
   const firstColumn = coachingCenters.filter((_, index) => index % 3 === 0)

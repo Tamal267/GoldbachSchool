@@ -31,7 +31,6 @@ export default async function ScriptEvaluation({ params }) {
     getNewScripts(course_id),
     getPrevScripts(course_id),
   ])
-  console.log(newScripts)
   return (
     <div className="flex flex-col gap-8 p-12">
       <div className="p-4 border rounded-lg flex flex-col gap-4">
