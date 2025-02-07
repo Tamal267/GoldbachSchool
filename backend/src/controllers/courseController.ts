@@ -717,8 +717,21 @@ export const updateMark = async (c: any) => {
       return c.json({ error: 'Invalid teacher' }, 400)
     }
 
+    const examDetails =
+      await sql`select exams.title exam_name, exams.total_mark, courses.name course_name, courses.program, coaching_centers.name coaching_center_name from exams 
+join courses on exams.course_id = courses.id
+join coaching_centers on coaching_centers.id = courses.coaching_center_id
+where exams.id = ${exam_id}
+and exams.course_id = ${course_id}`
+
     const result =
       await sql`UPDATE answers SET mark = ${mark}, feedback = ${feedback} WHERE student_id = ${student_id} and exam_id = ${exam_id} RETURNING *`
+
+    if (result.length > 0) {
+      const msg = `Your exam ${examDetails[0].exam_name} of ${examDetails[0].course_name} (${examDetails[0].program}) at ${examDetails[0].coaching_center_name} has been evaluated. Your mark is ${mark} out of ${examDetails[0].total_mark}.`
+
+      await sql`INSERT INTO notifications (user_id, message) values (${student_id}, ${msg})`
+    }
 
     return c.json({ result })
   } catch (error) {
@@ -811,14 +824,25 @@ export const teacherPayment = async (c: any) => {
     const { payment, teacher_id, course_id } = await c.req.json()
 
     const isValidAuthor =
-      await sql`select count(*) from courses c join authorities a on c.coaching_center_id = a.coaching_center_id 
-      where a.user_id = ${authority_id} and c.id = ${course_id}`
+      await sql`select cc.name coaching_center_name, c.name course_name, c.program program from courses c join authorities a on c.coaching_center_id = a.coaching_center_id 
+join coaching_centers cc on cc.id = c.coaching_center_id
+where a.user_id = ${authority_id} and c.id = ${course_id}`
     if (isValidAuthor.length === 0) {
       return c.json({ error: 'Invalid teacher' }, 400)
     }
 
+    const coaching_center_name = isValidAuthor[0].coaching_center_name
+    const course_name = isValidAuthor[0].course_name
+    const program = isValidAuthor[0].program
+
     const result =
       await sql`UPDATE teachers SET payment = payment + ${payment} WHERE user_id = ${teacher_id} and course_id = ${course_id} RETURNING *`
+
+    const msg = `Payment of Tk ${payment} added to your account for ${course_name} (${program}) course at ${coaching_center_name}.`
+
+    if (result.length > 0) {
+      await sql`INSERT INTO notifications (user_id, message) values (${teacher_id}, ${msg})`
+    }
 
     return c.json({ result })
   } catch (error) {

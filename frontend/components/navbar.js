@@ -22,11 +22,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { getUserInfo } from '@/lib/action'
+import { cntUnseenNotifications, getUserInfo } from '@/lib/action'
 import { Grip } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Image from 'next/image'
 import Link from 'next/link'
+import NotificationsBell from './notificationsBell'
 
 const programsList = [
   {
@@ -85,7 +86,10 @@ const programsList = [
 
 export default async function Navbar() {
   const cok = await cookies()
-  const userInfo = await getUserInfo()
+  const [userInfo, cntUnseenNoti] = await Promise.all([
+    getUserInfo(),
+    cntUnseenNotifications(),
+  ])
   const loggedIn = cok.get('token')
   return (
     <div className="w-full bg-darkb p-4 flex flex-row align-middle justify-between">
@@ -164,7 +168,14 @@ export default async function Navbar() {
         </NavigationMenu>
       </div>
 
-      <div className="max-lg:hidden flex flex-row gap-4 items-baseline">
+      <div className="max-lg:hidden flex flex-row gap-4 items-center">
+        {loggedIn && (
+          <NotificationsBell
+            count={cntUnseenNoti.count}
+            userInfo={userInfo}
+          />
+        )}
+
         {loggedIn && (
           <div className="flex flex-row gap-2 items-center text-white">
             <span>
@@ -173,6 +184,7 @@ export default async function Navbar() {
             </span>
           </div>
         )}
+
         <NavigationMenu>
           <NavigationMenuList>
             {!loggedIn && (

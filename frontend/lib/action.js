@@ -135,7 +135,9 @@ async function uploadImage(folder, uId, file, bucket) {
     .upload(folder + '/' + uId + '/' + fileName, file)
   if (error) return { error }
   const url =
-    process.env.SUPABASE_URL + `/storage/v1/object/public/` + data.fullPath
+    process.env.NEXT_PUBLIC_SUPABASE_URL +
+    `/storage/v1/object/public/` +
+    data.fullPath
 
   return { data, url }
 }
@@ -193,6 +195,24 @@ export async function getUserInfo() {
   const response = await get_with_token('user/info/get_user')
   if (response.error) return response.error
   return response.user[0]
+}
+
+export async function cntUnseenNotifications() {
+  const response = await get_with_token('user/info/cnt_unseen_notifications')
+  if (response.error) return response.error
+  return response.result[0]
+}
+
+export async function getNotifications() {
+  const response = await get_with_token('user/info/get_notifications')
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function seenNotifications() {
+  const response = await get_with_token('user/info/seen_notificatoins')
+  if (response.error) return response.error
+  return response.result
 }
 
 export async function forgetPassword(prevState, formData) {

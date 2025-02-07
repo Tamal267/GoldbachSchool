@@ -1,4 +1,6 @@
-import { Button } from '@/components/ui/button'
+import EmptyPage from '@/components/emptyPage'
+import Notifications from '@/components/notifications'
+import { getNotifications, getUserInfo } from '@/lib/action'
 
 const notifications = [
   {
@@ -28,39 +30,20 @@ const notifications = [
   },
 ]
 
-export default function Notification() {
+export default async function Notification() {
+  const [notifications, userInfo] = await Promise.all([
+    getNotifications(),
+    getUserInfo(),
+  ])
+
+  if (!Array.isArray(notifications) || notifications.length === 0) {
+    return <EmptyPage />
+  }
+
   return (
-    <div className="p-12">
-      <h2 className="text-xl text-gray-700 mb-7">Notifictions</h2>
-      <ul>
-        {notifications.map((notification, index) => (
-          <li
-            key={index}
-            className="relative flex items-baseline gap-6 pb-5"
-          >
-            <div className="before:absolute before:left-[5.5px] before:h-full before:w-[1px] before:bg-gray-400">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                className="bi bi-circle-fill fill-gray-400"
-                viewBox="0 0 16 16"
-              >
-                <circle
-                  cx="8"
-                  cy="8"
-                  r="8"
-                />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">{notification.time}</p>
-              <p className="mt-2 text-gray-600 ">{notification.message}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <Button className="mt-10">Load More</Button>
-    </div>
+    <Notifications
+      all_notifications={notifications}
+      userInfo={userInfo}
+    />
   )
 }

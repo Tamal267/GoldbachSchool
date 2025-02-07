@@ -1,11 +1,14 @@
 import { Hono } from 'hono'
 import { jwt } from 'hono/jwt'
 import {
+  cntUnseenNotifications,
   forgetPassword,
+  getNotifications,
   getUserInfo,
   login,
   otpCheck,
   resetPass,
+  seenNotifications,
   signUp,
 } from '../controllers/userControllers'
 
@@ -24,5 +27,8 @@ route.post('/forget_pass', forgetPassword)
 route.post('/otp_check', otpCheck)
 route.post('/reset_pass', resetPass)
 route.get('/info/get_user', getUserInfo)
+route.get('/info/cnt_unseen_notifications', cntUnseenNotifications)
+route.get('/info/get_notifications', getNotifications)
+route.get('/info/seen_notificatoins', seenNotifications)
 
 export default route
