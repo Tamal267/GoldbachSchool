@@ -43,7 +43,9 @@ export default function ScriptForm({ row }) {
             value={mark}
             onChange={(e) => setMark(e.target.value)}
           />
-          <FloatingLabel htmlFor="mark">Mark</FloatingLabel>
+          <FloatingLabel htmlFor="mark">
+            Mark out of {row.total_mark}
+          </FloatingLabel>
         </div>
         <div className="relative">
           <FloatingInput

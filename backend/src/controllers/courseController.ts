@@ -651,7 +651,7 @@ export const getNewScripts = async (c: any) => {
     const { course_id } = await c.req.json()
 
     const result =
-      await sql`select a.*, u.full_name, u.email, row_number() over(order by a.created_at desc) as sl_no, c.id as course_id from answers a 
+      await sql`select a.*, u.full_name, u.email, row_number() over(order by a.created_at desc) as sl_no, c.id as course_id, e.title exam_title, e.question_paper, e.total_mark from answers a 
 join exams e on a.exam_id = e.id
 join courses c on e.course_id = c.id
 join users u on a.student_id = u.id
@@ -680,7 +680,7 @@ export const getPreviousScripts = async (c: any) => {
     const { course_id } = await c.req.json()
 
     const result =
-      await sql`select a.*, u.full_name, u.email, row_number() over(order by a.created_at desc) as sl_no, c.id as course_id from answers a 
+      await sql`select a.*, u.full_name, u.email, row_number() over(order by a.created_at desc) as sl_no, c.id as course_id, e.title exam_title, e.question_paper, e.total_mark from answers a 
 join exams e on a.exam_id = e.id
 join courses c on e.course_id = c.id
 join users u on a.student_id = u.id

@@ -1,5 +1,11 @@
 import ScriptForm from '@/components/scriptForm'
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -63,9 +69,26 @@ export default async function ScriptEvaluation({ params }) {
                           height={100}
                         />
                       </DialogTrigger>
-                      <DialogContent className="max-h-screen m-4 overflow-y-auto">
+                      <DialogContent className="max-h-screen m-4 overflow-y-auto w-full max-w-6xl">
                         <DialogHeader>
                           <DialogTitle>View Answer Script</DialogTitle>
+                          <Accordion
+                            type="single"
+                            collapsible
+                          >
+                            <AccordionItem value="item-1">
+                              <AccordionTrigger>
+                                Question Paper of {row.exam_title} (Total Mark:{' '}
+                                {row.total_mark})
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <iframe
+                                  src={row.question_paper}
+                                  className="w-full h-screen"
+                                />
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
                           <ScriptForm row={row} />
                         </DialogHeader>
                       </DialogContent>
@@ -122,9 +145,26 @@ export default async function ScriptEvaluation({ params }) {
                           height={100}
                         />
                       </DialogTrigger>
-                      <DialogContent className="max-h-screen m-4 overflow-y-auto">
+                      <DialogContent className="max-h-screen m-4 overflow-y-auto w-full max-w-6xl">
                         <DialogHeader>
                           <DialogTitle>View Answer Script</DialogTitle>
+                          <Accordion
+                            type="single"
+                            collapsible
+                          >
+                            <AccordionItem value="item-1">
+                              <AccordionTrigger>
+                                Question Paper of {row.exam_title} (Total Mark:{' '}
+                                {row.total_mark})
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <iframe
+                                  src={row.question_paper}
+                                  className="w-full h-screen"
+                                />
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
                           <ScriptForm row={row} />
                         </DialogHeader>
                       </DialogContent>
