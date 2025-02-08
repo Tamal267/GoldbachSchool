@@ -1,4 +1,5 @@
 import AnswerSubmissionForm from '@/components/answerSubmissionForm'
+import EmptyPage from '@/components/emptyPage'
 import { getExam, isRegistered } from '@/lib/action'
 import { format, isAfter } from 'date-fns'
 import { AlarmCheck, Star } from 'lucide-react'
@@ -9,6 +10,9 @@ export default async function Class({ params }) {
     getExam(exam_id),
     isRegistered(course_id),
   ])
+  if (!Array.isArray(examArr) || examArr.length === 0) {
+    return <EmptyPage />
+  }
   const exam = examArr[0]
   const regex = /^([0-9]{1,2}):([0-9]{1,2})$/
   const str = exam.duration

@@ -271,27 +271,31 @@ export default function CourseSidebar({
               isCollapsed={isCollapsed}
             />
 
-            {((isReg.registered > 0 && isReg.type === 'Authority') ||
-              isReg.type === 'Teacher') && <div className="border-b"></div>}
+            {isReg.registered > 0 &&
+              (isReg.type === 'Authority' || isReg.type === 'Teacher') && (
+                <div className="border-b"></div>
+              )}
 
-            {((isReg.registered > 0 && isReg.type === 'Authority') ||
-              isReg.type === 'Teacher') && (
-              <GetNavs
+            {isReg.registered > 0 &&
+              (isReg.type === 'Authority' || isReg.type === 'Teacher') && (
+                <GetNavs
+                  course_id={course_id}
+                  navItems={TeacherNavs}
+                  activeLink={segments[3]}
+                  type="Teacher"
+                  isCollapsed={isCollapsed}
+                />
+              )}
+
+            {isReg.registered > 0 && (
+              <GetContentNavs
                 course_id={course_id}
-                navItems={TeacherNavs}
-                activeLink={segments[3]}
-                type="Teacher"
+                navItems={contents}
+                activeLink={segments[4]}
+                type="Contents"
                 isCollapsed={isCollapsed}
               />
             )}
-
-            <GetContentNavs
-              course_id={course_id}
-              navItems={contents}
-              activeLink={segments[4]}
-              type="Contents"
-              isCollapsed={isCollapsed}
-            />
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />

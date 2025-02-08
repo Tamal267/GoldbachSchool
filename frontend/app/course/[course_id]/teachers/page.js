@@ -1,3 +1,4 @@
+import EmptyPage from '@/components/emptyPage'
 import {
   Card,
   CardDescription,
@@ -11,6 +12,10 @@ import Image from 'next/image'
 export default async function Teachers({ params }) {
   const { course_id } = await params
   const teachers = await getTeachers(course_id)
+  if (!Array.isArray(teachers) || teachers.length === 0) {
+    return <EmptyPage />
+  }
+
   return (
     <div className="p-12 flex flex-col gap-4">
       {teachers.map((teacher, index) => (

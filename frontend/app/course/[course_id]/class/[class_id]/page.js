@@ -1,3 +1,4 @@
+import EmptyPage from '@/components/emptyPage'
 import FeedbackForm from '@/components/feedbackForm'
 import { getClass, isRegistered } from '@/lib/action'
 import { formatRelative } from 'date-fns'
@@ -9,6 +10,9 @@ export default async function Class({ params }) {
     getClass(class_id),
     isRegistered(course_id),
   ])
+  if (!Array.isArray(classArr) || classArr.length === 0) {
+    return <EmptyPage />
+  }
   const cls = classArr[0]
   const regex = /^([0-9]{1,2}):([0-9]{1,2})$/
   const str = cls.duration

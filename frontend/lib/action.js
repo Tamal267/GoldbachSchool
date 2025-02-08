@@ -585,7 +585,9 @@ export async function isRegistered(course_id) {
     course_id,
   })
   if (response.error) return response.error
-  return response.result[0]
+  const type = response.result[0].type
+  const registered = Number(response.result[0].registered)
+  return { type, registered }
 }
 
 export async function submitAnswer(prevState, formData) {

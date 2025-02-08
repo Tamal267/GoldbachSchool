@@ -1,3 +1,4 @@
+import EmptyPage from '@/components/emptyPage'
 import RatingStar from '@/components/ratingStar'
 import TeacherPaymentForm from '@/components/teacherPaymentForm'
 import {
@@ -24,6 +25,13 @@ export default async function TeacherMonitoring({ params }) {
     viewTeacherMonitoring(course_id),
     isRegistered(course_id),
   ])
+  if (
+    !Array.isArray(teacherMonitorDetails) ||
+    teacherMonitorDetails.length === 0
+  ) {
+    return <EmptyPage />
+  }
+
   return (
     <div className="p-12">
       <div className="p-4 border rounded-lg flex flex-col gap-4 overflow-x-auto">

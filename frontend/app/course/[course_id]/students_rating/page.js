@@ -1,3 +1,4 @@
+import EmptyPage from '@/components/emptyPage'
 import {
   Pagination,
   PaginationContent,
@@ -20,6 +21,11 @@ import { viewStudentsRating } from '@/lib/action'
 export default async function StudentMonitoring({ params }) {
   const { course_id } = await params
   const studentRatings = await viewStudentsRating(course_id)
+
+  if (!Array.isArray(studentRatings) || studentRatings.length === 0) {
+    return <EmptyPage />
+  }
+
   return (
     <div className="p-12">
       <div className="p-4 border rounded-lg flex flex-col gap-4">

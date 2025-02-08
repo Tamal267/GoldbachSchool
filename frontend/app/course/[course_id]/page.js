@@ -1,3 +1,4 @@
+import EmptyPage from '@/components/emptyPage'
 import MarkdownRender from '@/components/markdownRenderer'
 import { Button } from '@/components/ui/button'
 import { getCourse, isRegistered } from '@/lib/action'
@@ -8,6 +9,11 @@ import Link from 'next/link'
 export default async function Course({ params }) {
   const { course_id } = await params
   const courseArr = await getCourse(course_id)
+
+  if (!Array.isArray(courseArr) || courseArr.length === 0) {
+    return <EmptyPage />
+  }
+
   const course = courseArr[0]
   const isReg = await isRegistered(course_id)
 
