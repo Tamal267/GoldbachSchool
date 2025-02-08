@@ -1,13 +1,31 @@
 'use client'
-import { seenNotifications } from '@/lib/action'
+import { getNotificationsOffset, seenNotifications } from '@/lib/action'
 import { supabase } from '@/lib/supabase'
-import { format } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { formatRelative } from 'date-fns'
+import { useActionState, useCallback, useEffect, useState } from 'react'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
 
+const initialState = {
+  message: '',
+  success: false,
+}
+
 export default function Notifications({ all_notifications, userInfo }) {
   const [notifications, setNotifications] = useState(all_notifications)
+  const [state, formAction, pending] = useActionState(
+    getNotificationsOffset,
+    initialState,
+  )
+
+  const handleSubmit = useCallback(
+    (formData) => {
+      formData.append('offset', notifications.length)
+      formAction(formData)
+    },
+    [notifications, formAction],
+  )
+
   useEffect(() => {
     const notificationsChannel = supabase
       .channel('view_notifications')
@@ -34,6 +52,13 @@ export default function Notifications({ all_notifications, userInfo }) {
       notificationsChannel.unsubscribe()
     }
   }, [userInfo, notifications])
+
+  useEffect(() => {
+    if (state.success) {
+      setNotifications([...notifications, ...state.notifications])
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state])
 
   return (
     <div className="p-12">
@@ -63,19 +88,31 @@ export default function Notifications({ all_notifications, userInfo }) {
               <div>
                 <div>
                   <span className="text-sm text-gray-600">
-                    {format(
-                      notification.created_at,
-                      'dd MMM yyyy, HH:mm, EEEE',
-                    )}
+                    {formatRelative(notification.created_at, new Date(), {
+                      addSuffix: true,
+                    }).toUpperCase()}
                   </span>
-                  {!notification.seen && <Badge className="ml-2 bg-gray-600">New</Badge>}
+                  {!notification.seen && (
+                    <Badge className="ml-2 bg-gray-600">New</Badge>
+                  )}
                 </div>
-                <p className="mt-2 text-gray-600 ">{notification.message}</p>
+                <p className="mt-2 text-darkb ">{notification.message}</p>
               </div>
             </li>
           ))}
       </ul>
-      <Button className="mt-10">Load More</Button>
+      <form
+        className="inline"
+        action={handleSubmit}
+      >
+        <Button
+          type="submit"
+          className="mt-10 rounded-full"
+          disabled={pending}
+        >
+          {pending ? 'Wait...' : 'Load More'}
+        </Button>
+      </form>
     </div>
   )
 }

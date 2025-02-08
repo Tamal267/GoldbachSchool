@@ -209,6 +209,28 @@ export async function getNotifications() {
   return response.result
 }
 
+export async function getNotificationsOffset(prevState, formData) {
+  const raw = Object.fromEntries(formData)
+
+  const response = await post_with_token(
+    'user/info/get_notifications_offset',
+    raw,
+  )
+
+  if (response.error) {
+    return {
+      success: false,
+      message: response.error,
+      notifications: [],
+    }
+  }
+  return {
+    success: true,
+    message: `Notification fetched successfully`,
+    notifications: response.result,
+  }
+}
+
 export async function seenNotifications() {
   const response = await get_with_token('user/info/seen_notificatoins')
   if (response.error) return response.error

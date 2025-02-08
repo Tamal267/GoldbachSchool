@@ -156,7 +156,34 @@ export const getNotifications = async (c: any) => {
   try {
     const result = await sql`select * from notifications
 where user_id = ${user_id}
-order by created_at desc`
+order by created_at desc
+offset 0 limit 10`
+
+    return c.json({ result })
+  } catch (error) {
+    console.log(error)
+    return c.json({ error: 'error' }, 400)
+  }
+}
+
+export const getNotificationsOffset = async (c: any) => {
+  const { email } = c.get('jwtPayload')
+  if (!email) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+  const user = await sql`select * from users where email = ${email}`
+  if (user.length === 0) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+
+  const user_id = user[0].id
+
+  try {
+    const { offset } = await c.req.json()
+    const result = await sql`select * from notifications
+where user_id = ${user_id}
+order by created_at desc
+offset ${offset} limit 10`
 
     return c.json({ result })
   } catch (error) {
