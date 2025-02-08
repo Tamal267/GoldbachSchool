@@ -22,7 +22,7 @@ export default function CoachingCenterCard({ coachingCenterInfo }) {
   const image = coachingCenterInfo.image
 
   return (
-    <div className="bg-white/70 rounded-lg flex flex-col gap-4 p-4 shadow-lg h-fit">
+    <div className="bg-white/70 rounded-lg flex flex-col gap-4 p-4 shadow-lg h-fit max-w-sm">
       <div>
         <Image
           src={image}

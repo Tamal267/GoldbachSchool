@@ -16,7 +16,7 @@ export default function CourseCard({ course }) {
   const image = course.image
 
   return (
-    <div className="bg-white/70 rounded-lg flex flex-col gap-4 p-4 shadow-lg relative h-fit">
+    <div className="bg-white/70 rounded-lg flex flex-col gap-4 p-4 shadow-lg relative h-fit max-w-sm">
       <div className="absolute top-0 right-0 p-2 bg-darkb text-white rounded-tl-lg">
         {program}
       </div>
