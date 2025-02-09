@@ -26,6 +26,13 @@ export const createCourse = async (c: any) => {
       start_time,
     } = await c.req.json()
 
+    const isValidAuthor =
+      await sql`select * from authorities where user_id = ${user[0].id} and coaching_center_id = ${coaching_center_id}`
+
+    if (isValidAuthor.length === 0) {
+      return c.json({ error: 'Invalid authority' }, 400)
+    }
+
     let au_id_arr = []
 
     for (const email of ins_emails) {
@@ -906,6 +913,32 @@ where c.id not in (select s.course_id from students s
   where user_id = ${user_id})
 and c.id = co.course_id
 order by total_rating desc`
+
+    return c.json({ result })
+  } catch (error) {
+    console.log(error)
+    return c.json({ error: 'error' }, 400)
+  }
+}
+
+export const isRegisteredAuthor = async (c: any) => {
+  const { email } = c.get('jwtPayload')
+  if (!email) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+
+  const user = await sql`select * from users where email = ${email} 
+  and type = 'Authority'`
+  if (user.length === 0) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+
+  const user_id = user[0].id
+
+  try {
+    const { coaching_center_id } = await c.req.json()
+    const result =
+      await sql`select count(*) registered from authorities where user_id = ${user_id} and coaching_center_id = ${coaching_center_id}`
 
     return c.json({ result })
   } catch (error) {

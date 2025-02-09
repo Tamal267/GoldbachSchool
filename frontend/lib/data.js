@@ -508,3 +508,19 @@ export const teachers = [
     about: 'EWU',
   },
 ]
+
+export const PROGRAMS = [
+  { label: 'Class 1', value: 'class_1', link: 'class_1' },
+  { label: 'Class 2', value: 'class_2', link: 'class_2' },
+  { label: 'Class 3', value: 'class_3', link: 'class_3' },
+  { label: 'Class 4', value: 'class_4', link: 'class_4' },
+  { label: 'Class 5', value: 'class_5', link: 'class_5' },
+  { label: 'Class 6', value: 'class_6', link: 'class_6' },
+  { label: 'Class 7', value: 'class_7', link: 'class_7' },
+  { label: 'Class 8', value: 'class_8', link: 'class_8' },
+  { label: 'Class 9', value: 'class_9', link: 'class_9' },
+  { label: 'Class 10', value: 'class_10', link: 'class_10' },
+  { label: 'Class 11', value: 'class_11', link: 'class_11' },
+  { label: 'Class 12', value: 'class_12', link: 'class_12' },
+  { label: 'Admissoin', value: 'admission', link: 'admission' },
+]

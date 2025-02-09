@@ -590,6 +590,15 @@ export async function isRegistered(course_id) {
   return { type, registered }
 }
 
+export async function isRegisteredAuthor(cs_id) {
+  const response = await post_with_token('course/is_registered_authority', {
+    coaching_center_id: cs_id,
+  })
+  if (response.error) return response.error
+  const registered = Number(response.result[0].registered)
+  return { registered }
+}
+
 export async function submitAnswer(prevState, formData) {
   let raw = Object.fromEntries(formData)
   raw.exam_id = prevState.exam_id

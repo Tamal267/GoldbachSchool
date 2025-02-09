@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { createCourse } from '@/lib/action'
+import { PROGRAMS } from '@/lib/data'
 import { useActionState, useCallback, useState } from 'react'
 import { AutosizeTextarea } from './ui/autosize-textarea'
 import { DateTimePicker } from './ui/date-time-picker-demo'
@@ -19,22 +20,6 @@ const initialState = {
   message: '',
   success: false,
 }
-
-const OPTIONS = [
-  { label: 'Class 1', value: 'class_1' },
-  { label: 'Class 2', value: 'class_2' },
-  { label: 'Class 3', value: 'class_3' },
-  { label: 'Class 4', value: 'class_4' },
-  { label: 'Class 5', value: 'class_5' },
-  { label: 'Class 6', value: 'class_6' },
-  { label: 'Class 7', value: 'class_7' },
-  { label: 'Class 8', value: 'class_8' },
-  { label: 'Class 9', value: 'class_9' },
-  { label: 'Class 10', value: 'class_10' },
-  { label: 'Class 11', value: 'class_11' },
-  { label: 'Class 12', value: 'class_12' },
-  { label: 'Admissoin', value: 'admission' },
-]
 
 export default function NewCourseForm({ coaching_center_id }) {
   initialState.coaching_center_id = coaching_center_id
@@ -76,7 +61,7 @@ export default function NewCourseForm({ coaching_center_id }) {
                       <SelectValue placeholder="Select a program" />
                     </SelectTrigger>
                     <SelectContent key="program">
-                      {OPTIONS.map((option, index) => (
+                      {PROGRAMS.map((option, index) => (
                         <SelectItem
                           key={index}
                           value={option.label}

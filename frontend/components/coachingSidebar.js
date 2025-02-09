@@ -77,6 +77,7 @@ export default function CoachingSidebar({
   children,
   coaching_center,
   user,
+  isRegAuthor,
 }) {
   const pathname = usePathname()
   const segments = pathname.split('/')
@@ -104,15 +105,17 @@ export default function CoachingSidebar({
               </h1>
             )}
 
-            {user.type === 'Authority' && (
-              <GetNavs
-                cs_id={cs_id}
-                navItems={AuthorityNavs}
-                activeLink={activeLink}
-                type="Authority"
-                isCollapsed={isCollapsed}
-              />
-            )}
+            {user.type === 'Authority' &&
+              isRegAuthor.registered &&
+              isRegAuthor.registered > 0 && (
+                <GetNavs
+                  cs_id={cs_id}
+                  navItems={AuthorityNavs}
+                  activeLink={activeLink}
+                  type="Authority"
+                  isCollapsed={isCollapsed}
+                />
+              )}
 
             {user.type === 'Teacher' && (
               <GetNavs
