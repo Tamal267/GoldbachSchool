@@ -1,11 +1,14 @@
 import CourseCard from '@/components/courseCard'
 import EmptyPage from '@/components/emptyPage'
 import SearchCourse from '@/components/searchCourse'
-import { viewCourses } from '@/lib/action'
+import { searchCourses, viewCourses } from '@/lib/action'
 
-export default async function CoachingCenter({ params }) {
+export default async function CoachingCenter({ params, searchParams }) {
   const { cs_id } = await params
-  const allCourses = await viewCourses(cs_id)
+  const __sp = await searchParams
+  const __program = __sp.program || ''
+  const __course = __sp.course || ''
+  const allCourses = await viewCourses(cs_id, __program, __course)
 
   if (!Array.isArray(allCourses) || allCourses.length === 0) {
     return <EmptyPage />
@@ -18,7 +21,12 @@ export default async function CoachingCenter({ params }) {
     <div className="bg-gray-50 min-h-screen">
       <div className="flex flex-col items-center justify-center gap-10 p-8">
         <h1 className="text-2xl font-bold text-darkb">Courses</h1>
-        <SearchCourse />
+        <SearchCourse
+          cs_id={cs_id}
+          __program={__program}
+          __course={__course}
+          searchAction={searchCourses}
+        />
         {allCourses.length === 0 && <p>No courses available</p>}
         {allCourses.length < 3 ? (
           <div className="flex flex-row flex-wrap mt-12 gap-10">

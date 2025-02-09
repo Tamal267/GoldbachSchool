@@ -414,12 +414,22 @@ export async function createCourse(prevState, formData) {
   }
 }
 
-export async function viewCourses(cs_id) {
+export async function viewCourses(cs_id, program, course) {
   const response = await post_with_token('course/view', {
     coaching_center_id: cs_id,
+    program_name: '%' + program + '%',
+    course_name: '%' + course + '%',
   })
   if (response.error) return response.error
   return response.result
+}
+
+export async function searchCourses(prevState, formData) {
+  let raw = Object.fromEntries(formData)
+
+  redirect(
+    `/coaching_center/${prevState.cs_id}?program=${raw.program}&course=${raw.course}`,
+  )
 }
 
 export async function getCourse(course_id) {
@@ -557,10 +567,19 @@ export async function getExam(exam_id) {
   return response.result
 }
 
-export async function getAllCourses() {
-  const response = await get_with_token('course/get_all_courses')
+export async function getAllCourses(program, course) {
+  const response = await post_with_token('course/get_all_courses', {
+    program_name: '%' + program + '%',
+    course_name: '%' + course + '%',
+  })
   if (response.error) return response.error
   return response.result
+}
+
+export async function searchAllCourses(prevState, formData) {
+  let raw = Object.fromEntries(formData)
+
+  redirect(`/courses?program=${raw.program}&course=${raw.course}`)
 }
 
 export async function addStudent(prevState, formData) {

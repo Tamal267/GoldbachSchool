@@ -74,7 +74,8 @@ export const viewCourses = async (c: any) => {
   const user_id = user[0].id
 
   try {
-    const { coaching_center_id } = await c.req.json()
+    const { coaching_center_id, program_name, course_name } = await c.req.json()
+
     let result: any[] = []
     if (type === 'Authority')
       result = await sql`with classCnt as (
@@ -121,6 +122,8 @@ group by t.course_id
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
 where c.coaching_center_id = cte.coaching_center_id 
 and c.id = co.course_id
+and c.program like ${program_name}
+and c.name like ${course_name}
 order by co.total_rating desc
 `
 
@@ -167,7 +170,8 @@ group by t.course_id
 )
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
 where c.coaching_center_id = cte.coaching_center_id 
-and c.id = co.course_id
+and c.program like ${program_name}
+and c.name like ${course_name}
 order by co.total_rating desc`
 
     if (type === 'Student')
@@ -214,6 +218,8 @@ group by t.course_id
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
 where c.coaching_center_id = cte.coaching_center_id 
 and c.id = co.course_id
+and c.program like ${program_name}
+and c.name like ${course_name}
 order by co.total_rating desc`
 
     return c.json({ result })
@@ -435,6 +441,7 @@ export const getAllCourses = async (c: any) => {
   }
 
   try {
+    const { program_name, course_name } = await c.req.json()
     const result = await sql`with classCnt as (
   select count(*) as total_classes, course_id from classes
   group by course_id
@@ -477,6 +484,8 @@ group by t.course_id
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
 where c.coaching_center_id = cte.coaching_center_id 
 and c.id = co.course_id
+and c.program like ${program_name}
+and c.name like ${course_name}
 order by co.total_rating desc
 `
     return c.json({ result })
