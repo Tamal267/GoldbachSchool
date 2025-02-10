@@ -1,5 +1,6 @@
 import EmptyPage from '@/components/emptyPage'
 import FeedbackForm from '@/components/feedbackForm'
+import MarkdownRender from '@/components/markdownRenderer'
 import { getClass, isRegistered } from '@/lib/action'
 import { formatRelative } from 'date-fns'
 import { CalendarRange, CircleUser, Timer } from 'lucide-react'
@@ -68,7 +69,7 @@ export default async function Class({ params }) {
           <h1 className="text-xl font-epilogue font-semibold text-darkb">
             Description
           </h1>
-          <p className="text-gray-700">{cls.description}</p>
+          <MarkdownRender content={cls.description} />
         </div>
 
         <div className="space-y-2">

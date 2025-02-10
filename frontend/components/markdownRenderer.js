@@ -1,8 +1,58 @@
-// components/MarkdownRender.js
 import PropTypes from 'prop-types'
 import ReactMarkdown from 'react-markdown'
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { tomorrow as codeStyle } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import rehypeKatex from 'rehype-katex'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
+
+// (Optional) Import languages if needed
+import cpp from 'react-syntax-highlighter/dist/esm/languages/prism/cpp'
+import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript'
+import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx'
+import python from 'react-syntax-highlighter/dist/esm/languages/prism/python'
+
+// Register languages for better highlighting
+SyntaxHighlighter.registerLanguage('jsx', jsx)
+SyntaxHighlighter.registerLanguage('javascript', javascript)
+SyntaxHighlighter.registerLanguage('cpp', cpp)
+SyntaxHighlighter.registerLanguage('python', python)
+
+// Custom code block renderer using react-syntax-highlighter
+const CodeBlock = ({ node, inline, className, children, ...props }) => {
+  const match = /language-(\w+)/.exec(className || '')
+  if (!inline && match) {
+    return (
+      <SyntaxHighlighter
+        language={match[1]}
+        style={codeStyle}
+        PreTag="div"
+        {...props}
+      >
+        {String(children).replace(/\n$/, '')}
+      </SyntaxHighlighter>
+    )
+  }
+  return (
+    <code
+      className={className}
+      {...props}
+    >
+      {children}
+    </code>
+  )
+}
+
+// Custom iframe renderer for full-width video embeds with Tailwind's aspect-video ratio
+const Iframe = ({ node, ...props }) => {
+  return (
+    <iframe
+      {...props}
+      className="w-full aspect-video"
+    />
+  )
+}
 
 const MarkdownRender = ({ content }) => {
   if (!content) {
@@ -11,19 +61,23 @@ const MarkdownRender = ({ content }) => {
 
   return (
     <div className="prose prose-sm w-full mx-auto">
-      {' '}
-      {/* Apply Tailwind prose classes */}
+      {/* The ReactMarkdown component now uses remarkGfm & remarkMath,
+          and rehypeRaw & rehypeKatex to process equations.
+          It also uses our custom CodeBlock and Iframe renderers */}
       <ReactMarkdown
         children={content}
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw]} // Use with caution!
+        remarkPlugins={[remarkGfm, remarkMath]}
+        rehypePlugins={[rehypeRaw, rehypeKatex]}
         components={{
+          code: CodeBlock,
+          iframe: Iframe,
+          // Keep your other components if needed:
           img: ({ node, ...props }) => (
             <img
               {...props}
               alt={node.alt}
               className="max-w-full h-auto"
-            /> // Responsive images
+            />
           ),
           a: ({ node, ...props }) => (
             <a
@@ -31,81 +85,69 @@ const MarkdownRender = ({ content }) => {
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:underline"
-            ></a>
+            />
           ),
           table: ({ node, ...props }) => (
             <table
               {...props}
               className="table-auto w-full"
-            ></table> // Add Tailwind table classes
+            />
           ),
           th: ({ node, ...props }) => (
             <th
               {...props}
               className="px-4 py-2 text-left font-bold border-b border-gray-200"
-            ></th>
+            />
           ),
           td: ({ node, ...props }) => (
             <td
               {...props}
               className="px-4 py-2 border-b border-gray-200"
-            ></td>
-          ),
-          code: ({ node, ...props }) => (
-            <code
-              {...props}
-              className="bg-gray-100 rounded px-2 py-1 font-mono text-sm"
-            ></code>
-          ),
-          pre: ({ node, ...props }) => (
-            <pre
-              {...props}
-              className="bg-gray-100 rounded p-4 overflow-x-auto font-mono text-sm"
-            ></pre>
+            />
           ),
           h1: ({ node, ...props }) => (
             <h1
               {...props}
               className="text-3xl font-bold mt-6 mb-4"
-            ></h1>
+            />
           ),
           h2: ({ node, ...props }) => (
             <h2
               {...props}
               className="text-2xl font-bold mt-6 mb-4"
-            ></h2>
+            />
           ),
           h3: ({ node, ...props }) => (
             <h3
               {...props}
               className="text-xl font-bold mt-6 mb-4"
-            ></h3>
+            />
           ),
           h4: ({ node, ...props }) => (
             <h4
               {...props}
               className="text-lg font-bold mt-6 mb-4"
-            ></h4>
+            />
           ),
           p: ({ node, ...props }) => (
             <p
               {...props}
               className="mb-4"
-            ></p>
+            />
           ),
           ul: ({ node, ...props }) => (
             <ul
               {...props}
               className="list-disc ml-6 mb-4"
-            ></ul>
+            />
           ),
           ol: ({ node, ...props }) => (
             <ol
               {...props}
               className="list-decimal ml-6 mb-4"
-            ></ol>
+            />
           ),
-          li: ({ node, ...props }) => <li {...props}></li>,
+          li: ({ node, ...props }) => <li {...props} />,
         }}
       />
     </div>

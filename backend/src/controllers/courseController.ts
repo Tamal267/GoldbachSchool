@@ -152,7 +152,7 @@ courseDetails as (
   left join studentCnt on studentCnt.course_id = c.id
 ),
 cte as (
-  select distinct c.coaching_center_id from courses c join teachers s on c.id = s.course_id
+  select distinct c.id from courses c join teachers s on c.id = s.course_id
 where s.user_id = ${user_id} and c.coaching_center_id = ${coaching_center_id}
 ),
 teacherPerCo as (
@@ -169,7 +169,7 @@ select t.course_id, round(sum(t.rating) / (5 * count(*)) * 5, 1) total_rating fr
 group by t.course_id
 )
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
-where c.coaching_center_id = cte.coaching_center_id 
+where c.id = cte.id 
 and c.id = co.course_id
 and lower(c.program) like lower(${program_name})
 and lower(c.name) like lower(${course_name})
@@ -200,7 +200,7 @@ courseDetails as (
   left join studentCnt on studentCnt.course_id = c.id
 ),
 cte as (
-  select distinct c.coaching_center_id from courses c join students s on c.id = s.course_id
+  select distinct c.id from courses c join students s on c.id = s.course_id
 where s.user_id = ${user_id} and c.coaching_center_id = ${coaching_center_id}
 ),
 teacherPerCo as (
@@ -217,7 +217,7 @@ select t.course_id, round(sum(t.rating) / (5 * count(*)) * 5, 1) total_rating fr
 group by t.course_id
 )
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
-where c.coaching_center_id = cte.coaching_center_id 
+where c.id = cte.id 
 and c.id = co.course_id
 and lower(c.program) like lower(${program_name})
 and lower(c.name) like lower(${course_name})

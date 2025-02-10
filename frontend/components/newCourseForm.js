@@ -13,7 +13,7 @@ import {
 import { createCourse } from '@/lib/action'
 import { PROGRAMS } from '@/lib/data'
 import { useActionState, useCallback, useState } from 'react'
-import { AutosizeTextarea } from './ui/autosize-textarea'
+import Mdeditor from './mdeditor'
 import { DateTimePicker } from './ui/date-time-picker-demo'
 
 const initialState = {
@@ -29,6 +29,10 @@ export default function NewCourseForm({ coaching_center_id }) {
   )
   const [date24, setDate24] = useState()
   const [insEmails, setInsEmails] = useState([''])
+  const [description, setDescription] = useState('')
+
+  const [open, setOpen] = useState(false)
+  const [preview, setPreview] = useState(false)
 
   const onSetDate = (date) => {
     setDate24(date)
@@ -36,11 +40,12 @@ export default function NewCourseForm({ coaching_center_id }) {
 
   const handleSubmit = useCallback(
     (formData) => {
+      formData.append('description', description)
       const d = new Date(date24)
       formData.append('start_time', d.toISOString())
       formAction(formData)
     },
-    [date24, formAction],
+    [date24, formAction, description],
   )
 
   return (
@@ -87,17 +92,11 @@ export default function NewCourseForm({ coaching_center_id }) {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <div>
-                  <AutosizeTextarea
-                    placeholder="Write description"
-                    name="description"
-                    className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0 "
-                    maxHeight={500}
-                  />
-                </div>
-              </div>
+              <Mdeditor
+                description={description}
+                setDescription={setDescription}
+                name="description"
+              />
 
               <div className="space-y-2">
                 <Label htmlFor="image">Image</Label>
@@ -132,7 +131,7 @@ export default function NewCourseForm({ coaching_center_id }) {
                   <DateTimePicker
                     date={date24}
                     onSetDate={onSetDate}
-                    className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0 "
+                    className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0"
                   />
                 </div>
               </div>

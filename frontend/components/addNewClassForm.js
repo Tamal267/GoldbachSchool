@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select'
 import { addClass } from '@/lib/action'
 import { useActionState, useCallback, useState } from 'react'
-import { AutosizeTextarea } from './ui/autosize-textarea'
+import Mdeditor from './mdeditor'
 import { DateTimePicker } from './ui/date-time-picker-demo'
 import { Input } from './ui/input'
 
@@ -25,6 +25,8 @@ export default function AddNewClassForm({ course_id, teachers }) {
   const [st_date24, setStDate24] = useState()
   const [topics, setTopics] = useState([''])
   const [state, formAction, pending] = useActionState(addClass, initialState)
+
+  const [description, setDescription] = useState('')
 
   const handleSubmit = useCallback(
     (formData) => {
@@ -114,17 +116,11 @@ export default function AddNewClassForm({ course_id, teachers }) {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <div>
-              <AutosizeTextarea
-                placeholder="Write opinion"
-                name="description"
-                className="bg-transparent rounded-lg w-full ring-0 border border-gray-500 focus-visible:ring-offset-0 focus-visible:ring-0 "
-                maxHeight={500}
-              />
-            </div>
-          </div>
+          <Mdeditor
+            name="description"
+            description={description}
+            setDescription={setDescription}
+          />
 
           {topics.map((topic, index) => (
             <div
