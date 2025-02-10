@@ -660,7 +660,7 @@ export async function submitAnswer(prevState, formData) {
       exam_id: raw.exam_id,
     }
   }
-  // revalidatePath(`course/${raw.course_id}/exam/${raw.exam_id}`)
+  revalidatePath(`course/${raw.course_id}/exam/${raw.exam_id}`)
   return {
     success: true,
     message: `Your answer submitted successfully`,
@@ -778,10 +778,22 @@ export async function teacherPayment(prevState, formData) {
   }
 }
 
-export async function getNewCourses() {
-  const response = await get_with_token('course/get_new_courses')
+export async function getNewCourses(coaching_center_id, program, course) {
+  const response = await post_with_token('course/get_new_courses', {
+    coaching_center_id,
+    program_name: '%' + program + '%',
+    course_name: '%' + course + '%',
+  })
   if (response.error) return response.error
   return response.result
+}
+
+export async function searchNewCourses(prevState, formData) {
+  let raw = Object.fromEntries(formData)
+
+  redirect(
+    `/coaching_center/${prevState.cs_id}/buy_new_course?program=${raw.program}&course=${raw.course}`,
+  )
 }
 
 export async function studentDashboard(cs_id) {
@@ -794,6 +806,14 @@ export async function studentDashboard(cs_id) {
 
 export async function getAllCoachingCenters() {
   const response = await get_with_token('coaching_center/view_all')
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function getScript(exam_id) {
+  const response = await post_with_token('course/get_script', {
+    exam_id,
+  })
   if (response.error) return response.error
   return response.result
 }

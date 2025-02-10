@@ -122,8 +122,8 @@ group by t.course_id
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
 where c.coaching_center_id = cte.coaching_center_id 
 and c.id = co.course_id
-and c.program like ${program_name}
-and c.name like ${course_name}
+and lower(c.program) like lower(${program_name})
+and lower(c.name) like lower(${course_name})
 order by co.total_rating desc
 `
 
@@ -170,8 +170,9 @@ group by t.course_id
 )
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
 where c.coaching_center_id = cte.coaching_center_id 
-and c.program like ${program_name}
-and c.name like ${course_name}
+and c.id = co.course_id
+and lower(c.program) like lower(${program_name})
+and lower(c.name) like lower(${course_name})
 order by co.total_rating desc`
 
     if (type === 'Student')
@@ -218,8 +219,8 @@ group by t.course_id
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
 where c.coaching_center_id = cte.coaching_center_id 
 and c.id = co.course_id
-and c.program like ${program_name}
-and c.name like ${course_name}
+and lower(c.program) like lower(${program_name})
+and lower(c.name) like lower(${course_name})
 order by co.total_rating desc`
 
     return c.json({ result })
@@ -484,8 +485,8 @@ group by t.course_id
 select c.*, co.total_rating from courseDetails c, cte, coursePer co
 where c.coaching_center_id = cte.coaching_center_id 
 and c.id = co.course_id
-and c.program like ${program_name}
-and c.name like ${course_name}
+and lower(c.program) like lower(${program_name})
+and lower(c.name) like lower(${course_name})
 order by co.total_rating desc
 `
     return c.json({ result })
@@ -881,6 +882,7 @@ export const getNewCourses = async (c: any) => {
   const user_id = user[0].id
 
   try {
+    const { coaching_center_id, program_name, course_name } = await c.req.json()
     const result = await sql`with classCnt as (
   select count(*) as total_classes, course_id from classes
   group by course_id
@@ -920,6 +922,9 @@ group by t.course_id
 select c.*, co.total_rating from courseDetails c, coursePer co
 where c.id not in (select s.course_id from students s
   where user_id = ${user_id})
+  and c.coaching_center_id = ${coaching_center_id}
+  and lower(c.program) like lower(${program_name})
+and lower(c.name) like lower(${course_name})
 and c.id = co.course_id
 order by total_rating desc`
 
@@ -948,6 +953,32 @@ export const isRegisteredAuthor = async (c: any) => {
     const { coaching_center_id } = await c.req.json()
     const result =
       await sql`select count(*) registered from authorities where user_id = ${user_id} and coaching_center_id = ${coaching_center_id}`
+
+    return c.json({ result })
+  } catch (error) {
+    console.log(error)
+    return c.json({ error: 'error' }, 400)
+  }
+}
+
+export const getScript = async (c: any) => {
+  const { email } = c.get('jwtPayload')
+  if (!email) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+  const user =
+    await sql`select * from users where email = ${email} and type = 'Student'`
+  if (user.length === 0) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+
+  const user_id = user[0].id
+
+  try {
+    const { exam_id } = await c.req.json()
+
+    const result =
+      await sql`select * from answers where student_id = ${user_id} and exam_id = ${exam_id}`
 
     return c.json({ result })
   } catch (error) {

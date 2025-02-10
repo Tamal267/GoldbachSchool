@@ -1,15 +1,23 @@
 import AnswerSubmissionForm from '@/components/answerSubmissionForm'
 import EmptyPage from '@/components/emptyPage'
-import { getExam, isRegistered } from '@/lib/action'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+import { getExam, getScript, isRegistered } from '@/lib/action'
 import { format, isAfter } from 'date-fns'
 import { AlarmCheck, Star } from 'lucide-react'
 
 export default async function Class({ params }) {
   const { exam_id, course_id } = await params
-  const [examArr, isReg] = await Promise.all([
+  const [examArr, isReg, stdScript] = await Promise.all([
     getExam(exam_id),
     isRegistered(course_id),
+    getScript(exam_id),
   ])
+  console.log('STdScript', stdScript)
   if (!Array.isArray(examArr) || examArr.length === 0) {
     return <EmptyPage />
   }
@@ -50,6 +58,32 @@ export default async function Class({ params }) {
           src={exam.question_paper}
           className="w-full h-screen"
         />
+        {Array.isArray(stdScript) && stdScript.length > 0 && (
+          <Accordion
+            type="single"
+            collapsible
+          >
+            <AccordionItem value="item-1">
+              <AccordionTrigger>
+                <span className="text-blue-700 cursor-pointer">
+                  View Your Answer Script
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="space-y-2">
+                <p>
+                  <b>Mark:</b> {stdScript[0].mark}
+                </p>
+                <p>
+                  <b>Feedback:</b> {stdScript[0].feedback}
+                </p>
+                <iframe
+                  src={stdScript[0].answer_paper}
+                  className="w-full h-screen"
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        )}
         {isReg.registered > 0 && isReg.type === 'Student' && (
           <AnswerSubmissionForm
             type="Question"

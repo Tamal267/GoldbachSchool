@@ -12,6 +12,7 @@ import {
   getNewCourses,
   getNewScripts,
   getPreviousScripts,
+  getScript,
   getTeachers,
   isRegisterd,
   isRegisteredAuthor,
@@ -53,7 +54,8 @@ route.post('/get_prev_scripts', getPreviousScripts)
 route.post('/view_students_rating', viewStudentsRating)
 route.post('/view_teacher_monitoring', viewTeacherMonitoring)
 route.post('/teacher_payment', teacherPayment)
-route.get('/get_new_courses', getNewCourses)
+route.post('/get_new_courses', getNewCourses)
 route.post('/is_registered_authority', isRegisteredAuthor)
+route.post('/get_script', getScript)
 
 export default route
