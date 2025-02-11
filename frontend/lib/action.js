@@ -155,6 +155,24 @@ export async function signUp(prevState, formData) {
   }
 
   if (mailChecker.isValid(raw.email)) {
+    const { url, error } = await uploadImage(
+      'profile_pictures',
+      raw.email,
+      raw.profile_pic,
+      'store_room',
+    )
+
+    if (error) {
+      console.log('error image: ', error)
+      return {
+        success: false,
+        message: 'Error uploading image',
+        coaching_center_id: raw.coaching_center_id,
+      }
+    }
+
+    raw.profile_pic = url
+
     const response = await post('user/signup', raw)
     if (response.error) {
       return {
@@ -693,7 +711,7 @@ export async function submitClassReview(prevState, formData) {
       class_id: raw.class_id,
     }
   }
-  // revalidatePath(`course/${raw.course_id}/class/${raw.class_id}`)
+  revalidatePath(`course/${raw.course_id}/class/${raw.class_id}`)
   return {
     success: true,
     message: `Your review submitted successfully`,
@@ -813,6 +831,14 @@ export async function getAllCoachingCenters() {
 export async function getScript(exam_id) {
   const response = await post_with_token('course/get_script', {
     exam_id,
+  })
+  if (response.error) return response.error
+  return response.result
+}
+
+export async function getClassReviews(class_id) {
+  const response = await post_with_token('course/get_class_reviews', {
+    class_id,
   })
   if (response.error) return response.error
   return response.result

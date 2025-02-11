@@ -1,16 +1,28 @@
 import EmptyPage from '@/components/emptyPage'
 import FeedbackForm from '@/components/feedbackForm'
 import MarkdownRender from '@/components/markdownRenderer'
-import { getClass, isRegistered } from '@/lib/action'
+import RatingStar from '@/components/ratingStar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { getClass, getClassReviews, isRegistered } from '@/lib/action'
 import { formatRelative } from 'date-fns'
 import { CalendarRange, CircleUser, Timer } from 'lucide-react'
 
 export default async function Class({ params }) {
   const { course_id, class_id } = await params
-  const [classArr, isReg] = await Promise.all([
+  const [classArr, isReg, allReviews] = await Promise.all([
     getClass(class_id),
     isRegistered(course_id),
+    getClassReviews(class_id),
   ])
+  console.log('allReviews', allReviews)
   if (!Array.isArray(classArr) || classArr.length === 0) {
     return <EmptyPage />
   }
@@ -35,7 +47,7 @@ export default async function Class({ params }) {
         <div>
           <h1 className="text-3xl font-poppins">{cls.title}</h1>
         </div>
-        <div className="flex flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex flex-row gap-2 items-center">
             <CalendarRange
               size={20}
@@ -62,6 +74,10 @@ export default async function Class({ params }) {
               className="text-blue-700"
             />
             <span>{cls.teacher_name}</span>
+          </div>
+          <div className="flex flex-row gap-2 items-center">
+            <RatingStar rating={allReviews[0].rating} /> (
+            {allReviews[0].total_rating})
           </div>
         </div>
         <hr className="w-full" />
@@ -95,6 +111,44 @@ export default async function Class({ params }) {
             class_id={class_id}
           />
         )}
+      </div>
+
+      <hr className="w-full my-4" />
+
+      <div className="space-y-4">
+        <h1 className="text-xl font-epilogue font-semibold text-darkb">
+          All Reviews ({allReviews.length})
+        </h1>
+        <div className="flex flex-col gap-4">
+          {allReviews.map((review, index) => (
+            <Card key={index}>
+              <CardHeader>
+                <div className="flex flex-row gap-4 items-center">
+                  <Avatar>
+                    <AvatarImage src={review.profile_pic} />
+                    <AvatarFallback>
+                      {review.full_name.slice(0, 2)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <CardTitle>{review.full_name}</CardTitle>
+                    <CardDescription>
+                      {formatRelative(review.created_at, new Date())}
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-darkb">{review.description}</p>
+              </CardContent>
+              <CardFooter>
+                <div className="flex flex-row gap-2 items-center">
+                  <RatingStar rating={review.rating} /> ({review.rating})
+                </div>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   )

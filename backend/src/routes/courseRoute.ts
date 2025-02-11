@@ -7,6 +7,7 @@ import {
   createCourse,
   getAllCourses,
   getClass,
+  getClassReviews,
   getCourse,
   getExam,
   getNewCourses,
@@ -57,5 +58,6 @@ route.post('/teacher_payment', teacherPayment)
 route.post('/get_new_courses', getNewCourses)
 route.post('/is_registered_authority', isRegisteredAuthor)
 route.post('/get_script', getScript)
+route.post('/get_class_reviews', getClassReviews)
 
 export default route

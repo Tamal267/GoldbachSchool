@@ -8,12 +8,13 @@ function generateRandomWord() {
 }
 
 export const signUp = async (c: any) => {
-  const { full_name, phone, email, password, gender, type } = await c.req.json()
+  const { full_name, phone, email, password, gender, type, profile_pic } =
+    await c.req.json()
   // console.log(full_name, phone, email, password, gender, type)
 
   try {
     const result =
-      await sql`insert into users (full_name, phone, email, password, gender, type) values(${full_name}, ${phone}, ${email}, ${password}, ${gender}, ${type}) returning *`
+      await sql`insert into users (full_name, phone, email, password, gender, type, profile_pic) values(${full_name}, ${phone}, ${email}, ${password}, ${gender}, ${type}, ${profile_pic}) returning *`
     console.log(result)
     await sendEmail(email, 'SignUp', 'You have successfully signed up')
     return c.json({ result })

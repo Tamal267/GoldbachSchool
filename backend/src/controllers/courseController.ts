@@ -986,3 +986,33 @@ export const getScript = async (c: any) => {
     return c.json({ error: 'error' }, 400)
   }
 }
+
+export const getClassReviews = async (c: any) => {
+  const { email } = c.get('jwtPayload')
+  if (!email) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+  const user = await sql`select * from users where email = ${email}`
+  if (user.length === 0) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+
+  try {
+    const { class_id } = await c.req.json()
+
+    const result = await sql`with totalRating as (
+  select class_id, round(sum(rating) / (5 * count(*)) * 5, 1) total_rating from class_reviews
+  group by class_id
+)
+select class_reviews.*, u.full_name, u.email, u.profile_pic, coalesce(tr.total_rating, 0) total_rating from class_reviews
+join users u on u.id = class_reviews.student_id
+left join totalRating tr on tr.class_id = class_reviews.class_id
+where class_reviews.class_id = ${class_id}
+order by created_at desc`
+
+    return c.json({ result })
+  } catch (error) {
+    console.log(error)
+    return c.json({ error: 'error' }, 400)
+  }
+}

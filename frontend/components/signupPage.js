@@ -94,6 +94,20 @@ export default function SignUpPage({ type, signUpAction }) {
                   className="bg-transparent rounded-lg w-full ring-0 border focus-visible:ring-offset-0 focus-visible:ring-0"
                 />
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="profile_pic">Profile Picture</Label>
+                <div>
+                  <Input
+                    type="file"
+                    id="profile_pic"
+                    name="profile_pic"
+                    placeholder="Select a picture..."
+                    className="bg-transparent rounded-lg w-full ring-0 border border-gray-500 focus-visible:ring-offset-0 focus-visible:ring-0"
+                  />
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="gender">Gender</Label>
                 <Select name="gender">
