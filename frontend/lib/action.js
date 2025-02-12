@@ -720,17 +720,19 @@ export async function submitClassReview(prevState, formData) {
   }
 }
 
-export async function getNewScripts(course_id) {
+export async function getNewScripts(course_id, offset) {
   const response = await post_with_token('course/get_new_scripts', {
     course_id,
+    offset,
   })
   if (response.error) return response.error
   return response.result
 }
 
-export async function getPrevScripts(course_id) {
+export async function getPrevScripts(course_id, offset) {
   const response = await post_with_token('course/get_prev_scripts', {
     course_id,
+    offset,
   })
   if (response.error) return response.error
   return response.result

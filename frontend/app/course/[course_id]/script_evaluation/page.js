@@ -31,11 +31,14 @@ import {
 import { getNewScripts, getPrevScripts } from '@/lib/action'
 import Image from 'next/image'
 
-export default async function ScriptEvaluation({ params }) {
+export default async function ScriptEvaluation({ params, searchParams }) {
   const { course_id } = await params
+  const __sp = await searchParams
+  const __newOffset = __sp.new_offset ? parseInt(__sp.new_offset) : 0
+  const __prevOffset = __sp.prev_offset ? parseInt(__sp.prev_offset) : 0
   const [newScripts, prevScripts] = await Promise.all([
-    getNewScripts(course_id),
-    getPrevScripts(course_id),
+    getNewScripts(course_id, __newOffset),
+    getPrevScripts(course_id, __prevOffset),
   ])
   return (
     <div className="flex flex-col gap-8 p-12">
@@ -101,13 +104,17 @@ export default async function ScriptEvaluation({ params }) {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious
+                href={`?new_offset=${Math.max(0, __newOffset - 10)}&prev_offset=${__prevOffset}`}
+              />
             </PaginationItem>
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext
+                href={`?new_offset=${__newOffset + 10}&prev_offset=${__prevOffset}`}
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
@@ -177,13 +184,17 @@ export default async function ScriptEvaluation({ params }) {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious
+                href={`?new_offset=${__newOffset}&prev_offset=${Math.max(0, __prevOffset - 10)}`}
+              />
             </PaginationItem>
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext
+                href={`?new_offset=${__newOffset}&prev_offset=${__prevOffset + 10}`}
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
