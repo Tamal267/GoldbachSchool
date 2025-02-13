@@ -108,7 +108,7 @@ export default async function Navbar() {
       </Link>
       <div className="max-lg:hidden">
         <NavigationMenu>
-          <NavigationMenuList>
+          <NavigationMenuList className="flex flex-row gap-4 items-center">
             <NavigationMenuItem>
               <Link
                 href="/coaching_centers"
@@ -119,28 +119,6 @@ export default async function Navbar() {
                   Coaching centers
                 </NavigationMenuLink>
               </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className="bg-transparent text-white font-poppins">
-                Programs
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Link
-                </NavigationMenuLink>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Link
-                </NavigationMenuLink>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Link
-                </NavigationMenuLink>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Link
-                </NavigationMenuLink>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Link
-                </NavigationMenuLink>
-              </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link
@@ -159,7 +137,7 @@ export default async function Navbar() {
                 legacyBehavior
                 passHref
               >
-                <NavigationMenuLink className="bg-transparent text-white font-poppins p-4">
+                <NavigationMenuLink className="bg-transparent text-white font-poppins">
                   Dashboard
                 </NavigationMenuLink>
               </Link>

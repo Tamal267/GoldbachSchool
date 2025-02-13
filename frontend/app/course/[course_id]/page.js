@@ -2,6 +2,7 @@ import EmptyPage from '@/components/emptyPage'
 import MarkdownRender from '@/components/markdownRenderer'
 import { Button } from '@/components/ui/button'
 import { getCourse, isRegistered } from '@/lib/action'
+import { getBlur } from '@/lib/utils'
 import { BookOpenCheck, FileSpreadsheet, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -17,6 +18,8 @@ export default async function Course({ params }) {
   const course = courseArr[0]
   const isReg = await isRegistered(course_id)
 
+  const Blur = getBlur()
+
   return (
     <div className="p-12">
       <div className="flex flex-col gap-8 lg:flex-row">
@@ -27,6 +30,8 @@ export default async function Course({ params }) {
               alt={course.name}
               width={1400}
               height={1000}
+              placeholder="blur"
+              blurDataURL={Blur}
               className="w-full h-auto"
             />
           </div>

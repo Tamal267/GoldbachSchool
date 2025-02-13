@@ -8,9 +8,9 @@ import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 
 // (Optional) Import languages if needed
-import cpp from 'react-syntax-highlighter/dist/esm/languages/prism/cpp'
-import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript'
 import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx'
+import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript'
+import cpp from 'react-syntax-highlighter/dist/esm/languages/prism/cpp'
 import python from 'react-syntax-highlighter/dist/esm/languages/prism/python'
 
 // Register languages for better highlighting
@@ -35,10 +35,7 @@ const CodeBlock = ({ node, inline, className, children, ...props }) => {
     )
   }
   return (
-    <code
-      className={className}
-      {...props}
-    >
+    <code className={className} {...props}>
       {children}
     </code>
   )
@@ -61,9 +58,6 @@ const MarkdownRender = ({ content }) => {
 
   return (
     <div className="prose prose-sm w-full mx-auto">
-      {/* The ReactMarkdown component now uses remarkGfm & remarkMath,
-          and rehypeRaw & rehypeKatex to process equations.
-          It also uses our custom CodeBlock and Iframe renderers */}
       <ReactMarkdown
         children={content}
         remarkPlugins={[remarkGfm, remarkMath]}
@@ -71,13 +65,8 @@ const MarkdownRender = ({ content }) => {
         components={{
           code: CodeBlock,
           iframe: Iframe,
-          // Keep your other components if needed:
           img: ({ node, ...props }) => (
-            <img
-              {...props}
-              alt={node.alt}
-              className="max-w-full h-auto"
-            />
+            <img {...props} alt={node.alt} className="max-w-full h-auto" />
           ),
           a: ({ node, ...props }) => (
             <a
@@ -88,10 +77,7 @@ const MarkdownRender = ({ content }) => {
             />
           ),
           table: ({ node, ...props }) => (
-            <table
-              {...props}
-              className="table-auto w-full"
-            />
+            <table {...props} className="table-auto w-full" />
           ),
           th: ({ node, ...props }) => (
             <th
@@ -100,10 +86,7 @@ const MarkdownRender = ({ content }) => {
             />
           ),
           td: ({ node, ...props }) => (
-            <td
-              {...props}
-              className="px-4 py-2 border-b border-gray-200"
-            />
+            <td {...props} className="px-4 py-2 border-b border-gray-200" />
           ),
           h1: ({ node, ...props }) => (
             <h1
@@ -130,22 +113,13 @@ const MarkdownRender = ({ content }) => {
             />
           ),
           p: ({ node, ...props }) => (
-            <p
-              {...props}
-              className="mb-4"
-            />
+            <p {...props} className="mb-4" />
           ),
           ul: ({ node, ...props }) => (
-            <ul
-              {...props}
-              className="list-disc ml-6 mb-4"
-            />
+            <ul {...props} className="list-disc ml-6 mb-4" />
           ),
           ol: ({ node, ...props }) => (
-            <ol
-              {...props}
-              className="list-decimal ml-6 mb-4"
-            />
+            <ol {...props} className="list-decimal ml-6 mb-4" />
           ),
           li: ({ node, ...props }) => <li {...props} />,
         }}

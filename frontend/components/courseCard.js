@@ -1,3 +1,4 @@
+import { getBlur } from '@/lib/utils'
 import { FileBadge2, Speech, Users } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -15,6 +16,8 @@ export default function CourseCard({ course }) {
   const price = course.course_fee
   const image = course.image
 
+  const Blur = getBlur()
+
   return (
     <div className="bg-white/70 rounded-lg flex flex-col gap-4 p-4 shadow-lg relative h-fit max-w-sm">
       <div className="absolute top-0 right-0 p-2 bg-darkb text-white rounded-tl-lg">
@@ -26,6 +29,8 @@ export default function CourseCard({ course }) {
           alt="Search"
           width={500}
           height={500}
+          placeholder="blur"
+          blurDataURL={Blur}
         />
       </div>
       <div className="flex flex-row justify-left pr-4">

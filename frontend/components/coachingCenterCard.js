@@ -1,3 +1,4 @@
+import { getBlur } from '@/lib/utils'
 import { FileBadge2, Speech, Users } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -21,6 +22,8 @@ export default function CoachingCenterCard({ coachingCenterInfo }) {
     : 0
   const image = coachingCenterInfo.image
 
+  const Blur = getBlur()
+
   return (
     <div className="bg-white/70 rounded-lg flex flex-col gap-4 p-4 shadow-lg h-fit max-w-sm">
       <div>
@@ -29,6 +32,8 @@ export default function CoachingCenterCard({ coachingCenterInfo }) {
           alt="Search"
           width={500}
           height={500}
+          placeholder="blur"
+          blurDataURL={Blur}
           className="w-full h-auto aspect-auto"
         />
       </div>

@@ -16,6 +16,7 @@ import {
   scaleUpVarient,
   topToBottomVarient,
 } from '@/lib/animation'
+import { getBlur } from '@/lib/utils'
 import { Label } from '@radix-ui/react-label'
 import { motion } from 'framer-motion'
 import { Book } from 'lucide-react'
@@ -112,6 +113,8 @@ const heroWords = [
 export default function Home() {
   const searchBoxRef = useRef(null)
 
+  const Blur = getBlur()
+
   const [coachingCenters, setCoachingCenters] = useState([])
   const [firstColumn, setFirstColumn] = useState([])
   const [secondColumn, setSecondColumn] = useState([])
@@ -179,6 +182,8 @@ export default function Home() {
             <Image
               src="/Assets/LandingStudents.svg"
               alt="Landing Student"
+              placeholder="blur"
+              blurDataURL={Blur}
               width={500}
               height={500}
             />
@@ -217,6 +222,8 @@ export default function Home() {
               alt="Landing Student"
               width={500}
               height={500}
+              placeholder="blur"
+              blurDataURL={Blur}
             />
           </div>
           <motion.div
@@ -278,6 +285,8 @@ export default function Home() {
                     alt="Search"
                     width={100}
                     height={100}
+                    placeholder="blur"
+                    blurDataURL={Blur}
                   />
                   START COURSE
                 </CardTitle>
@@ -304,6 +313,8 @@ export default function Home() {
                     alt="Search"
                     width={100}
                     height={100}
+                    placeholder="blur"
+                    blurDataURL={Blur}
                   />
                 </motion.div>
                 EXPERT TEACHERS
@@ -330,6 +341,8 @@ export default function Home() {
                     alt="Search"
                     width={100}
                     height={100}
+                    placeholder="blur"
+                    blurDataURL={Blur}
                   />
                   STRATEGI LOCATION
                 </CardTitle>
