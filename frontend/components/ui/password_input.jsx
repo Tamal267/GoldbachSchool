@@ -9,7 +9,6 @@ import { cn } from '@/lib/utils'
 
 const PasswordInput = React.forwardRef(({ className, ...props }, ref) => {
   const [showPassword, setShowPassword] = React.useState(false)
-  console.log(props)
   const disabled = false || props.disabled
 
   return (

@@ -17,7 +17,6 @@ export default async function Class({ params }) {
     isRegistered(course_id),
     getScript(exam_id),
   ])
-  console.log('STdScript', stdScript)
   if (!Array.isArray(examArr) || examArr.length === 0) {
     return <EmptyPage />
   }

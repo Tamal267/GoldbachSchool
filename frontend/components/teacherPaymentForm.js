@@ -11,7 +11,6 @@ const initialState = {
 }
 
 export default function TeacherPaymentForm({ row }) {
-  console.log('row: ', row)
   const [state, formAction, pending] = useActionState(
     teacherPayment,
     initialState,

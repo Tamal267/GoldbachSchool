@@ -22,7 +22,6 @@ export default async function Class({ params }) {
     isRegistered(course_id),
     getClassReviews(class_id),
   ])
-  console.log('allReviews', allReviews)
   if (!Array.isArray(classArr) || classArr.length === 0) {
     return <EmptyPage />
   }

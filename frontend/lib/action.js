@@ -194,11 +194,14 @@ export async function login(prevState, formData) {
   const raw = Object.fromEntries(formData)
   raw.type = prevState.type
   const response = await post('user/login', raw)
-  if (response.error)
+  if (response.error) {
+    revalidatePath(`/login/${prevState.type.toLowerCase()}`)
     return {
       success: false,
       message: response.error,
+      type: prevState.type,
     }
+  }
   const co = await cookies()
   co.set('token', response.token)
   redirect('/')
