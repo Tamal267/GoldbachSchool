@@ -845,3 +845,9 @@ export async function getClassReviews(class_id) {
   if (response.error) return response.error
   return response.result
 }
+
+export async function getAllCoachingCentersNonUser() {
+  const response = await get('non_user/view_all_coaching_centers')
+  if (response.error) return response.error
+  return response.result
+}

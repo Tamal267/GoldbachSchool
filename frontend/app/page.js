@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { InfiniteMovingCards } from '@/components/ui/infinite-moving-cards'
 import { Input } from '@/components/ui/input'
 import { TypewriterEffect } from '@/components/ui/typewriter-effect'
+import { getAllCoachingCentersNonUser } from '@/lib/action'
 import {
   bottomToTopParentVarient,
   bottomToTopVarient,
@@ -15,12 +16,11 @@ import {
   scaleUpVarient,
   topToBottomVarient,
 } from '@/lib/animation'
-import { coachingCenters } from '@/lib/data'
 import { Label } from '@radix-ui/react-label'
 import { motion } from 'framer-motion'
 import { Book } from 'lucide-react'
 import Image from 'next/image'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const parantsSay = [
   {
@@ -112,7 +112,22 @@ const heroWords = [
 export default function Home() {
   const searchBoxRef = useRef(null)
 
+  const [coachingCenters, setCoachingCenters] = useState([])
+  const [firstColumn, setFirstColumn] = useState([])
+  const [secondColumn, setSecondColumn] = useState([])
+  const [thirdColumn, setThirdColumn] = useState([])
+
   useEffect(() => {
+    const getCoachingCenters = async () => {
+      const coCenters = await getAllCoachingCentersNonUser()
+      setCoachingCenters(coCenters)
+      setFirstColumn(coCenters.filter((_, index) => index % 3 === 0))
+      setSecondColumn(coCenters.filter((_, index) => index % 3 === 1))
+      setThirdColumn(coCenters.filter((_, index) => index % 3 === 2))
+    }
+
+    getCoachingCenters()
+
     const handleKeyDown = (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
         event.preventDefault()
@@ -336,13 +351,46 @@ export default function Home() {
           </h1>
         </div>
         <div className="flex flex-col gap-10">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 p-10 gap-10">
-            {coachingCenters.map((coachingCenter, index) => (
-              <CoachingCenterCard
-                key={index}
-                coachingCenterInfo={coachingCenter}
-              />
-            ))}
+          <div className="flex flex-col items-center justify-center gap-10 p-8">
+            {coachingCenters.length === 0 && <p>No courses available</p>}
+            {coachingCenters.length < 3 ? (
+              <div className="flex flex-row flex-wrap mt-12 gap-10">
+                {coachingCenters.length > 0 &&
+                  coachingCenters.map((coachingCenter, index) => (
+                    <CoachingCenterCard
+                      key={index}
+                      coachingCenterInfo={coachingCenter}
+                    />
+                  ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-12">
+                <div className="flex flex-col gap-10">
+                  {firstColumn.map((coachingCenter, index) => (
+                    <CoachingCenterCard
+                      key={index}
+                      coachingCenterInfo={coachingCenter}
+                    />
+                  ))}
+                </div>
+                <div className="flex flex-col gap-10">
+                  {secondColumn.map((coachingCenter, index) => (
+                    <CoachingCenterCard
+                      key={index}
+                      coachingCenterInfo={coachingCenter}
+                    />
+                  ))}
+                </div>
+                <div className="flex flex-col gap-10">
+                  {thirdColumn.map((coachingCenter, index) => (
+                    <CoachingCenterCard
+                      key={index}
+                      coachingCenterInfo={coachingCenter}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           <div className="flex justify-center">
             <Button className="bg-darkb p-0 rounded-full">
