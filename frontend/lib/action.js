@@ -208,7 +208,8 @@ export async function login(prevState, formData) {
 }
 
 export async function logout(prevState, formData) {
-  await cookies().delete('token')
+  const co = await cookies()
+  co.delete('token')
   redirect('/')
 }
 
