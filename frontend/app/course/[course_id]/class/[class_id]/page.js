@@ -74,10 +74,12 @@ export default async function Class({ params }) {
             />
             <span>{cls.teacher_name}</span>
           </div>
-          <div className="flex flex-row gap-2 items-center">
-            <RatingStar rating={allReviews[0].total_rating} /> (
-            {allReviews[0].total_rating})
-          </div>
+          {allReviews.length > 0 && (
+            <div className="flex flex-row gap-2 items-center">
+              <RatingStar rating={allReviews[0].total_rating} /> (
+              {allReviews[0].total_rating})
+            </div>
+          )}
         </div>
         <hr className="w-full" />
         <div className="space-y-2">
