@@ -131,17 +131,19 @@ export default async function Navbar() {
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link
-                href="/my_dashboard"
-                legacyBehavior
-                passHref
-              >
-                <NavigationMenuLink className="bg-transparent text-white font-poppins">
-                  Dashboard
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
+            {loggedIn && (
+              <NavigationMenuItem>
+                <Link
+                  href="/my_dashboard"
+                  legacyBehavior
+                  passHref
+                >
+                  <NavigationMenuLink className="bg-transparent text-white font-poppins">
+                    Dashboard
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            )}
           </NavigationMenuList>
         </NavigationMenu>
       </div>

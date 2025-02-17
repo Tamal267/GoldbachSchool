@@ -1,13 +1,13 @@
 import CourseCard from '@/components/courseCard'
 import EmptyPage from '@/components/emptyPage'
 import SearchCourse from '@/components/searchCourse'
-import { getAllCourses, searchAllCourses } from '@/lib/action'
+import { getAllCourses, getAllNonUserCourses, searchAllCourses } from '@/lib/action'
 
 export default async function Courses({ searchParams }) {
   const __sp = await searchParams
   const __program = __sp.program || ''
   const __course = __sp.course || ''
-  const allCourses = await getAllCourses(__program, __course)
+  const allCourses = await getAllNonUserCourses(__program, __course)
 
   if (!Array.isArray(allCourses) || allCourses.length === 0) {
     return <EmptyPage />

@@ -1,10 +1,10 @@
 import CoachingCenterCard from '@/components/coachingCenterCard'
 import EmptyPage from '@/components/emptyPage'
 import SearchCoachingCenter from '@/components/searchCoachingCenter'
-import { getAllCoachingCenters } from '@/lib/action'
+import { getAllCoachingCentersNonUser } from '@/lib/action'
 
 export default async function CoachingCenters() {
-  const coachingCenters = await getAllCoachingCenters()
+  const coachingCenters = await getAllCoachingCentersNonUser()
   if (!Array.isArray(coachingCenters) || coachingCenters.length === 0) {
     return <EmptyPage />
   }

@@ -855,3 +855,12 @@ export async function getAllCoachingCentersNonUser() {
   if (response.error) return response.error
   return response.result
 }
+
+export async function getAllNonUserCourses(program, course) {
+  const response = await post('non_user/get_all_courses', {
+    program_name: '%' + program + '%',
+    course_name: '%' + course + '%',
+  })
+  if (response.error) return response.error
+  return response.result
+}
