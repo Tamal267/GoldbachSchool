@@ -284,8 +284,10 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <p>
-                  Duis aute irure dolor reprehenderit in voluptate velit esse
-                  cillum dolore fugiat nulla pariatur. Excepteur
+                  Starting a course provides students with structured learning,
+                  expert guidance, and skill development. It sets clear
+                  objectives, fosters growth, and ensures a strong foundation
+                  for academic and professional success.
                 </p>
               </CardContent>
             </Card>
@@ -311,8 +313,10 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <p>
-                Duis aute irure dolor reprehenderit in voluptate velit esse
-                cillum dolore fugiat nulla pariatur. Excepteur
+                Expert teachers bring deep subject knowledge, effective teaching
+                strategies, and personalized guidance, ensuring students excel.
+                Their experience and dedication foster a dynamic learning
+                environment, enhancing academic success.
               </p>
             </CardContent>
           </Card>
@@ -336,8 +340,11 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <p>
-                  Duis aute irure dolor reprehenderit in voluptate velit esse
-                  cillum dolore fugiat nulla pariatur. Excepteur
+                  Managing strategic locations ensures optimal accessibility,
+                  convenience, and efficiency. It enhances student reach,
+                  improves operational effectiveness, and maximizes growth
+                  opportunities, making learning centers more effective and
+                  impactful.
                 </p>
               </CardContent>
             </Card>
