@@ -6,17 +6,39 @@ The Goldbach School frontend is a modern, interactive application built using Ne
 
 ## Key Features
 
-- **Dynamic Routing & Modular Structure:**  
-  Individual pages for functions like buying courses, adding classes, and script evaluations ensure a scalable and maintainable codebase.
+- **Dynamic Routing & Modular Structure**  
 
-- **Interactive Search & Navigation:**  
-  Real-time search components with keyboard shortcuts (e.g., Ctrl/Meta + K) allow users to quickly find coaching centers and courses.
+- **Interactive Search & Navigation**  
 
-- **Rich Content & Media Presentation:**  
-  Custom markdown rendering, responsive card layouts, and high-quality images/videos provide an immersive user experience.
+- **Rich Content & Media Presentation**  
 
-- **Real-Time Notifications & Monitoring:**  
-  Built-in real-time updates keep users informed about course progress, exam details, and performance metrics.
+- **Real-Time Notifications & Monitoring**  
+
+## User Rules
+
+### Authority
+
+- **Create New Coaching Center**
+
+- **Create Course and Allocate Teachres**
+
+- **Payment Teachres**
+
+### Teachres
+
+- **Create New Class or Exam**
+
+- **Evaluate Exam Scripts**
+
+- **View Class performance on Students Reviews**
+
+### Students
+
+- **Buy New Course**
+
+- **Takeing Exam & See Mark and Feedback**
+
+- **Review on Classes**
 
 # Backend Overview
 
