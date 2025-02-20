@@ -311,9 +311,9 @@ export const studentDashboard = async (c: any) => {
   group by course_id
 ),
 totalStdMark as (
-  select course_id, student_id, sum(mark) tsm from answers a
+  select course_id, sum(mark) tsm from answers a
   join exams e on e.id = a.exam_id
-  group by course_id, student_id
+  group by course_id
 )
 select c.id course_id, c.name, c.image, round(coalesce(tsm / tm * 100, 0), 1) progress
 from answers a
@@ -321,7 +321,7 @@ join exams e on a.exam_id = e.id
 join students s on s.user_id = a.student_id
 join courses c on c.id = s.course_id
 left join totalMark on totalMark.course_id = c.id 
-left join totalStdMark on totalStdMark.course_id = a.id and totalStdMark.student_id = a.user_id
+left join totalStdMark on totalStdMark.course_id = c.id
 where c.coaching_center_id = ${coaching_center_id}
 and s.user_id = ${user_id}
 group by c.id, c.name, c.image, totalMark.tm, totalStdMark.tsm
