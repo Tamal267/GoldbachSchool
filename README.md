@@ -6,13 +6,13 @@ The Goldbach School frontend is a modern, interactive application built using Ne
 
 ## Key Features
 
-- **Dynamic Routing & Modular Structure**  
+- **Dynamic Routing & Modular Structure**
 
-- **Interactive Search & Navigation**  
+- **Interactive Search & Navigation**
 
-- **Rich Content & Media Presentation**  
+- **Rich Content & Media Presentation**
 
-- **Real-Time Notifications & Monitoring**  
+- **Real-Time Notifications & Monitoring**
 
 ## User Rules
 
@@ -20,11 +20,11 @@ The Goldbach School frontend is a modern, interactive application built using Ne
 
 - **Create New Coaching Center**
 
-- **Create Course and Allocate Teachres**
+- **Create Course and Allocate Teachers**
 
-- **Payment Teachres**
+- **Payment Teachers**
 
-### Teachres
+### Teachers
 
 - **Create New Class or Exam**
 
@@ -57,6 +57,7 @@ Clone this repository first. Run `git clone https://github.com/Tamal267/Goldbach
 ## For Frontend
 
 Add a `env` file. The `./frontend/.env.local` file includes:
+
 ```bash
 SERVER_URL=https://your-server-url.com
 HOST_NAME=your-host-name
@@ -65,6 +66,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
 Then install all dependencies and run in your local machine.
+
 ```bash
 cd frontend && npm install --force && npm run dev
 ```
@@ -72,6 +74,7 @@ cd frontend && npm install --force && npm run dev
 ## For Backend
 
 Add a `env` file. The `./backend/.env.local` file includes:
+
 ```bash
 PORT=YourBackendPort
 DATABASE_URL=YourDatabaseURL
@@ -81,6 +84,7 @@ SECRET=YourSecretKey
 ```
 
 Then install all dependencies and run in your local machine.
+
 ```bash
 cd backend && bun install && bun run dev
 ```
