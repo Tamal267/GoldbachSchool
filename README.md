@@ -1,5 +1,7 @@
 Goldbach School is a modern, interactive education platform designed to connect students with top coaching centers and courses.
 
+**Watch this video**
+
 [![Project Overview Video](https://github.com/Tamal267/GoldbachSchool/blob/main/frontend/public/Assets/thumbnail.png?raw=true)](https://youtu.be/2tD3IqcQpms)
 
 # Frontend Overview
