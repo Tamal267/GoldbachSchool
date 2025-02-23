@@ -1,5 +1,7 @@
 Goldbach School is a modern, interactive education platform designed to connect students with top coaching centers and courses.
 
+[![Project Overview Video](https://github.com/Tamal267/GoldbachSchool/blob/main/frontend/public/Assets/thumbnail.png?raw=true)](https://youtu.be/2tD3IqcQpms)
+
 # Frontend Overview
 
 The Goldbach School frontend is a modern, interactive application built using Next.js. It leverages Tailwind CSS for responsive design and Framer Motion for smooth, engaging animations. The project is organized into modular pages covering various features such as coaching centers, courses, exams, and performance dashboards.
