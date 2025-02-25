@@ -18,7 +18,7 @@ The Goldbach School frontend is a modern, interactive application built using Ne
 
 - **Real-Time Notifications & Monitoring**
 
-## User Rules
+## User Roles
 
 ### Authority
 
